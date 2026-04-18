@@ -1,0 +1,148 @@
+User stories — pre-consulting firm website
+
+1. AutoCAD-style cursor
+US-01 — As a visitor, I want to see an AutoCAD-style crosshair cursor replace the standard pointer across the entire site, so I immediately feel the precision and engineering identity of the firm.
+Acceptance criteria:
+
+Default browser cursor is hidden site-wide
+A custom crosshair renders: two perpendicular lines extending from a small centre gap (replicating AutoCAD's crosshair, not a simple +)
+The crosshair tracks the mouse in real time with no visible lag
+A small coordinate readout (x, y) follows the cursor in monospace font — styled like an AutoCAD coordinate display
+On mobile / touch devices, the cursor falls back gracefully (no broken overlay)
+The crosshair colour matches the gold brand accent
+
+
+2. Homepage — intro / hero
+US-02 — As a first-time visitor, I want to land on a homepage that immediately communicates what the firm does and who is behind it, so I can decide in under 10 seconds if this is relevant to me.
+Acceptance criteria:
+
+Hero section with firm name, a one-line tagline, and a primary CTA ("View our work" / "Get in touch")
+Short intro paragraph — what the firm does and who it serves
+Dark charcoal background with gold typographic accents visible above the fold
+Smooth scroll to sections below
+No heavy load time — hero renders before any heavy assets
+
+US-03 — As a returning visitor, I want the homepage to surface the most recent project or report so I always see something new.
+
+3. About / founders
+US-04 — As a prospect, I want a dedicated About section or page where I can read each founder's background, so I can assess their expertise and decide if I trust them.
+Acceptance criteria:
+
+One card or block per founder with: name, photo (or initials placeholder), role/title, short bio (3–5 sentences), and a link to their LinkedIn or relevant profile
+Founders section feels editorial — not a generic "team grid"
+Firm origin story or philosophy paragraph sits above or between the founder cards
+
+US-05 — As a prospect, I want to see each founder's academic and professional certifications so I can verify their qualifications.
+Acceptance criteria:
+
+Certifications displayed per founder: degree(s), institution, year, professional licences (e.g. P.Eng, PMP, etc.)
+Displayed as a structured list or credential badges — not buried in the bio paragraph
+If a founder has a PDF credential or linked verification, there is an icon/link to it
+
+
+4. Projects gallery
+US-06 — As a prospect, I want to browse all projects on a single page as a grid of cards, so I can quickly scan the firm's portfolio.
+Acceptance criteria:
+
+Grid of project cards, each showing: project name, a short descriptor (sector / type), a thumbnail or placeholder image, and a visible "View project" affordance
+Cards are filterable or sortable by sector (optional Phase 2)
+Grid is responsive — 3 columns on desktop, 2 on tablet, 1 on mobile
+
+US-07 — As a prospect, I want to click on any project card and be taken to that project's individual page, so I can read the full case study.
+Acceptance criteria:
+
+Each project has its own URL (e.g. /projects/project-name)
+Project page includes: title, sector/type, scope summary, challenge, approach, outcome, images or diagrams
+Breadcrumb or back button returns to the projects gallery
+Individual project pages are shareable links
+
+
+5. Services
+US-08 — As a visitor, I want a clear Services page that lists exactly what the firm offers, so I can determine if my need is within scope.
+Acceptance criteria:
+
+Each service has: name, short description, typical deliverables, and who it is for
+Services are visually separated — not a wall of text
+A CTA at the bottom of the page points to the contact form
+
+US-09 — As a prospect, I want each service to indicate a rough scope or engagement type (advisory, project-based, retainer, etc.) so I understand how the firm works.
+
+6. Certifications
+US-10 — As a prospect evaluating the firm, I want a dedicated credentials section so I can see all qualifications in one place without reading through full bios.
+Acceptance criteria:
+
+Degree(s) with institution and year
+Professional licences and their issuing bodies
+Industry certifications (software, project management, etc.)
+Layout is scannable — not a paragraph dump
+Section works as a standalone block embeddable on both the About page and the homepage
+
+
+7. Reports / publications
+US-11 — As a visitor, I want to browse published reports and whitepapers so I can assess the firm's depth of thinking before reaching out.
+Acceptance criteria:
+
+Reports listed with: title, date, short abstract, and a download or read button
+PDFs open in a new tab or trigger a download — user's choice
+Reports page works without authentication (open access, or with optional email gate — TBD)
+
+US-12 — As the firm owner, I want to add a new report to the site without touching code, so I can keep publications current.
+Acceptance criteria:
+
+New report added via CMS or a simple folder + config file
+No redeployment required for content-only additions (Phase 2)
+
+
+8. Testimonials
+US-13 — As a prospect, I want to read testimonials from past clients so I can validate the firm's reputation through third-party voices.
+Acceptance criteria:
+
+Each testimonial includes: quote, client name, title/company, and optionally a project reference
+Displayed as a grid or horizontal scroll of cards — not a basic <blockquote> list
+At least one testimonial visible on the homepage without needing to navigate
+
+US-14 — As the firm owner, I want to add and reorder testimonials easily so I can feature the most relevant ones at any time.
+
+9. Contact form + automated emails
+US-15 — As a prospect, I want to fill out a contact form so I can reach the firm without needing to find an email address.
+Acceptance criteria:
+
+Fields: full name, email, company (optional), subject/service of interest (dropdown), message
+Client-side validation before submit (required fields, valid email format)
+Success state shown on submission — no page reload required
+
+US-16 — As a prospect, I want to receive an automated confirmation email immediately after submitting the form, so I know my message was received.
+Acceptance criteria:
+
+Email sent within 30 seconds of form submission
+Subject line: something like "We've received your enquiry — [Firm Name]"
+Body: thanks, confirms what they submitted, sets expectation on response time, includes firm contact details
+Email is branded — dark background, gold accent, firm name — not a generic transactional template
+
+US-17 — As the firm owner, I want to receive an automated alert email every time someone submits the contact form, so I can follow up quickly.
+Acceptance criteria:
+
+Alert arrives within 30 seconds
+Contains: submitter name, email, company, subject, full message, timestamp, and a reply-to link
+Plain-text fallback if HTML email is not supported
+
+US-18 — As a prospect, I want the automated reply to answer common questions (services, typical engagement timeline, location/remote availability) so I don't have to wait for a manual response to get basic information.
+Acceptance criteria:
+
+The automated confirmation email includes a short FAQ block or "While you wait" section covering 3–5 common questions
+Questions are relevant to the service selected in the dropdown
+Links to relevant pages (Services, Reports) included in the email body
+
+
+10. Footer contact
+US-19 — As a visitor on any page, I want to see contact details and a quick enquiry link in the footer so I never have to hunt for how to reach the firm.
+Acceptance criteria:
+
+Footer includes: firm email address (or mailto link), phone (if applicable), LinkedIn and any other social links, and a "Get in touch" button or link to the contact page
+Footer is consistent across all pages
+Footer also includes: copyright line, links to Privacy Policy (placeholder), and navigation links to all main sections
+
+
+11. SEO & performance (non-functional)
+US-20 — As the firm owner, I want every page to have correct meta titles, descriptions, and Open Graph tags so the site appears well in search results and link previews.
+US-21 — As a visitor on a slow connection, I want the site to load within 3 seconds on the first visit so I don't bounce before seeing the content.
