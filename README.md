@@ -1,6 +1,6 @@
-# [Bluprynt-Consulting] — Website Project
+# Bluprynt Consulting Group — Website Project
 
-> Pre-consulting firm website. Dark charcoal + gold theme. Built to impress, built to convert.
+> Pre-consulting firm website. Dark charcoal + gold theme. (tag liner)
 
 ---
 
@@ -185,15 +185,136 @@ ANALYTICS_ID=
 
 ## Content To-Do
 
+### Brand & identity
 - [ ] Firm name confirmed
 - [ ] Tagline written
-- [ ] Founder bio written
-- [ ] Services list finalized
-- [ ] At least 2 case studies ready
-- [ ] 3+ testimonials collected
-- [ ] Logo / wordmark ready
-- [ ] Brand colors confirmed (hex values)
-- [ ] Report(s) ready for upload
+- [ ] Logo / wordmark ready (SVG preferred)
+- [ ] Brand colors confirmed (hex values — charcoal + gold)
+- [ ] Fonts chosen (headings + body)
+- [ ] Favicon created
+
+### Homepage
+- [ ] Hero headline and subheading written
+- [ ] Intro paragraph written (what you do, who you serve)
+- [ ] Hero background image or visual chosen
+- [ ] Key stats decided (years of experience, projects completed, clients served)
+- [ ] 2–3 featured projects selected for homepage preview
+- [ ] Services teaser copy written (short list)
+- [ ] 1–2 testimonial quotes selected for homepage
+- [ ] Latest report or publication selected for homepage feature
+- [ ] CTA button label decided ("Get in touch" / "View our work" / other)
+
+### About / founders
+- [ ] Firm origin story written (how it started, philosophy)
+- [ ] Founder 1 — photo ready
+- [ ] Founder 1 — name, title, bio written (3–5 sentences)
+- [ ] Founder 1 — LinkedIn URL
+- [ ] Founder 1 — degrees listed (field, institution, year)
+- [ ] Founder 1 — professional licences listed (P.Eng, PMP, etc.)
+- [ ] Founder 1 — software certifications (AutoCAD, Revit, etc.)
+- [ ] Founder 1 — affiliations / memberships
+- [ ] Founder 1 — awards or recognition
+- [ ] Founder 2 — photo ready
+- [ ] Founder 2 — name, title, bio written
+- [ ] Founder 2 — LinkedIn URL
+- [ ] Founder 2 — degrees listed
+- [ ] Founder 2 — professional licences listed
+- [ ] Founder 2 — software certifications
+- [ ] Founder 2 — affiliations / memberships
+- [ ] Founder 2 — awards or recognition
+
+### Projects
+- [ ] Project list finalised (minimum 2 for launch)
+- [ ] Each project — name and one-line summary
+- [ ] Each project — sector / type / location
+- [ ] Each project — thumbnail image
+- [ ] Each project — full description written (challenge, approach, outcome)
+- [ ] Each project — images, drawings, or diagrams ready
+- [ ] Each project — client name confirmed (or anonymised)
+- [ ] Each project — year and tools used noted
+
+### Services
+- [ ] Full list of services finalised
+- [ ] Each service — name and description written
+- [ ] Each service — deliverables listed
+- [ ] Each service — engagement type noted (advisory / project / retainer / workshop)
+- [ ] Each service — typical timeline noted
+- [ ] Each service — who it is for written
+- [ ] CTA copy for bottom of services page written
+
+### Certifications / credentials
+- [ ] All academic degrees listed (both founders)
+- [ ] All professional licences listed with issuing body
+- [ ] All software certifications listed
+- [ ] Industry-specific training or qualifications listed
+- [ ] Credential PDFs or verification links gathered (if sharing)
+
+### Reports / publications
+- [ ] Report list finalised
+- [ ] Each report — title, date, short abstract written
+- [ ] Each report — PDF ready for upload
+- [ ] Decision made: open download or email-gated?
+- [ ] Blog / insights section decided (yes / no / later)
+
+### Testimonials
+- [ ] Minimum 3 testimonials collected
+- [ ] Each testimonial — client name, title, company confirmed
+- [ ] Each testimonial — quote approved by client
+- [ ] Each testimonial — linked to relevant project (if applicable)
+- [ ] Client photos or company logos gathered (if permitted)
+
+### Contact
+- [ ] Contact form fields finalised
+- [ ] Firm email address confirmed
+- [ ] Phone number decided (include or not)
+- [ ] Location / remote availability copy written
+- [ ] Response time expectation set
+- [ ] Social links confirmed (LinkedIn, etc.)
+- [ ] Office address / map embed decided (yes / no)
+- [ ] Automated email — prospect confirmation copy written
+- [ ] Automated email — owner alert fields confirmed
+- [ ] Automated email — FAQ reply content written (3–5 common questions)
+
+### Footer
+- [ ] Footer nav links decided
+- [ ] Copyright line written
+- [ ] Privacy policy page drafted (required for any data collection)
+
+### Site-wide / technical
+- [ ] Analytics platform chosen and set up
+- [ ] Privacy policy published
+- [ ] SEO meta title and description written for each page
+- [ ] Open Graph image created (for LinkedIn / WhatsApp link previews)
+- [ ] 404 page designed
+- [ ] Domain purchased and pointed
+
+---
+
+The idea
+When someone fills out your contact form and selects a service (e.g. "Structural Assessment" or "Project Advisory"), the automated reply doesn't just say "thanks, we'll be in touch." It actually answers 3–5 questions that person is likely to have — tailored to whichever service they selected. So it feels like a thoughtful, personalised response even though it's instant and automatic.
+
+What you'd need
+A form with a "service of interest" dropdown — this is the trigger that determines which version of the email gets sent. You already have this planned.
+An email service to actually send the emails. The main options are Resend, SendGrid, or EmailJS — all have free tiers that are more than enough for a small firm. Resend is the cleanest to set up with modern web frameworks.
+Email templates — one per service, or one master template with a dynamic FAQ block that swaps content based on what was selected. You write the questions and answers once, they get pulled in automatically.
+A backend function to handle the form submission, match the service to the right FAQ block, and trigger the send. If you're on Next.js this is just a simple API route. On a static site you'd use something like Formspree or Netlify Forms as a middleman.
+
+What the email would look like
+Something like:
+
+Hi [Name], thanks for reaching out about [selected service]. While we prepare a personal response, here are answers to the questions we hear most often about this...
+How long does a typical engagement take? ...
+Do you work remotely or on-site? ...
+What do you need from us to get started? ...
+What does the deliverable look like? ...
+We'll be in touch within [X] business days.
+
+
+What you'd write (your job)
+For each service, a set of 3–5 questions and answers. Plain text is fine — the developer formats them into the template. You'd also write the opening paragraph and sign-off once, since those stay the same across all services.
+
+Difficulty level
+Low to medium. It's not complex technically — it's mostly configuration and content. The hardest part is writing good answers to the questions. The code to make it work is maybe a few hours of developer time once the stack is chosen.
 
 ---
 
