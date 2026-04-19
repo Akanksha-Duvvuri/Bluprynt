@@ -83,33 +83,6 @@
 - [ ] Blog / insights section (optional)
 
 ---
-
-## User Stories
-
-### Discovery
-- As a visitor, I want a striking homepage so I immediately understand this is a premium firm.
-- As a mobile user, I want full responsiveness on any device.
-- As a visitor, I want the AutoCAD crosshair cursor so I feel the precision identity of the firm.
-
-### Credibility
-- As a prospect, I want an About page with the founder's background and philosophy.
-- As a prospect, I want to browse case studies to see relevant experience.
-- As a visitor, I want to read client testimonials to validate the firm's reputation.
-- As a prospect, I want to download published reports to assess depth of expertise.
-
-### Services
-- As a visitor, I want a clear Services page so I know exactly what the firm offers.
-
-### Engagement
-- As a prospect, I want to submit a contact form without needing to call.
-- As a prospect, I want an automated confirmation email after reaching out.
-- As the firm owner, I want an automated alert with lead details on every form submission.
-
-### Admin
-- As the firm owner, I want to update case studies and reports without a developer.
-
----
-
 ## Email Templates
 
 ### Prospect confirmation
@@ -298,7 +271,7 @@ A form with a "service of interest" dropdown — this is the trigger that determ
 An email service to actually send the emails. The main options are Resend, SendGrid, or EmailJS — all have free tiers that are more than enough for a small firm. Resend is the cleanest to set up with modern web frameworks.
 Email templates — one per service, or one master template with a dynamic FAQ block that swaps content based on what was selected. You write the questions and answers once, they get pulled in automatically.
 A backend function to handle the form submission, match the service to the right FAQ block, and trigger the send. If you're on Next.js this is just a simple API route. On a static site you'd use something like Formspree or Netlify Forms as a middleman.
-
+1
 What the email would look like
 Something like:
 
