@@ -1,6 +1,10 @@
 # User Stories
 
-## Pre-Consulting firm website
+## Pre-Consulting Firm Website — Bluprynt Consulting Group
+
+---
+
+> **Prerequisite for all stories:** Brand assets confirmed — logo (SVG), hex values (charcoal + gold), fonts (headings + body), and tagline. No story should begin development until these are finalised and handed to the developer.
 
 ---
 
@@ -8,12 +12,14 @@
 
 **US-01** — *As a visitor, I want to see an AutoCAD-style crosshair cursor replace the standard pointer across the entire site, so I immediately feel the precision and engineering identity of the firm.*
 
+Dependencies: Base layout / global frontend setup, branding assets (gold hex value).
+
 Acceptance criteria:
 
 - Default browser cursor is hidden site-wide
 - A custom crosshair renders: two perpendicular lines extending from a small centre gap (replicating AutoCAD's crosshair, not a simple `+`)
 - The crosshair tracks the mouse in real time with no visible lag
-- A small coordinate readout (x, y) follows the cursor in monospace font — styled like an AutoCAD coordinate display  - `if wanted`
+- A small coordinate readout (x, y) follows the cursor in monospace font — styled like an AutoCAD coordinate display `if wanted`
 - On mobile / touch devices, the cursor falls back gracefully (no broken overlay)
 - The crosshair colour matches the gold brand accent
 
@@ -23,18 +29,22 @@ Acceptance criteria:
 
 **US-02** — *As a first-time visitor, I want to land on a homepage that immediately communicates what the firm does and who is behind it, so I can decide in under 10 seconds if this is relevant to me.*
 
+Dependencies: Base layout, navbar, branding assets, content/copy ready (tagline, intro paragraph, hero image).
+
 Acceptance criteria:
 
 - Hero section with firm name, a one-line tagline, and a primary CTA
-- Short intro paragraph — what the firm does and who it serves / About the founders
+- Short intro paragraph — what the firm does and who it serves / about the founders
 - Dark charcoal background with gold typographic accents visible above the fold
 - Smooth scroll to sections below
 - No heavy load time — hero renders before any heavy assets
-- Nav-bar with the logo on the left, a search bar in the middle and other icons on the right (account, `hamburger menu??`)
-- A background image replicating the autocad experience
-- Should have links to every page on the website, all contact info, projects etc etc
+- Navbar with the logo on the left, a search bar in the middle and other icons on the right (account, hamburger menu)
+- A background image replicating the AutoCAD experience
+- Should have links to every page on the website, all contact info, projects etc.
 
-**US-03** — *As a returning visitor, I want the homepage to surface the most recent project or report so I always see something new.* 
+**US-03** — *As a returning visitor, I want the homepage to surface the most recent project or report so I always see something new.*
+
+Dependencies: US-02, US-06 (projects grid), US-11 (reports page) — US-03 cannot be built until both projects and reports data structures exist.
 
 ---
 
@@ -42,16 +52,20 @@ Acceptance criteria:
 
 **US-04** — *As a prospect, I want a dedicated About Us section or page where I can read each founder's background, so I can assess their expertise and decide if I trust them.*
 
+Dependencies: Base layout, navbar, branding assets, content/copy ready (founder bios, photos, LinkedIn URLs, firm origin story).
+
 Acceptance criteria:
 
 - One card or block per founder with: name, photo (or initials placeholder), role/title, short bio (3–5 sentences), and a link to their LinkedIn or relevant profile
 - Firm origin story or philosophy paragraph sits above or between the founder cards
 
-**US-05** — *As a prospect, I want to see each founder's academic and professional certifications so I can verify their qualifications assess its relevance to the company’s work.* 
+**US-05** — *As a prospect, I want to see each founder's academic and professional certifications so I can verify their qualifications and assess their relevance to the company's work.*
+
+Dependencies: US-04, content/copy ready (degrees, licences, certifications per founder).
 
 Acceptance criteria:
 
-- Certifications displayed per founder: degree(s), institution, year, professional licences.
+- Certifications displayed per founder: degree(s), institution, year, professional licences
 - Displayed as a structured list or credential badges — not buried in the bio paragraph
 - If a founder has a PDF credential or linked verification, there is an icon/link to it
 
@@ -59,21 +73,25 @@ Acceptance criteria:
 
 ### 4. Projects gallery
 
-**US-06** — *As a prospect, I want to browse all projects on a single page as a grid of cards, so I can quickly scan the firm's portfolio on the homepage.*
+**US-06** — *As a prospect, I want to browse all projects on a single page as a grid of cards, so I can quickly scan the firm's portfolio.*
+
+Dependencies: Routing, CMS / data structure, content/copy ready (minimum 2 projects with thumbnails, names, descriptors).
 
 Acceptance criteria:
 
-- Grid of project cards, each showing: project name, a short descriptor (sector / type), a thumbnail or placeholder image, and a visible "View project" affordance that redirects to another website specially for that project
+- Grid of project cards, each showing: project name, a short descriptor (sector / type), a thumbnail or placeholder image, and a visible "View project" affordance that redirects to that project's individual page
 - Cards are filterable or sortable by sector or another category
-- Grid is responsive — 3 columns on desktop, 2 on tablet, 1 on mobile (UIUX)
+- Grid is responsive — 3 columns on desktop, 2 on tablet, 1 on mobile
 
 **US-07** — *As a prospect, I want to click on any project card and be taken to that project's individual page, so I can read the full case study.*
+
+Dependencies: US-06, routing, content/copy ready (full case study text, images/diagrams per project).
 
 Acceptance criteria:
 
 - Each project has its own URL (e.g. `/projects/project-name`)
 - Project page includes: title, sector/type, scope summary, challenge, approach, outcome, images or diagrams
-- Breadcrumb or back button returns to the projects gallery (from the nav bar mostly)
+- Breadcrumb or back button returns to the projects gallery (from the navbar mostly)
 - Individual project pages are shareable links
 
 ---
@@ -82,21 +100,29 @@ Acceptance criteria:
 
 **US-08** — *As a visitor, I want a clear Services page that lists exactly what the firm offers in good depth, so I can determine if my need is within scope.*
 
+Dependencies: Base layout, routing, content/copy ready (full services list, descriptions, deliverables, timelines).
+
 Acceptance criteria:
 
 - Each service has: name, short description, typical deliverables, and who it is for
-- Tentative / Close timeline of the Service offered
+- Tentative / indicative timeline of the service offered
 - Services are visually separated — not a wall of text
-- Pictures  / other visually interpreted items
-- A CTA at the bottom of the page points to the contact us form
+- Pictures / other visually interpreted items
+- A CTA at the bottom of the page points to the contact form
 
 **US-09** — *As a prospect, I want each service to indicate a rough scope or engagement type (advisory, project-based, retainer, etc.) so I understand how the firm works.*
 
+Dependencies: US-08, content/copy ready (engagement types confirmed per service).
+
 ---
 
-### 6. Certifications `directly add to the about us page`
+### 6. Certifications
 
-**US-10** — *As a prospect evaluating the firm, I want a dedicated credentials section so I can see all qualifications in one place without reading through full bios.*  
+> Added directly to the About Us page — not a standalone page.
+
+**US-10** — *As a prospect evaluating the firm, I want a dedicated credentials section on the About page so I can see all qualifications in one place without reading through full bios.*
+
+Dependencies: US-04, US-05, content/copy ready (all credentials, licences, software certifications per founder).
 
 Acceptance criteria:
 
@@ -112,13 +138,17 @@ Acceptance criteria:
 
 **US-11** — *As a visitor, I want to browse published reports and whitepapers so I can assess the firm's depth of thinking before reaching out.*
 
+Dependencies: Routing, file hosting / data structure, content ready (at least 1 report PDF with title, date, abstract).
+
 Acceptance criteria:
 
 - Reports listed with: title, date, short abstract, and a download or read button
 - PDFs open in a new tab or trigger a download — user's choice
-- Reports page works without authentication (open access, or with optional email gate)
+- Reports page works without authentication (open access, or with optional email gate — to be decided before build)
 
 **US-12** — *As the firm owner, I want to add a new report to the site without touching code, so I can keep publications current.*
+
+Dependencies: US-11, CMS / backend setup.
 
 Acceptance criteria:
 
@@ -131,26 +161,29 @@ Acceptance criteria:
 
 **US-13** — *As a prospect, I want to read testimonials from past clients so I can validate the firm's reputation through third-party voices.*
 
+Dependencies: Base layout, homepage sections, content ready (minimum 3 testimonials with quote, name, title, company).
+
 Acceptance criteria:
 
 - Each testimonial includes: quote, client name, title/company, and optionally a project reference
 - Displayed as a grid or horizontal scroll of cards — not a basic `<blockquote>` list
 - At least one or two testimonials visible on the homepage without needing to navigate
 
-**US-14** — *As the firm owner, I want to add and reorder testimonials easily so I can feature the most relevant ones at any time.* 
+**US-14** — *As the firm owner, I want to add and reorder testimonials easily without touching the code so I can feature the most relevant ones at any time.*
+
+Dependencies: US-13, CMS / backend setup.
 
 ---
 
 ### 9. Contact form + automated emails
 
-**US-15** — *As a prospect, I want to fill out a contact form with my name, email, 
-company, and a free-text message describing my need (or a question regarding the company, service etc etc), so I can reach the firm without needing to find an email address or making a call.*
+**US-15** — *As a prospect, I want to fill out a contact form with my name, email, company, and a free-text message describing my need, so I can reach the firm without needing to find an email address or make a call.*
 
----
+Dependencies: Routing, frontend forms, backend API, Resend account + domain verified.
 
 Acceptance criteria:
 
-- Fields: full name, email, company (optional), message (free text, no dropdown required) / or questions with FAQs
+- Fields: full name, email, company (optional), message (free text, no dropdown required)
 - Client-side validation before submit — required fields, valid email format
 - Submit button disabled while sending to prevent double submission
 - Success message shown on submission without a page reload
@@ -160,21 +193,19 @@ Acceptance criteria:
 
 **US-16 — Automated confirmation email to prospect**
 
-*As a prospect, I want to receive an automated reply within seconds of 
-submitting the form, so I know my message was received and I get useful 
-information(a few automated answers based on keywords) while I wait to hear back from the company.*
+*As a prospect, I want to receive an automated reply within seconds of submitting the form, so I know my message was received and I get useful information while I wait to hear back from the firm.*
+
+Dependencies: US-15, US-18 (keyword matching logic), Resend setup, branded email template ready, FAQ content written per service area.
 
 Acceptance criteria:
 
-- Email sent via Resend or EmailJS or SendGrid within 30 seconds of form submission
-- Subject: `We've received your enquiry — [Bluprynt Consulting Group]`
+- Email sent via Resend within 30 seconds of form submission
+- Subject: `We've received your enquiry — Bluprynt Consulting Group`
 - Email is branded — dark background, gold accents, firm name and contact details in footer
 - Body includes a personalised opening using the prospect's first name
 - Body includes a short FAQ block (3–5 questions and answers) relevant to the topic the prospect described
 - FAQ content is determined by keyword detection on the message body — not a dropdown
-- Keywords are defined per
-service area (e.g. "structural", "load", "foundation" → structural FAQ;
-"feasibility", "concept", "viability" → feasibility FAQ)
+- Keywords are defined per service area (e.g. "structural", "load", "foundation" → structural FAQ; "feasibility", "concept", "viability" → feasibility FAQ)
 - If no keywords match, a general FAQ block is sent as fallback
 - Email includes links back to relevant pages on the site (Services, Reports, Projects)
 - Plain-text version included as fallback for email clients that don't render HTML
@@ -185,13 +216,13 @@ service area (e.g. "structural", "load", "foundation" → structural FAQ;
 
 *As the firm owner, I want to receive an instant alert email every time someone submits the contact form, so I can follow up quickly without checking an admin dashboard.*
 
+Dependencies: US-15, Resend setup, owner email address confirmed.
+
 Acceptance criteria:
 
 - Alert sent to owner email address within 30 seconds of submission
 - Subject: `New enquiry from [Name] — Bluprynt Consulting Group`
-- Contains: full name,
-email address (as a clickable mailto link), company, full message body,
-detected service area (what the keyword scan matched), and timestamp
+- Contains: full name, email address (as a clickable mailto link), company, full message body, detected service area (what the keyword scan matched), and timestamp
 - Reply-to header set to the prospect's email so the owner can reply directly from their inbox
 - Plain text — no heavy HTML
 
@@ -200,6 +231,8 @@ detected service area (what the keyword scan matched), and timestamp
 **US-18 — Keyword-based FAQ matching**
 
 *As the firm owner, I want the automated reply to detect what the prospect is asking about from their message and send a relevant FAQ, so the response feels tailored rather than generic.*
+
+Dependencies: US-15, US-16, keyword lists and FAQ content written and approved by firm owner before build.
 
 Acceptance criteria:
 
@@ -213,24 +246,61 @@ Acceptance criteria:
 
 ---
 
-### 10. Footer contact
+### 10. Footer
 
 **US-19** — *As a visitor on any page, I want to use the footer as a navigation panel so I never have an issue navigating or reaching out to the firm.*
 
+Dependencies: Base layout, all main routes / pages complete (footer links to every page so all pages must exist first), branding assets, content ready (email, phone, social links).
+
 Acceptance criteria:
 
-- Footer includes: firm email address (or mailto link), phone, names and roles of the owners or contact owners, icons for LinkedIn and any other social links on the right
-- Links to every webpage of the website for easy navigation a "Get in touch" button or link to the contact page in the middle
-- The logo and the tag line of the company on the left
+- Footer includes: firm email address (mailto link), phone number, names and roles of the owners, icons for LinkedIn and any other social links on the right
+- Links to every webpage of the website for easy navigation, and a "Get in touch" button linking to the contact page in the middle
+- The logo and tagline of the company on the left
 - Footer is consistent across all pages
-- Footer also includes: copyright line, links to Privacy Policy (placeholder), and navigation links to all main sections
+- Footer includes: copyright line, link to Privacy Policy (placeholder), and navigation links to all main sections
 
 ---
 
-### 11. SEO & performance (non-functional)
+### 11. SEO & performance
 
 **US-20** — *As the firm owner, I want every page to have correct meta titles, descriptions, and Open Graph tags so the site appears well in search results and link previews.*
 
+Dependencies: All pages created, Open Graph image ready (1200×630px), unique meta copy written per page.
+
 **US-21** — *As a visitor on a slow connection, I want the site to load within 3 seconds on the first visit so I don't bounce before seeing the content.*
 
-**US-22** — *As a prospect, I want to see the name of the firm and its logo on the chrome / firefox or any other browser tab, so I can easily identify the website and return to it.*
+Dependencies: All core pages built, images optimised, fonts loaded correctly.
+
+**US-22** — *As a prospect, I want to see the name of the firm and its logo on the Chrome, Firefox, or any other browser tab, so I can easily identify and return to the site when I have multiple tabs open.*
+
+Dependencies: Branding assets ready (logo SVG), US-02 (page title structure established), all pages created (for unique per-page tab titles).
+
+Acceptance criteria:
+
+- Favicon displays the firm's logo mark or a simplified version of it in all browser tabs
+- Firm name appears as the page title in the tab alongside the favicon
+- Each page has a unique, descriptive tab title (e.g. "Projects — Bluprynt Consulting Group", "Contact — Bluprynt Consulting Group") — not just the firm name repeated on every page
+- `favicon.ico` present for legacy browser support
+- `favicon-32x32.png` and `favicon-16x16.png` generated for standard browser tabs
+- `apple-touch-icon.png` (180×180px) generated for iOS home screen saves
+- `android-chrome-192x192.png` and `android-chrome-512x512.png` generated for Android home screen
+- `site.webmanifest` file present and correctly references all icon sizes
+- `theme-color` meta tag set to the firm's charcoal hex so the browser chrome matches the site on mobile
+- All favicon assets generated from the same source logo file for consistency
+
+---
+
+### 12. Mobile functionality
+
+**US-23** — *As a prospect, I want full responsiveness on my device, so I can easily browse through without any issue.*
+
+Dependencies: All UI pages / components built, US-01 (cursor fallback on touch devices).
+
+Acceptance criteria:
+
+- Hamburger menu or dropdown replaces the full navbar on mobile
+- No lag during use of the website on mobile
+- AutoCAD crosshair cursor disabled on mobile / touch devices — falls back to default touch behaviour
+- No overlapping elements or UI/UX faults at any screen size
+- All pages tested at 375px (iPhone SE), 390px (iPhone 14), and 768px (tablet)

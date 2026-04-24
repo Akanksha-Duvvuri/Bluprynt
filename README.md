@@ -1,6 +1,7 @@
 # Bluprynt Consulting Group — Website Project
 
-> Pre-consulting firm website. Dark charcoal + gold theme. (tag liner)
+> Pre-consulting firm website. Dark charcoal + gold theme. 
+> Engineering Accurary. Consulting Excellence, from blueprint to brilliance
 
 ---
 
