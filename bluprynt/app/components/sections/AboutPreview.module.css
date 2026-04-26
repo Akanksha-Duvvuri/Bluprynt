@@ -1,0 +1,109 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+}
+
+.card {
+  border: 1px solid var(--sheet-divider);
+  background: var(--sheet-card-bg);
+  padding: 32px;
+  position: relative;
+}
+
+.photo {
+  width: 100%;
+  height: 220px;
+  background: rgba(143, 118, 64, 0.07);
+  border: 1px dashed var(--sheet-divider);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  font-family: var(--primary);
+  font-size: 64px;
+  font-weight: 300;
+  color: var(--gold-deep);
+  letter-spacing: -0.04em;
+  position: relative;
+  overflow: hidden;
+}
+:global(.sheet-dark) .photo {
+  background: linear-gradient(135deg, var(--ink-soft), var(--ink-deep));
+  color: var(--gold);
+}
+.photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--sheet-line) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--sheet-line) 6%, transparent) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.name {
+  font-family: var(--primary);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  margin-bottom: 4px;
+}
+
+.role {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--gold-deep);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+:global(.sheet-dark) .role {
+  color: var(--gold);
+}
+
+.bio {
+  font-family: var(--secondary);
+  font-size: 13px;
+  color: var(--sheet-text-soft);
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.credentials {
+  border-top: 1px dashed var(--sheet-divider);
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.credRow {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+
+.credK {
+  color: var(--sheet-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.credV {
+  color: var(--gold-deep);
+  font-weight: 700;
+  text-align: right;
+}
+:global(.sheet-dark) .credV {
+  color: var(--gold-bright);
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}

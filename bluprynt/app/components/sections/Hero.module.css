@@ -1,0 +1,130 @@
+.hero {
+  min-height: calc(100vh - 72px);
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.content {
+  position: relative;
+  z-index: 5;
+  align-self: center;
+  padding: 0 80px 0 110px;
+  max-width: 1100px;
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.eyebrow::before {
+  content: "";
+  width: 36px;
+  height: 1px;
+  background: var(--gold);
+}
+.dot {
+  width: 5px;
+  height: 5px;
+  background: var(--gold);
+  margin: 0 6px;
+}
+
+.title {
+  font-family: var(--primary);
+  font-size: clamp(48px, 7.5vw, 104px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  color: var(--cream);
+  margin-bottom: 32px;
+}
+.gold {
+  color: var(--gold);
+  font-weight: 600;
+}
+.ital {
+  font-style: italic;
+  color: var(--gold);
+  font-weight: 300;
+}
+
+.deck {
+  font-family: var(--secondary);
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 238, 198, 0.6);
+  line-height: 1.6;
+  max-width: 560px;
+  margin-bottom: 40px;
+  padding-left: 16px;
+  border-left: 1px solid var(--gold);
+}
+
+.ctaRow {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.cmd {
+  position: absolute;
+  bottom: 56px;
+  left: 110px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(202, 255, 209, 0.55);
+  letter-spacing: 0.05em;
+  z-index: 5;
+}
+.prompt {
+  color: var(--gold);
+}
+.cursor {
+  display: inline-block;
+  width: 7px;
+  height: 13px;
+  background: var(--gold);
+  margin-left: 4px;
+  vertical-align: -2px;
+  animation: caret 1.1s ease-in-out infinite;
+}
+@keyframes caret {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.selected {
+  position: absolute;
+  top: 18%;
+  right: 8%;
+  width: 220px;
+  height: 130px;
+  border: 1px dashed var(--gold);
+  opacity: 0.25;
+  z-index: 2;
+}
+.selected span {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  border: 1px solid var(--ink);
+}
+.selected span:nth-child(1) { top: -3px; left: -3px; }
+.selected span:nth-child(2) { top: -3px; right: -3px; }
+.selected span:nth-child(3) { bottom: -3px; left: -3px; }
+.selected span:nth-child(4) { bottom: -3px; right: -3px; }
+
+@media (max-width: 900px) {
+  .content { padding: 80px 24px 60px; }
+  .cmd { left: 24px; }
+  .selected { display: none; }
+}

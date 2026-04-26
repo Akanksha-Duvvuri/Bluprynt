@@ -1,0 +1,76 @@
+.crosshair {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  transform: translate3d(var(--mx), var(--my), 0);
+  will-change: transform;
+  transition: opacity 0.18s ease;
+}
+.hidden {
+  opacity: 0;
+}
+
+.h,
+.v {
+  position: absolute;
+  background: var(--gold);
+}
+
+.h {
+  top: 0;
+  left: calc(-1 * var(--crosshair-arm) - 6px);
+  width: calc((var(--crosshair-arm) + 6px) * 2);
+  height: 1px;
+  box-shadow: 0 0 4px rgba(196, 165, 100, 0.5);
+}
+
+.v {
+  left: 0;
+  top: calc(-1 * var(--crosshair-arm) - 6px);
+  height: calc((var(--crosshair-arm) + 6px) * 2);
+  width: 1px;
+  box-shadow: 0 0 4px rgba(196, 165, 100, 0.5);
+}
+
+.pickbox {
+  position: absolute;
+  width: var(--crosshair-pickbox);
+  height: var(--crosshair-pickbox);
+  top: calc(-1 * var(--crosshair-pickbox) / 2);
+  left: calc(-1 * var(--crosshair-pickbox) / 2);
+  border: 1px solid var(--gold);
+  box-shadow: 0 0 8px rgba(196, 165, 100, 0.4);
+  background: transparent;
+}
+
+.readout {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  transform: translate3d(calc(var(--mx) + 14px), calc(var(--my) + 14px), 0);
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  background: rgba(13, 12, 8, 0.78);
+  border: 1px solid var(--gold-dim);
+  padding: 4px 7px;
+  will-change: transform;
+  line-height: 1.6;
+  backdrop-filter: blur(2px);
+  transition: opacity 0.18s ease;
+  white-space: nowrap;
+}
+
+.k {
+  color: rgba(255, 238, 198, 0.45);
+  margin-right: 4px;
+}
+
+.v_text {
+  color: var(--gold);
+}

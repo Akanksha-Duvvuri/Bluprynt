@@ -1,0 +1,140 @@
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 44px;
+  background: rgba(21, 19, 13, 0.85);
+  border-bottom: 1px solid var(--gold-faint);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  z-index: 200;
+  backdrop-filter: blur(8px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 32px;
+  text-decoration: none;
+}
+
+.mark {
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: -0.05em;
+  position: relative;
+}
+.mark::before,
+.mark::after {
+  content: "";
+  position: absolute;
+  background: var(--gold);
+}
+.mark::before {
+  width: 4px;
+  height: 1px;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.mark::after {
+  width: 1px;
+  height: 4px;
+  left: -1px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.name {
+  font-family: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cream);
+  letter-spacing: -0.015em;
+}
+.name span {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--gold);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-left: 8px;
+  font-weight: 400;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.tab {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: rgba(255, 238, 198, 0.45);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.tab.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.tab:hover {
+  color: var(--cream);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(255, 238, 198, 0.45);
+  letter-spacing: 0.15em;
+}
+.pill {
+  border: 1px solid var(--gold-dim);
+  padding: 5px 10px;
+}
+.pill.live {
+  color: var(--ink);
+  background: var(--mint);
+  border-color: var(--mint);
+  font-weight: 700;
+}
+.pill.live::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink);
+  margin-right: 6px;
+  animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@media (max-width: 900px) {
+  .topbar { padding: 0 16px; height: 52px; }
+  .tabs { display: none; }
+  .pill:not(.live) { display: none; }
+}

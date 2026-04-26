@@ -1,0 +1,98 @@
+.form {
+  border: 1px solid var(--sheet-divider);
+  background: var(--sheet-card-bg);
+  padding: 36px;
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--gold);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+}
+:global(.sheet-cream) .label {
+  color: var(--gold-deep);
+}
+
+.optional {
+  color: var(--sheet-text-dim);
+}
+
+.row {
+  margin-bottom: 22px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--sheet-divider);
+  padding: 8px 0;
+  color: inherit;
+  font-family: var(--primary);
+  font-size: 16px;
+  font-weight: 400;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--sheet-text-dim);
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--gold);
+}
+
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+  font-size: 14px;
+  font-family: var(--secondary);
+}
+
+.submitRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px dashed var(--sheet-divider);
+}
+
+.status {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--mint);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.status::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--mint);
+  margin-right: 8px;
+}
+
+.statusError {
+  color: var(--red);
+}
+.statusError::before {
+  background: var(--red);
+}
+
+.statusSuccess {
+  color: var(--mint);
+}
+.statusSuccess::before {
+  background: var(--mint);
+}
