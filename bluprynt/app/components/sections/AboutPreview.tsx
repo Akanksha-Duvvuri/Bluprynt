@@ -18,7 +18,7 @@ const FOUNDERS: Founder[] = [
     role: "Principal · Structural",
     bio: "Twelve years across high-rise residential, civic infrastructure, and post-tensioning. Worked on three IFC-funded transit programs before founding the firm.",
     credentials: [
-      { k: "Degree", v: "M.Eng · IIT" },
+      { k: "Degree", v: "Civil.Eng · NYU" },
       { k: "Licence", v: "P.Eng / Chartered" },
       { k: "Software", v: "ETABS · SAFE · SAP2000" },
     ],
@@ -29,7 +29,7 @@ const FOUNDERS: Founder[] = [
     role: "Principal · Civil",
     bio: "A decade in coastal and water infrastructure across two continents. Specialises in feasibility, scope-to-cost translation, and owner-side technical strategy.",
     credentials: [
-      { k: "Degree", v: "M.Sc · TU Delft" },
+      { k: "Degree", v: "MBA · ISB" },
       { k: "Licence", v: "PMP · CEng" },
       { k: "Software", v: "Civil 3D · Revit · MIKE" },
     ],

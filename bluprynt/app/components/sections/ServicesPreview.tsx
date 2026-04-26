@@ -68,7 +68,7 @@ export default function ServicesPreview() {
           <div className="section-head-left">
             <div className="label">▸ A-003 · Services</div>
             <h2 className="title">
-              Four ways
+              Ways in which
               <br />
               we <span className="em">work.</span>
             </h2>
