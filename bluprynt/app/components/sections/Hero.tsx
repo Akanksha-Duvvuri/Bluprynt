@@ -34,16 +34,14 @@ export default function Hero() {
           Infrastructure
         </div>
         <h1 className={styles.title}>
-          The firm you
+          _Engineering Accuracy. Consulting Excellence_
           <br />
-          call <span className={styles.ital}>before</span>
+          <span className={styles.ital}>from blueprint</span>
           <br />
-          you <span className={styles.gold}>build.</span>
+          <span className={styles.gold}>to brilliance</span>
         </h1>
         <p className={styles.deck}>
-          Civil and infrastructure consulting for the decisions that matter
-          most. Feasibility, structural review, and owner-side advisory — before
-          the first drawing goes to site.
+          Plan with clarity, accuracy, and confidence at every stage of development.
         </p>
         <div className={styles.ctaRow}>
           <Link href="/#work" className="btn-primary">
