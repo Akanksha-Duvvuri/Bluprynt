@@ -12,16 +12,6 @@ import "./globals.css";
      Inter Tight  → Scto Grotesk A (primary)
      Nunito       → Airbnb Cereal W BD (secondary)
      Space Mono   → mono / readouts
-
-   When you have the licensed font files, swap to next/font/local:
-     import localFont from "next/font/local";
-     const sctoGrotesk = localFont({
-       src: [
-         { path: "./fonts/SctoGroteskA-Regular.woff2", weight: "400" },
-         { path: "./fonts/SctoGroteskA-Bold.woff2", weight: "700" },
-       ],
-       variable: "--font-primary",
-     });
    ────────────────────────────────────────────────────────────── */
 const primary = Inter_Tight({
   subsets: ["latin"],
@@ -73,15 +63,7 @@ export const metadata: Metadata = {
     locale: "en_IN",
   },
   themeColor: "#15130D",
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-    ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
-  },
-  manifest: "/site.webmanifest",
+  // Favicon is auto-detected from app/favicon.ico — no `icons` config needed.
 };
 
 export default function RootLayout({

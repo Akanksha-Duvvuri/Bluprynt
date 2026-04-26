@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./TopBar.module.css";
+// import Logo-A1.png from
 
 interface NavItem {
   href: string;
@@ -46,12 +47,7 @@ export default function TopBar() {
   return (
     <header className={styles.topbar}>
       <Link href="/" className={styles.brand}>
-        <div className={styles.mark} aria-hidden="true">
-          B
-        </div>
-        <div className={styles.name}>
-          Bluprynt <span>Consulting Group</span>
-        </div>
+          <img src="Logo-A1.png"></img>
       </Link>
 
       <nav className={styles.tabs} aria-label="Primary">
@@ -67,7 +63,7 @@ export default function TopBar() {
       </nav>
 
       <div className={styles.right}>
-        <div className={styles.pill}>Rev. 04</div>
+        <div className={styles.pill}>Rev. 02</div>
         <div className={`${styles.pill} ${styles.live}`}>Live</div>
       </div>
     </header>

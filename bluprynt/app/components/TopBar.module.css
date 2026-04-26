@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 44px;
+  height: 70px;
   background: rgba(21, 19, 13, 0.85);
   border-bottom: 1px solid var(--gold-faint);
   display: flex;
@@ -13,12 +13,9 @@
   backdrop-filter: blur(8px);
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-right: 32px;
-  text-decoration: none;
+.brand img{
+  width: 110px;
+  margin-right: 40px;
 }
 
 .mark {
@@ -35,12 +32,14 @@
   letter-spacing: -0.05em;
   position: relative;
 }
+
 .mark::before,
 .mark::after {
   content: "";
   position: absolute;
   background: var(--gold);
 }
+
 .mark::before {
   width: 4px;
   height: 1px;
@@ -48,6 +47,7 @@
   left: 50%;
   transform: translateX(-50%);
 }
+
 .mark::after {
   width: 1px;
   height: 4px;
@@ -56,32 +56,15 @@
   transform: translateY(-50%);
 }
 
-.name {
-  font-family: var(--primary);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--cream);
-  letter-spacing: -0.015em;
-}
-.name span {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--gold);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin-left: 8px;
-  font-weight: 400;
-}
-
 .tabs {
   display: flex;
-  gap: 4px;
+  gap: 10px;
   flex: 1;
 }
 
 .tab {
   font-family: var(--mono);
-  font-size: 9.5px;
+  font-size: 12px;
   color: rgba(255, 238, 198, 0.45);
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -107,9 +90,11 @@
   color: rgba(255, 238, 198, 0.45);
   letter-spacing: 0.15em;
 }
+
 .pill {
   border: 1px solid var(--gold-dim);
   padding: 5px 10px;
+  font-size: 10px;
 }
 .pill.live {
   color: var(--ink);
@@ -117,6 +102,7 @@
   border-color: var(--mint);
   font-weight: 700;
 }
+
 .pill.live::before {
   content: "";
   display: inline-block;
