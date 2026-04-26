@@ -17,11 +17,11 @@ interface FeaturedProject {
 
 const PROJECTS: FeaturedProject[] = [
   {
-    slug: "eastwood-viaduct",
-    num: "P-024 / 2025",
+    slug: "Project-1-Name",
+    num: "P-01 / 2026",
     tag: "Structural · Feasibility",
-    title: "Eastwood ",
-    titleEm: "Viaduct",
+    title: "Project  ",
+    titleEm: "-01",
     flag: { kind: "live", label: "Live" },
     metaLeft: "3-span · 240m",
     metaRight: "2025",
@@ -46,11 +46,11 @@ const PROJECTS: FeaturedProject[] = [
     ),
   },
   {
-    slug: "harbor-reclamation",
-    num: "P-021 / 2024",
+    slug: "Project-2-Name",
+    num: "P-02 / 2026",
     tag: "Advisory · Coastal",
-    title: "Harbor ",
-    titleEm: "Reclamation",
+    title: "Project  ",
+    titleEm: "-02",
     metaLeft: "14 ha",
     metaRight: "2024",
     thumb: (
@@ -76,11 +76,11 @@ const PROJECTS: FeaturedProject[] = [
     ),
   },
   {
-    slug: "cardinal-tower",
-    num: "P-019 / 2024",
+    slug: "Project-3-Name",
+    num: "P-03 / 2026",
     tag: "Structural · Review",
-    title: "Cardinal ",
-    titleEm: "Tower",
+    title: "Project ",
+    titleEm: "-03",
     flag: { kind: "review", label: "Review" },
     metaLeft: "22 floors",
     metaRight: "2024",
@@ -125,11 +125,11 @@ export default function WorkPreview() {
           <div className="section-head-left">
             <div className="label">▸ A-002 · Selected Work</div>
             <h2 className="title">
-              A record of <span className="em">considered</span> decisions.
+              A record of <span className="em">considered</span> decisions. <br></br> <span className="em">Our Work_</span>
             </h2>
           </div>
           <div className="section-head-right">
-            Twenty-four engagements across feasibility, structural review, and
+            X number of engagements across feasibility, structural review, and
             owner-side advisory. A short selection below — full archive on the
             work page.
           </div>

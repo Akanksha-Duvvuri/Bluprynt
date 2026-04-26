@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter_Tight, Nunito, Space_Mono } from "next/font/google";
 import Crosshair from "./components/Crosshair";
 import TopBar from "./components/TopBar";
@@ -62,9 +62,12 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
   },
-  themeColor: "#15130D",
   // Favicon is auto-detected from app/favicon.ico — no `icons` config needed.
 };
+
+export const viewport : Viewport = {
+    themeColor: "#15130D",
+}
 
 export default function RootLayout({
   children,

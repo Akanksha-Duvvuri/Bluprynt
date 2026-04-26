@@ -34,7 +34,7 @@ export default function Hero() {
           Infrastructure
         </div>
         <h1 className={styles.title}>
-          _Engineering Accuracy. Consulting Excellence_
+          _Engineering Accuracy. <br></br>Consulting Excellence_
           <br />
           <span className={styles.ital}>from blueprint</span>
           <br />
