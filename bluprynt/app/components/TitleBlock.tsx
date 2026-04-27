@@ -1,11 +1,11 @@
-interface TitleBlockRow {
+interface TitleBlockRow {  //key and value pair 0 describes one row of the title block
   k: string;
   v: string;
 }
 
 interface TitleBlockProps {
-  title: string;
-  rows: TitleBlockRow[];
+  title: string;  //bluprynt / home
+  rows: TitleBlockRow[]; //array of titleblockrow objects. so rows must be a list and every list should match the k and v shape
 }
 
 /**
@@ -39,7 +39,7 @@ export function SheetMeta({ sheetCode, lines }: SheetMetaProps) {
   return (
     <div className="sheet-meta">
       <div>
-        <span className="arrow">▸</span>Sheet{" "}
+        <span className="arrow">▸</span>Sheet{" "} {/*forces a whitespace - JSX collapses whitespaces bw tags but this forces a literal space to render*/}
         <span className="num">{sheetCode}</span>
       </div>
       {lines.map((line) => (
@@ -48,3 +48,6 @@ export function SheetMeta({ sheetCode, lines }: SheetMetaProps) {
     </div>
   );
 }
+
+
+//theres no default infront of these functions - both are equally important side by side

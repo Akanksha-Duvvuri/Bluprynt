@@ -25,7 +25,7 @@ export default function Hero() {
         <span />
         <span />
         <span />
-        <span />
+        <span /> {/*each of the span elements become one of the 4 corners*/}
       </div>
 
       <div className={styles.content}>

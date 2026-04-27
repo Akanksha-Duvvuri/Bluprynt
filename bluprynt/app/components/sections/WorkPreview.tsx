@@ -138,7 +138,7 @@ export default function WorkPreview() {
         <div className={styles.grid}>
           {PROJECTS.map((p) => (
             <Link
-              key={p.slug}
+              key={p.slug} //url safe identifier for each project - it becomes a part of the web address
               href={`/projects/${p.slug}`}
               className={styles.card}
             >

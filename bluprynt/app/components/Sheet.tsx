@@ -1,6 +1,8 @@
-import { ReactNode } from "react";
+import { ReactNode } from "react"; 
 
-interface SheetProps {
+//this is the bg that every section of the homepage uses. 
+
+interface SheetProps {   //anyone calling sheet must pass in these values with these types
   /** Section ID — must match an entry in Crosshair's SHEET_MAP */
   id: string;
   /** Visual variant — alternates down the homepage */
@@ -16,12 +18,12 @@ interface SheetProps {
  * Renders the faint default grid, the bright spotlight grid, the wash,
  * and corner ticks. Children render on top via z-index in their own styles.
  */
-export default function Sheet({
+export default function Sheet({ //destructuring directly instead of writing function Sheet(props) {props.id, etc etc }
   id,
   variant,
   className = "",
   children,
-}: SheetProps) {
+}: SheetProps) {  //annotation on the destructured argument
   return (
     <section
       id={id}
