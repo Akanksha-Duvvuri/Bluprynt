@@ -32,7 +32,7 @@
   --my: 50%;
   --crosshair-arm: 14px;
   --crosshair-pickbox: 12px;
-  --spot-radius: 280px;
+  --spot-radius: 130px;
 }
 
 html { scroll-behavior: smooth; }

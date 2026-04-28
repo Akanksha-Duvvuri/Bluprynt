@@ -6,8 +6,7 @@ import StatusBar from "./components/StatusBar";
 import Footer from "./components/Footer";
 import "./globals.css";
 
-/* ──────────────────────────────────────────────────────────────
-   FONTS
+/*
    Free stand-ins for the licensed brand fonts:
      Inter Tight  → Scto Grotesk A (primary)
      Nunito       → Airbnb Cereal W BD (secondary)

@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react"; //hooks - special functions that let the component managestate, run side effects and hold references and they only work inside client components
 import styles from "./Crosshair.module.css";
+
+//hooks are called inside a component funtion at the top level - NEVER inside loops or funtions. 
 
 /* ──────────────────────────────────────────────────────────────
    Maps section IDs to drawing sheet codes shown in the readout
    and status bar. Add new sections here as the site grows.
    ────────────────────────────────────────────────────────────── */
-const SHEET_MAP: Record<string, string> = {
+const SHEET_MAP: Record<string, string> = { //keys and values both are strings
   hero: "A-001",
   work: "A-002",
   services: "A-003",
