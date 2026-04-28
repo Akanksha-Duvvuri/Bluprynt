@@ -15,35 +15,44 @@ interface Service {
 const SERVICES: Service[] = [
   {
     num: "S-01",
-    title: "Structural ",
-    titleEm: "Assessment",
+    title: "Concrete Takeoff & ",
+    titleEm: "Estimation",
     desc: "Independent review of structural calculations, drawings, and design intent — before sign-off, before site, before cost is locked.",
     deliverables: ["Review Report", "Risk Register", "Sign-Off Memo"],
-    engagement: "▸ Project-based · 2–6 weeks",
+    engagement: "▸ Concrete Takeoff / Estimation · 2–6 weeks",
   },
   {
     num: "S-02",
-    title: "Feasibility ",
-    titleEm: "Studies",
+    title: "Rebar Shop ",
+    titleEm: "Drawings",
     desc: "Site, scope, cost and constructability — answered honestly, with the trade-offs laid out, before the first design fee is spent.",
     deliverables: ["Site Brief", "Cost Range", "Go / No-Go"],
-    engagement: "▸ Project-based · 4–10 weeks",
+    engagement: "▸ Rebar Detailing · 4–10 weeks",
   },
   {
     num: "S-03",
-    title: "Project ",
-    titleEm: "Advisory",
+    title: "Slab Edge &  ",
+    titleEm: "Dimensional Drawings",
     desc: "Owner-side counsel through design and procurement — the engineer in your corner when the room is full of consultants.",
     deliverables: ["Monthly Reviews", "Risk Watch", "Stage Sign-Offs"],
-    engagement: "▸ Retainer · Ongoing",
+    engagement: "▸ Slab Edge / Dimensional Drawings · Ongoing",
   },
   {
     num: "S-04",
-    title: "Due ",
-    titleEm: "Diligence",
+    title: "Support of Excavation ",
+    titleEm: "Takeoffs",
     desc: "Acquisition, lender, or owner-side technical diligence — the report you can put in front of a board with confidence.",
     deliverables: ["Tech DD Report", "Findings Pack", "Q&A Session"],
-    engagement: "▸ Project-based · 3–5 weeks",
+    engagement: "▸ CMU Estimation · 3–5 weeks",
+  },
+
+  {
+    num: "S-05",
+    title: "Submittal ",
+    titleEm: "Coordination",
+    desc: "Acquisition, lender, or owner-side technical diligence — the report you can put in front of a board with confidence.",
+    deliverables: ["Tech DD Report", "Findings Pack", "Q&A Session"],
+    engagement: "▸ Submittal Coordination · 3–5 weeks",
   },
 ];
 
@@ -74,9 +83,16 @@ export default function ServicesPreview() {
             </h2>
           </div>
           <div className="section-head-right">
-            Tap any line for the full spec sheet — deliverables, timelines, and
-            what we need from you to start.
+            <p>
+              Tap any line for the full spec sheet — deliverables, timelines, and
+              what we need from you to start.
+            </p>
+            <p className="muted">
+              There is no minimum project pricing — we take on all scales of work.
+              Rates are transparent, with no hidden fees.
+            </p>
           </div>
+          
         </div>
 
         <div className={styles.grid}>

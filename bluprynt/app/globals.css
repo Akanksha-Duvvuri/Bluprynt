@@ -232,6 +232,7 @@ main {
   justify-content: space-between;
   gap: 40px;
   margin-bottom: 56px;
+  margin-top: 45px;
   padding-bottom: 24px;
   border-bottom: 1px solid var(--sheet-divider);
 }
@@ -261,6 +262,17 @@ main {
   color: var(--sheet-text-soft);
   line-height: 1.6;
   max-width: 320px;
+}
+
+.section-head-right p {
+  margin: 0;
+}
+.section-head-right p + p {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--sheet-divider);
+  font-size: 11.5px;
+  color: var(--sheet-text-dim);
 }
 
 /* ── Buttons ── */
