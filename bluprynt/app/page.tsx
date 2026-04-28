@@ -1,4 +1,4 @@
-import type { Metadata } from "next"; //typescript type from nextjs that describes the shape of a metadata object that usually gets inserted into the head of the HTML - import type shows that its purely type checking, js throws it away when compiling to JS. NEXT JS reads the exported metadata at build time, hydrates it into the HTML head tag and ensures that you're filling it in correctly
+import type { Metadata } from "next";
 import Hero from "./components/sections/Hero";
 import WorkPreview from "./components/sections/WorkPreview";
 import ServicesPreview from "./components/sections/ServicesPreview";
