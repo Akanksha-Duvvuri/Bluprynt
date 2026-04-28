@@ -1,0 +1,83 @@
+/* ═══════════════════════════════════════════════════════════════
+   SitePlanStrip — bigger, scroll-into-view, per-section
+   ═══════════════════════════════════════════════════════════════ */
+
+/*
+  Each zone reads its own custom property (--p1 through --p5),
+  set by JS based on whether that zone's matching section is in view.
+
+  Path animation: strokeDashoffset interpolates 1 → 0 as --pN goes 0 → 1.
+  Text opacity follows the same curve.
+
+  Because each zone has its OWN progress value, scrolling reveals only
+  the zone whose section is currently in view — exactly what the user
+  asked for.
+*/
+
+.wrap {
+  position: fixed;
+  top: 60px;
+  bottom: 50px;
+  right: 24px;
+  width: 220px;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0.9;
+
+  /* progress for each zone — set by JS, default to 0 */
+  --p1: 0;
+  --p2: 0;
+  --p3: 0;
+  --p4: 0;
+  --p5: 0;
+
+  color: var(--gold);
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.path {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.15s linear;
+  vector-effect: non-scaling-stroke;
+}
+
+.text {
+  font-family: var(--mono), monospace;
+  opacity: 0;
+  transition: opacity 0.2s linear;
+}
+
+/* ── Zone bindings ── */
+/*
+  Inside each zone, every path's dashoffset = 1 - --pN
+  Every text's opacity is a sharper curve that snaps in around p > 0.5
+*/
+
+.z1 .path { stroke-dashoffset: calc(1 - var(--p1)); }
+.z1 .text { opacity: clamp(0, calc((var(--p1) - 0.5) * 4), 1); }
+
+.z2 .path { stroke-dashoffset: calc(1 - var(--p2)); }
+.z2 .text { opacity: clamp(0, calc((var(--p2) - 0.5) * 4), 1); }
+
+.z3 .path { stroke-dashoffset: calc(1 - var(--p3)); }
+.z3 .text { opacity: clamp(0, calc((var(--p3) - 0.5) * 4), 1); }
+
+.z4 .path { stroke-dashoffset: calc(1 - var(--p4)); }
+.z4 .text { opacity: clamp(0, calc((var(--p4) - 0.5) * 4), 1); }
+
+.z5 .path { stroke-dashoffset: calc(1 - var(--p5)); }
+.z5 .text { opacity: clamp(0, calc((var(--p5) - 0.5) * 4), 1); }
+
+/* ── Mobile/tablet hide ── */
+@media (max-width: 1280px) {
+  .wrap {
+    display: none;
+  }
+}

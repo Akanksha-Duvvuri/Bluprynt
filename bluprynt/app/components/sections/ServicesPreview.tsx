@@ -19,7 +19,7 @@ const SERVICES: Service[] = [
     titleEm: "Estimation",
     desc: "Independent review of structural calculations, drawings, and design intent — before sign-off, before site, before cost is locked.",
     deliverables: ["Review Report", "Risk Register", "Sign-Off Memo"],
-    engagement: "▸ Concrete Takeoff / Estimation · 2–6 weeks",
+    engagement: "▸ Project-Based · 2–6 weeks",
   },
   {
     num: "S-02",
@@ -27,7 +27,7 @@ const SERVICES: Service[] = [
     titleEm: "Drawings",
     desc: "Site, scope, cost and constructability — answered honestly, with the trade-offs laid out, before the first design fee is spent.",
     deliverables: ["Site Brief", "Cost Range", "Go / No-Go"],
-    engagement: "▸ Rebar Detailing · 4–10 weeks",
+    engagement: "▸ Project-Based · 2–6 weeks",
   },
   {
     num: "S-03",
@@ -35,7 +35,7 @@ const SERVICES: Service[] = [
     titleEm: "Dimensional Drawings",
     desc: "Owner-side counsel through design and procurement — the engineer in your corner when the room is full of consultants.",
     deliverables: ["Monthly Reviews", "Risk Watch", "Stage Sign-Offs"],
-    engagement: "▸ Slab Edge / Dimensional Drawings · Ongoing",
+    engagement: "▸ Project-Based · 2–6 weeks",
   },
   {
     num: "S-04",
@@ -43,7 +43,7 @@ const SERVICES: Service[] = [
     titleEm: "Takeoffs",
     desc: "Acquisition, lender, or owner-side technical diligence — the report you can put in front of a board with confidence.",
     deliverables: ["Tech DD Report", "Findings Pack", "Q&A Session"],
-    engagement: "▸ CMU Estimation · 3–5 weeks",
+    engagement: "▸ Project-Based · 2–6 weeks",
   },
 
   {
@@ -52,7 +52,7 @@ const SERVICES: Service[] = [
     titleEm: "Coordination",
     desc: "Acquisition, lender, or owner-side technical diligence — the report you can put in front of a board with confidence.",
     deliverables: ["Tech DD Report", "Findings Pack", "Q&A Session"],
-    engagement: "▸ Submittal Coordination · 3–5 weeks",
+    engagement: "▸ Project-Based · 2–6 weeks",
   },
 ];
 

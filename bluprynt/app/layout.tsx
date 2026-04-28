@@ -1,16 +1,28 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { Inter_Tight, Nunito, Space_Mono } from "next/font/google";
 import Crosshair from "./components/Crosshair";
 import TopBar from "./components/TopBar";
 import StatusBar from "./components/StatusBar";
 import Footer from "./components/Footer";
 import "./globals.css";
+import SitePlanStrip from "./components/SitePlanStrimp";
 
-/*
+/* ──────────────────────────────────────────────────────────────
+   FONTS
    Free stand-ins for the licensed brand fonts:
      Inter Tight  → Scto Grotesk A (primary)
      Nunito       → Airbnb Cereal W BD (secondary)
      Space Mono   → mono / readouts
+
+   When you have the licensed font files, swap to next/font/local:
+     import localFont from "next/font/local";
+     const sctoGrotesk = localFont({
+       src: [
+         { path: "./fonts/SctoGroteskA-Regular.woff2", weight: "400" },
+         { path: "./fonts/SctoGroteskA-Bold.woff2", weight: "700" },
+       ],
+       variable: "--font-primary",
+     });
    ────────────────────────────────────────────────────────────── */
 const primary = Inter_Tight({
   subsets: ["latin"],
@@ -61,12 +73,17 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
   },
-  // Favicon is auto-detected from app/favicon.ico — no `icons` config needed.
+  themeColor: "#15130D",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
+  manifest: "/site.webmanifest",
 };
-
-export const viewport : Viewport = {
-    themeColor: "#15130D",
-}
 
 export default function RootLayout({
   children,
@@ -79,6 +96,7 @@ export default function RootLayout({
       <body>
         <Crosshair />
         <TopBar />
+        <SitePlanStrip></SitePlanStrip>
         <main>{children}</main>
         <Footer />
         <StatusBar />
