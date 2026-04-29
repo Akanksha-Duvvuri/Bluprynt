@@ -363,17 +363,3 @@ main {
     opacity: 0.18;
   }
 }
-
-@media (min-width: 1281px) {
-  .sheet-body {
-    /* original right padding was 80px; bump to clear 220px strip + gap */
-    padding-right: 280px;
-  }
- 
-  /* Hero content has its own padding rule, override that too */
-  .sheet .hero-content,
-  section.hero > div:has(> h1) {
-    padding-right: 280px;
-  }
-}
- 

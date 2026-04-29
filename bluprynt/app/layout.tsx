@@ -5,7 +5,6 @@ import TopBar from "./components/TopBar";
 import StatusBar from "./components/StatusBar";
 import Footer from "./components/Footer";
 import "./globals.css";
-import SitePlanStrip from "./components/SitePlanStrimp";
 
 /* ──────────────────────────────────────────────────────────────
    FONTS
@@ -96,7 +95,6 @@ export default function RootLayout({
       <body>
         <Crosshair />
         <TopBar />
-        <SitePlanStrip></SitePlanStrip>
         <main>{children}</main>
         <Footer />
         <StatusBar />

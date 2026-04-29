@@ -97,11 +97,8 @@ export default function TopBar() {
   return (
     <header className={styles.topbar}>
       <Link href="/" className={styles.brand}>
-        <div className={styles.mark} aria-hidden="true">
-          B
-        </div>
-        <div className={styles.name}>
-          Bluprynt <span>Consulting Group</span>
+        <div aria-hidden="true">
+          <img src="Logo-A1.png"></img>
         </div>
       </Link>
 
