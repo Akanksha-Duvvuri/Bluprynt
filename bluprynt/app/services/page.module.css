@@ -1,0 +1,164 @@
+/* ═══════════════════════════════════════════════════════════════
+   /services
+   ═══════════════════════════════════════════════════════════════ */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--sheet-divider);
+}
+
+.service {
+  padding: 48px 0;
+  border-bottom: 1px solid var(--sheet-divider);
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 56px;
+}
+
+.serviceHead {
+  position: sticky;
+  top: 80px;
+  align-self: start;
+}
+
+.serviceNum {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.serviceTitle {
+  font-family: var(--primary);
+  font-size: 38px;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.em {
+  color: var(--gold);
+  font-weight: 400;
+}
+
+.serviceBody {
+  max-width: 720px;
+}
+
+.serviceLong {
+  font-family: var(--secondary);
+  font-size: 15px;
+  color: var(--sheet-text-soft);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.specSheet {
+  border-top: 1px dashed var(--sheet-divider);
+  border-bottom: 1px dashed var(--sheet-divider);
+  padding: 16px 0;
+}
+
+.specRow {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 24px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--sheet-divider);
+  align-items: start;
+}
+
+.specRow:last-child {
+  border-bottom: none;
+}
+
+.specK {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--sheet-text-dim);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.specV {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.06em;
+}
+
+.specVProse {
+  font-family: var(--secondary);
+  font-size: 13px;
+  color: var(--sheet-text-soft);
+  line-height: 1.6;
+}
+
+.deliv {
+  border: 1px solid var(--sheet-divider);
+  padding: 4px 9px;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ── Bottom CTA ── */
+.cta {
+  margin-top: 80px;
+  padding-top: 56px;
+  border-top: 1px solid var(--sheet-divider);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 64px;
+  align-items: end;
+}
+
+.ctaLabel {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.ctaTitle {
+  font-family: var(--primary);
+  font-size: 44px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 18px;
+}
+
+.ctaCopy {
+  font-family: var(--secondary);
+  font-size: 14px;
+  color: var(--sheet-text-soft);
+  line-height: 1.65;
+  max-width: 520px;
+}
+
+@media (max-width: 1100px) {
+  .service {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .serviceHead {
+    position: static;
+  }
+  .specRow {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .cta {
+    grid-template-columns: 1fr;
+  }
+}

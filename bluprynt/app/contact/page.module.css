@@ -1,0 +1,85 @@
+/* ═══════════════════════════════════════════════════════════════
+   /contact
+   ═══════════════════════════════════════════════════════════════ */
+
+.wrap {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 64px;
+}
+
+.info {
+  padding-top: 12px;
+}
+
+.block {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px dashed var(--sheet-divider);
+}
+.block:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--gold);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.value {
+  font-family: var(--primary);
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.4;
+}
+
+.value a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--sheet-divider);
+  padding-bottom: 2px;
+  transition: border-color 0.15s ease;
+}
+.value a:hover {
+  border-color: var(--gold);
+}
+
+.steps {
+  font-family: var(--secondary);
+  font-size: 13px;
+  color: var(--sheet-text-soft);
+  line-height: 1.65;
+  list-style: none;
+  counter-reset: step;
+}
+
+.steps li {
+  counter-increment: step;
+  padding: 6px 0 6px 32px;
+  position: relative;
+}
+
+.steps li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+@media (max-width: 1100px) {
+  .wrap {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}

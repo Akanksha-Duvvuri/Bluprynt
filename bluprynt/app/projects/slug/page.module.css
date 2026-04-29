@@ -1,0 +1,126 @@
+/* ═══════════════════════════════════════════════════════════════
+   /projects/[slug] — case study
+   ═══════════════════════════════════════════════════════════════ */
+
+.breadcrumb {
+  margin-bottom: 32px;
+}
+
+.crumb {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gold-deep);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid var(--sheet-divider);
+  padding-bottom: 4px;
+  transition: border-color 0.15s ease;
+}
+.crumb:hover {
+  border-color: var(--gold-deep);
+}
+
+.hero {
+  margin: 0 0 56px;
+  border: 1px solid var(--sheet-divider);
+  background: rgba(143, 118, 64, 0.04);
+  position: relative;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--sheet-line) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--sheet-line) 6%, transparent) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+}
+
+.hero svg {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.specSheet {
+  border-top: 1px dashed var(--sheet-divider);
+  border-bottom: 1px dashed var(--sheet-divider);
+  margin-bottom: 56px;
+}
+
+.specRow {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 24px;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--sheet-divider);
+  align-items: start;
+}
+.specRow:last-child {
+  border-bottom: none;
+}
+
+.specK {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--sheet-text-dim);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.specV {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--gold-deep);
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.story {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  margin-bottom: 32px;
+}
+
+.storySection {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 56px;
+  padding-bottom: 32px;
+  border-bottom: 1px dashed var(--sheet-divider);
+}
+.storySection:last-child {
+  border-bottom: none;
+}
+
+.storyLabel {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gold-deep);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.storyBody {
+  font-family: var(--secondary);
+  font-size: 15px;
+  color: var(--sheet-text-soft);
+  line-height: 1.75;
+  max-width: 640px;
+}
+
+@media (max-width: 1100px) {
+  .specRow,
+  .storySection {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .storySection {
+    gap: 16px;
+  }
+}
