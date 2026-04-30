@@ -1,0 +1,249 @@
+/* ═══════════════════════════════════════════════════════════════
+   /admin/login
+   ═══════════════════════════════════════════════════════════════ */
+
+.shell {
+  min-height: 100vh;
+  background: var(--ink-deep);
+  color: var(--cream);
+  display: grid;
+  place-items: center;
+  padding: 60px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Faint blueprint grid behind the form */
+.bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(196, 165, 100, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196, 165, 100, 0.05) 1px, transparent 1px);
+  background-size: 22px 22px;
+  pointer-events: none;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: var(--ink);
+  border: 1px solid rgba(196, 165, 100, 0.18);
+  padding: 56px 48px;
+}
+
+/* Corner ticks */
+.card::before,
+.card::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--gold);
+  border-style: solid;
+}
+.card::before {
+  top: -1px;
+  left: -1px;
+  border-width: 1px 0 0 1px;
+}
+.card::after {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 1px 1px 0;
+}
+
+/* Brand block */
+.brandBlock {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(196, 165, 100, 0.15);
+}
+
+.brandMark {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: var(--gold);
+  color: var(--ink);
+  font-family: var(--primary);
+  font-weight: 700;
+  font-size: 18px;
+  border-radius: 2px;
+}
+
+.brandText {
+  font-family: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.brandText span {
+  color: var(--gold);
+  font-weight: 400;
+}
+
+.headLabel {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.heading {
+  font-family: var(--primary);
+  font-size: 36px;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  margin-bottom: 36px;
+}
+
+.em {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--gold);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.input {
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(196, 165, 100, 0.25);
+  padding: 10px 0;
+  font-family: var(--primary);
+  font-size: 16px;
+  color: var(--cream);
+  letter-spacing: -0.01em;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.input::placeholder {
+  color: rgba(255, 238, 198, 0.3);
+}
+
+.input:focus {
+  border-bottom-color: var(--gold);
+}
+
+/* Error message */
+.error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(193, 101, 101, 0.08);
+  border-left: 2px solid var(--red);
+  padding: 10px 14px;
+  font-family: var(--secondary);
+  font-size: 13px;
+  color: var(--cream);
+}
+
+.errorTag {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--red);
+  letter-spacing: 0.18em;
+  font-weight: 700;
+}
+
+/* Submit button */
+.submit {
+  appearance: none;
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  color: var(--ink);
+  padding: 14px 24px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.submit:hover:not(:disabled) {
+  background: transparent;
+  color: var(--gold);
+}
+
+.submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Footnote */
+.footnote {
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(196, 165, 100, 0.1);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(255, 238, 198, 0.5);
+  letter-spacing: 0.05em;
+}
+
+.publicLink {
+  color: rgba(255, 238, 198, 0.55);
+  text-decoration: none;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.publicLink:hover {
+  color: var(--gold);
+}
+
+.footnoteRight {
+  font-family: var(--secondary);
+  font-size: 12px;
+  letter-spacing: 0;
+}
+
+.contactPrompt {
+  color: var(--gold);
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 36px 24px;
+  }
+  .heading {
+    font-size: 28px;
+  }
+}

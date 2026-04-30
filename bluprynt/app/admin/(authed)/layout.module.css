@@ -1,0 +1,178 @@
+/* ═══════════════════════════════════════════════════════════════
+   /admin layout — sidebar + main area
+   Brand-aligned: same gold-on-ink palette as the public site.
+   ═══════════════════════════════════════════════════════════════ */
+
+.shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  background: var(--ink-soft);
+  border-right: 1px solid rgba(196, 165, 100, 0.15);
+  padding: 28px 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  margin-bottom: 36px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(196, 165, 100, 0.15);
+}
+
+.brandMark {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  background: var(--gold);
+  color: var(--ink);
+  font-family: var(--primary);
+  font-weight: 700;
+  font-size: 16px;
+  border-radius: 2px;
+}
+
+.brandName {
+  font-family: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.brandName span {
+  color: var(--gold);
+  font-weight: 400;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.navLabel {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--gold);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.navLink {
+  font-family: var(--secondary);
+  font-size: 14px;
+  color: var(--cream);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-left: 2px solid transparent;
+  margin-left: -14px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.navLink:hover {
+  border-left-color: var(--gold);
+  background: rgba(196, 165, 100, 0.06);
+}
+
+.signedAs {
+  margin-top: 8px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: rgba(196, 165, 100, 0.04);
+  border: 1px solid rgba(196, 165, 100, 0.12);
+}
+
+.signedAsLabel {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: rgba(255, 238, 198, 0.5);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.signedAsName {
+  font-family: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin-bottom: 2px;
+}
+
+.signedAsEmail {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 238, 198, 0.6);
+  letter-spacing: 0.05em;
+  word-break: break-all;
+}
+
+.signoutBtn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 9px 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.signoutBtn:hover {
+  background: rgba(196, 165, 100, 0.1);
+}
+
+.footerNote {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(196, 165, 100, 0.1);
+}
+
+.publicLink {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(255, 238, 198, 0.55);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.publicLink:hover {
+  color: var(--gold);
+}
+
+.main {
+  padding: 56px 64px;
+  overflow-y: auto;
+}
+
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+    height: auto;
+  }
+}
