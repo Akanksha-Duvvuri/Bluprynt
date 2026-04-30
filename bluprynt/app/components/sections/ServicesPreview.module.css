@@ -11,7 +11,13 @@
   border-bottom: 1px solid var(--sheet-divider);
   background: var(--sheet-card-bg);
   transition: background 0.2s ease;
+ 
+  /* New: make the Link feel like a card, not a hyperlink */
+  display: block;
+  text-decoration: none;
+  color: inherit;
 }
+ 
 .row:nth-child(2n) {
   border-right: none;
 }
@@ -24,6 +30,8 @@
 :global(.sheet-cream) .row:hover {
   background: rgba(196, 165, 100, 0.12);
 }
+ 
+
 
 .num {
   font-family: var(--mono);

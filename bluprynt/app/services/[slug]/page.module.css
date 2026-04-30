@@ -1,88 +1,64 @@
 /* ═══════════════════════════════════════════════════════════════
-   /services
-   Replaces the OLD content of app/services/page.module.css.
-
-   What changed:
-     - .service was a <article>; it's now a <Link>. Added text-decoration: none,
-       color: inherit, display: block.
-     - Added .serviceFoot + .viewLink for the new "View full spec sheet →" link.
-     - Hover effect: the section subtly highlights to telegraph clickability.
+   /services/[slug] — service detail page
    ═══════════════════════════════════════════════════════════════ */
 
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  border-top: 1px solid var(--sheet-divider);
-}
-
-.service {
-  padding: 48px 0;
-  border-bottom: 1px solid var(--sheet-divider);
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 56px;
-
-  /* link-as-card */
-  text-decoration: none;
-  color: inherit;
-  transition: background 0.2s ease;
-}
-.service:hover {
-  background: rgba(196, 165, 100, 0.025);
-}
-
-.serviceHead {
-  position: sticky;
-  top: 80px;
-  align-self: start;
-}
-
-.serviceNum {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--gold);
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  margin-bottom: 16px;
-}
-
-.serviceTitle {
-  font-family: var(--primary);
-  font-size: 38px;
-  font-weight: 500;
-  letter-spacing: -0.035em;
-  line-height: 1;
-}
-
-.em {
-  color: var(--gold);
-  font-weight: 400;
-}
-
-.serviceBody {
-  max-width: 720px;
-}
-
-.serviceLong {
-  font-family: var(--secondary);
-  font-size: 15px;
-  color: var(--sheet-text-soft);
-  line-height: 1.7;
+.breadcrumb {
   margin-bottom: 32px;
 }
 
+.crumb {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid var(--sheet-divider);
+  padding-bottom: 4px;
+  transition: border-color 0.15s ease;
+}
+.crumb:hover {
+  border-color: var(--gold);
+}
+
+/* Long-form description block */
+.longSection {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 56px;
+  padding: 24px 0 48px;
+  border-bottom: 1px solid var(--sheet-divider);
+  margin-bottom: 48px;
+}
+
+.longLabel {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.longBody {
+  font-family: var(--secondary);
+  font-size: 15px;
+  color: var(--sheet-text-soft);
+  line-height: 1.75;
+  max-width: 640px;
+}
+
+/* Spec sheet */
 .specSheet {
   border-top: 1px dashed var(--sheet-divider);
   border-bottom: 1px dashed var(--sheet-divider);
-  padding: 16px 0;
+  margin-bottom: 56px;
 }
 
 .specRow {
   display: grid;
-  grid-template-columns: 160px 1fr;
+  grid-template-columns: 200px 1fr;
   gap: 24px;
-  padding: 12px 0;
+  padding: 16px 0;
   border-bottom: 1px dashed var(--sheet-divider);
   align-items: start;
 }
@@ -102,51 +78,36 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--gold);
-  letter-spacing: 0.06em;
 }
 
 .specVProse {
   font-family: var(--secondary);
-  font-size: 13px;
+  font-size: 14px;
   color: var(--sheet-text-soft);
   line-height: 1.6;
+  max-width: 560px;
 }
 
 .deliv {
-  border: 1px solid var(--sheet-divider);
-  padding: 4px 9px;
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-
-/* Footer link inside each service card */
-.serviceFoot {
-  margin-top: 24px;
-  padding-top: 18px;
-  border-top: 1px dashed var(--sheet-divider);
-}
-
-.viewLink {
   font-family: var(--mono);
   font-size: 10px;
   color: var(--gold);
-  letter-spacing: 0.22em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
+  border: 1px solid var(--sheet-divider);
+  padding: 4px 9px;
 }
 
-/* ── Bottom CTA ── */
+/* Bottom CTA */
 .cta {
-  margin-top: 80px;
+  margin-top: 24px;
   padding-top: 56px;
   border-top: 1px solid var(--sheet-divider);
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 64px;
   align-items: end;
+  margin-bottom: 32px;
 }
 
 .ctaLabel {
@@ -167,6 +128,11 @@
   margin-bottom: 18px;
 }
 
+.em {
+  color: var(--gold);
+  font-weight: 600;
+}
+
 .ctaCopy {
   font-family: var(--secondary);
   font-size: 14px;
@@ -176,16 +142,10 @@
 }
 
 @media (max-width: 1100px) {
-  .service {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  .serviceHead {
-    position: static;
-  }
+  .longSection,
   .specRow {
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: 12px;
   }
   .cta {
     grid-template-columns: 1fr;

@@ -16,7 +16,11 @@ export default function ServicesPage() {
     <Sheet id="services" variant="dark">
       <SheetMeta
         sheetCode="A-003"
-        lines={["Layer · SERVICES", "Engagement matrix", `Items · ${SERVICES.length}`]}
+        lines={[
+          "Layer · SERVICES",
+          "Engagement matrix",
+          `Items · ${SERVICES.length}`,
+        ]}
       />
       <TitleBlock
         title="Bluprynt / Services"
@@ -40,15 +44,20 @@ export default function ServicesPage() {
           <div className="section-head-right">
             <p>
               Each service has a defined deliverable, a typical timeline, and
-              a clear answer to the question of who it&apos;s for. Everything
-              we offer is project-scaled — there is no minimum project size.
+              a clear answer to the question of who it&apos;s for. Click any
+              service for the full spec sheet.
             </p>
           </div>
         </div>
 
         <div className={styles.list}>
           {SERVICES.map((s) => (
-            <article key={s.slug} id={s.slug} className={styles.service}>
+            <Link
+              key={s.slug}
+              href={`/services/${s.slug}`}
+              id={s.slug}
+              className={styles.service}
+            >
               <div className={styles.serviceHead}>
                 <div className={styles.serviceNum}>{s.num}</div>
                 <h2 className={styles.serviceTitle}>
@@ -65,7 +74,9 @@ export default function ServicesPage() {
                     <span className={styles.specK}>Deliverables</span>
                     <span className={styles.specV}>
                       {s.deliverables.map((d) => (
-                        <span key={d} className={styles.deliv}>{d}</span>
+                        <span key={d} className={styles.deliv}>
+                          {d}
+                        </span>
                       ))}
                     </span>
                   </div>
@@ -82,8 +93,12 @@ export default function ServicesPage() {
                     <span className={styles.specVProse}>{s.whoItsFor}</span>
                   </div>
                 </div>
+
+                <div className={styles.serviceFoot}>
+                  <span className={styles.viewLink}>View full spec sheet →</span>
+                </div>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
 
@@ -91,7 +106,9 @@ export default function ServicesPage() {
           <div className={styles.ctaLeft}>
             <div className={styles.ctaLabel}>▸ Start</div>
             <h2 className={styles.ctaTitle}>
-              Not sure which one<br />you need?
+              Not sure which one
+              <br />
+              you need?
             </h2>
             <p className={styles.ctaCopy}>
               Tell us about the project and we&apos;ll tell you honestly
