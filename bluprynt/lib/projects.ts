@@ -1,132 +1,102 @@
 /**
- * Project data — single source of truth for all projects on the site.
+ * ──────────────────────────────────────────────────────────────
+ * lib/projects.ts — DATABASE-BACKED VERSION
  *
- * Owner-editable: add/remove/reorder projects here. Each one needs a
- * unique `slug` (URL-safe lowercase string) — that becomes the URL
- * path at /projects/[slug].
+ * This used to be a static TypeScript array. After Phase 1 it
+ * fetches from Postgres via Drizzle.
  *
- * For MVP, no CMS — content sits in this file. When you outgrow this,
- * swap to markdown + frontmatter; the page components don't change.
+ * The functions returned by this module match the OLD signatures
+ * (getFeaturedProjects, getAllProjectSlugs, getProjectBySlug) so
+ * the rest of the app — page components, ProjectsPage, [slug] page,
+ * WorkPreview — DOES NOT CHANGE. Just the fetch source did.
+ *
+ * Note: every function here is async because database calls return
+ * promises. Pages that consume these need to be `async` (which all
+ * Next.js server components can be).
+ * ──────────────────────────────────────────────────────────────
  */
 
-export type ProjectStatus = "live" | "review" | "complete" | "ongoing";
+import { db, projects } from "@/db";
+import { eq } from "drizzle-orm";
+import type { Project as DbProject } from "@/db";
 
+/**
+ * The shape the rest of the app expects.
+ * Matches the old static-data interface so we don't have to refactor
+ * every component that consumes a Project.
+ */
 export interface Project {
   slug: string;
-  num: string;            // e.g. "P-024 / 2025"
+  num: string;
   name: string;
-  nameEm: string;         // gold-highlighted portion (e.g. "Viaduct")
-  sector: string;         // e.g. "Structural · Feasibility"
+  nameEm: string;
+  sector: string;
   year: number;
-  scope: string;          // one-line summary, e.g. "3-span · 240m"
-  status?: ProjectStatus;
-  client?: string;        // or "Anonymised"
+  scope: string;
+  status?: "live" | "review" | "complete" | "ongoing";
+  client?: string;
   location?: string;
   tools?: string[];
-
-  // Long-form content for the case study page
   challenge: string;
   approach: string;
   outcome: string;
-
-  // Featured = appears on homepage
   featured?: boolean;
 }
 
-export const PROJECTS: Project[] = [
-  {
-    slug: "eastwood-viaduct",
-    num: "P-024 / 2025",
-    name: "Eastwood ",
-    nameEm: "Viaduct",
-    sector: "Structural · Feasibility",
-    year: 2025,
-    scope: "3-span · 240m",
-    status: "live",
-    client: "State Transport Authority",
-    location: "Eastwood, AU",
-    tools: ["SAP2000", "MIDAS", "AutoCAD"],
-    challenge:
-      "A three-span continuous viaduct over a sensitive watercourse, with the original feasibility cost estimate already over budget by 18%. The client needed an independent review before committing to detailed design.",
-    approach:
-      "We re-ran the deck depth-to-span ratio analysis, challenged the assumption of a steel-composite superstructure, and modelled three alternative configurations including a precast segmental option. We costed each at concept level with our own QS partner, then ran a constructability review with two contractors.",
-    outcome:
-      "Recommendation to proceed with a precast segmental superstructure rather than steel-composite. Cost reduction of 14% against the original estimate. The recommendation was adopted and the project is currently in detailed design.",
-    featured: true,
-  },
-  {
-    slug: "harbor-reclamation",
-    num: "P-021 / 2024",
-    name: "Harbor ",
-    nameEm: "Reclamation",
-    sector: "Advisory · Coastal",
-    year: 2024,
-    scope: "14 ha",
-    status: "complete",
-    client: "Anonymised (port authority)",
-    location: "South-East Asia",
-    tools: ["MIKE 21", "Civil 3D", "Revit"],
-    challenge:
-      "A 14-hectare reclamation project where the original coastal protection design did not adequately account for projected sea-level rise over a 50-year horizon, and the geotechnical report was based on borings spaced too far apart for a project of this scale.",
-    approach:
-      "We commissioned an independent geotechnical interpretation, ran a coupled wave-and-current model with updated SLR scenarios, and held two technical workshops with the design team. We produced a written technical opinion and a risk register tied to specific design decisions.",
-    outcome:
-      "Revetment crest level was raised by 0.6m and the breakwater alignment was changed to reduce wave focusing on the eastern face. Additional geotech investigation was scoped and executed. Project handed over without coastal protection issues to date.",
-    featured: true,
-  },
-  {
-    slug: "cardinal-tower",
-    num: "P-019 / 2024",
-    name: "Cardinal ",
-    nameEm: "Tower",
-    sector: "Structural · Review",
-    year: 2024,
-    scope: "22 floors",
-    status: "review",
-    client: "Anonymised (developer)",
-    location: "Hyderabad, IN",
-    tools: ["ETABS", "SAFE", "Revit"],
-    challenge:
-      "A 22-storey residential tower where the structural design had been signed off but the developer had concerns about post-tensioning detailing in the transfer slab and wanted an independent peer review before construction began.",
-    approach:
-      "We reviewed the calculations, the drawings, and the construction sequence, and re-ran the transfer slab analysis with stricter assumptions. Two on-site visits to the precast yard. A formal peer review report with findings categorised by severity.",
-    outcome:
-      "Three findings rated Major, eight rated Moderate. The transfer slab reinforcement detail was revised. Client elected to delay site start by six weeks to incorporate the changes — significantly cheaper than discovering them during construction.",
-    featured: true,
-  },
-  {
-    slug: "pinewood-rail-station",
-    num: "P-016 / 2023",
-    name: "Pinewood ",
-    nameEm: "Rail Station",
-    sector: "Feasibility · Civic",
-    year: 2023,
-    scope: "1,200 daily passengers",
-    status: "complete",
-    client: "Regional Rail Operator",
-    location: "Pinewood, NZ",
-    tools: ["Civil 3D", "Revit", "AutoCAD"],
-    challenge:
-      "A new commuter rail station in a heritage town. The proposed location was politically contentious and the operator wanted feasibility-grade comparison of three sites with full accessibility, parking, and integration analysis.",
-    approach:
-      "Site brief for each option, schematic plan and section, traffic and pedestrian counts, accessibility audit, and a comparative cost band. We presented findings at two public consultations and revised the brief based on community feedback.",
-    outcome:
-      "Site C (originally the operator's third choice) was selected after the analysis clearly showed the lowest cost-per-passenger and the best accessibility outcomes. Now under construction.",
-    featured: false,
-  },
-];
-
-/** Helper: get a project by slug (for [slug] page). */
-export function getProjectBySlug(slug: string): Project | undefined {
-  return PROJECTS.find((p) => p.slug === slug);
+/**
+ * Hydrate a database row into the shape pages expect.
+ * Mostly: parse the JSON-encoded `tools` field, and turn nullable
+ * columns into optional fields.
+ */
+function hydrate(row: DbProject): Project {
+  return {
+    slug: row.slug,
+    num: row.num,
+    name: row.name,
+    nameEm: row.nameEm,
+    sector: row.sector,
+    year: row.year,
+    scope: row.scope,
+    status: row.status ?? undefined,
+    client: row.client ?? undefined,
+    location: row.location ?? undefined,
+    tools: row.tools ? (JSON.parse(row.tools) as string[]) : undefined,
+    challenge: row.challenge,
+    approach: row.approach,
+    outcome: row.outcome,
+    featured: row.featured,
+  };
 }
 
-/** Helper: list of all slugs (for static path generation). */
-export function getAllProjectSlugs(): string[] {
-  return PROJECTS.map((p) => p.slug);
+/* ── PUBLIC API ─────────────────────────────────────────────── */
+
+/** All projects, newest first. Used by /projects gallery. */
+export async function getAllProjects(): Promise<Project[]> {
+  const rows = await db.select().from(projects);
+  // Sort by year desc, then by id desc for stable ordering within a year
+  rows.sort((a, b) => b.year - a.year || b.id - a.id);
+  return rows.map(hydrate);
 }
 
-/** Helper: only featured projects (for homepage). */
-export function getFeaturedProjects(): Project[] {
-  return PROJECTS.filter((p) => p.featured);
+/** Featured projects only. Used by homepage WorkPreview. */
+export async function getFeaturedProjects(): Promise<Project[]> {
+  const rows = await db.select().from(projects).where(eq(projects.featured, true));
+  rows.sort((a, b) => b.year - a.year || b.id - a.id);
+  return rows.map(hydrate);
+}
+
+/** Look up a single project by slug. Used by /projects/[slug]. */
+export async function getProjectBySlug(slug: string): Promise<Project | undefined> {
+  const rows = await db
+    .select()
+    .from(projects)
+    .where(eq(projects.slug, slug))
+    .limit(1);
+  return rows[0] ? hydrate(rows[0]) : undefined;
+}
+
+/** All slugs — used by Next.js generateStaticParams to pre-render pages. */
+export async function getAllProjectSlugs(): Promise<string[]> {
+  const rows = await db.select({ slug: projects.slug }).from(projects);
+  return rows.map((r) => r.slug);
 }
