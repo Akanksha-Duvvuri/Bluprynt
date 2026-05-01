@@ -1,0 +1,324 @@
+/* ═══════════════════════════════════════════════════════════════
+   /admin/testimonials — list view
+   Different layout from projects: cards instead of table rows,
+   because testimonials are quote-heavy and need more vertical space.
+   ═══════════════════════════════════════════════════════════════ */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 32px;
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(196, 165, 100, 0.12);
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.title {
+  font-family: var(--primary);
+  font-size: 48px;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  margin-bottom: 14px;
+}
+
+.em {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.subtitle {
+  font-family: var(--secondary);
+  font-size: 13px;
+  color: rgba(255, 238, 198, 0.6);
+  line-height: 1.55;
+}
+
+.newBtn {
+  flex-shrink: 0;
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  color: var(--ink);
+  padding: 11px 20px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  display: inline-block;
+}
+
+.newBtn:hover {
+  background: transparent;
+  color: var(--gold);
+}
+
+.empty {
+  text-align: center;
+  padding: 80px 24px;
+  border: 1px dashed rgba(196, 165, 100, 0.2);
+  background: rgba(196, 165, 100, 0.02);
+}
+
+.emptyLabel {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.emptyBody {
+  font-family: var(--secondary);
+  font-size: 14px;
+  color: rgba(255, 238, 198, 0.65);
+  margin-bottom: 24px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  border: 1px solid rgba(196, 165, 100, 0.15);
+  background: rgba(196, 165, 100, 0.03);
+  padding: 24px 28px;
+}
+
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed rgba(196, 165, 100, 0.15);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.cardMeta {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(255, 238, 198, 0.5);
+  letter-spacing: 0.18em;
+  display: flex;
+  gap: 8px;
+}
+
+.cardId {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.cardBadges {
+  display: flex;
+  gap: 8px;
+}
+
+.badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid;
+  font-weight: 700;
+}
+
+.badgeFeatured {
+  color: var(--gold);
+  border-color: rgba(196, 165, 100, 0.45);
+  background: rgba(196, 165, 100, 0.08);
+}
+
+.badgeUnpublished {
+  color: rgba(255, 238, 198, 0.7);
+  border-color: rgba(255, 238, 198, 0.25);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.quote {
+  font-family: var(--primary);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.55;
+  color: var(--cream);
+  margin: 0 0 18px;
+}
+
+.attribution {
+  border-top: 1px dashed rgba(196, 165, 100, 0.15);
+  padding-top: 14px;
+  margin-bottom: 18px;
+}
+
+.author {
+  font-family: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin-bottom: 4px;
+}
+
+.affiliation {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 238, 198, 0.6);
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.related {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(255, 238, 198, 0.45);
+  letter-spacing: 0.05em;
+}
+
+.relatedLink {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.relatedLink:hover {
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(196, 165, 100, 0.1);
+}
+
+.editBtn {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--gold);
+  border: 1px solid rgba(196, 165, 100, 0.3);
+  padding: 5px 12px;
+  text-decoration: none;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.editBtn:hover {
+  background: rgba(196, 165, 100, 0.1);
+}
+
+.deleteBtn {
+  appearance: none;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--red);
+  background: transparent;
+  border: 1px solid rgba(193, 101, 101, 0.3);
+  padding: 5px 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.deleteBtn:hover {
+  background: rgba(193, 101, 101, 0.1);
+}
+
+.deleteConfirm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  width: 100%;
+}
+
+.deleteConfirmText {
+  font-family: var(--secondary);
+  font-size: 12px;
+  color: rgba(255, 238, 198, 0.7);
+}
+
+.deleteConfirmPreview {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 238, 198, 0.45);
+  letter-spacing: 0.05em;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deleteConfirmRow {
+  display: flex;
+  gap: 8px;
+}
+
+.deleteBtnConfirm {
+  appearance: none;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink);
+  background: var(--red);
+  border: 1px solid var(--red);
+  padding: 5px 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.deleteBtnConfirm:hover:not(:disabled) {
+  background: rgba(193, 101, 101, 0.85);
+}
+
+.deleteBtnConfirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.deleteBtnCancel {
+  appearance: none;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 238, 198, 0.7);
+  background: transparent;
+  border: 1px solid rgba(255, 238, 198, 0.2);
+  padding: 5px 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.deleteBtnCancel:hover:not(:disabled) {
+  background: rgba(255, 238, 198, 0.05);
+}
+
+.deleteError {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--red);
+  letter-spacing: 0.05em;
+}

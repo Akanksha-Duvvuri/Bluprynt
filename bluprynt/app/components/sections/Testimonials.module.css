@@ -1,0 +1,84 @@
+/* ═══════════════════════════════════════════════════════════════
+   Testimonials — homepage section
+   Cream-variant sheet so it sits between the dark Services
+   and dark Contact sections, breaking up the rhythm.
+   ═══════════════════════════════════════════════════════════════ */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.card {
+  border: 1px solid var(--sheet-divider);
+  background: var(--sheet-card-bg);
+  padding: 32px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.markBlock {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--sheet-divider);
+}
+
+.markCode {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--gold-deep);
+  letter-spacing: 0.22em;
+  font-weight: 700;
+}
+
+.openQuote {
+  font-family: var(--primary);
+  font-size: 56px;
+  font-weight: 300;
+  color: var(--gold-deep);
+  line-height: 0.6;
+  margin-top: -8px;
+}
+
+.quote {
+  font-family: var(--primary);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0 0 24px;
+  flex: 1;
+}
+
+.attribution {
+  border-top: 1px dashed var(--sheet-divider);
+  padding-top: 14px;
+}
+
+.author {
+  font-family: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.affiliation {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--sheet-text-dim);
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
