@@ -38,7 +38,7 @@ const FOUNDERS: Founder[] = [
 
 export default function AboutPreview() {
   return (
-    <Sheet id="about" variant="cream">
+    <Sheet id="about" variant="dark">
       <SheetMeta
         sheetCode="A-004"
         lines={["Layer · ABOUT / Founders", "Drawn by · BCG"]}

@@ -34,7 +34,7 @@ const CONTACT_INFO: ContactInfoBlock[] = [
 
 export default function ContactPreview() {
   return (
-    <Sheet id="contact" variant="dark">
+    <Sheet id="contact" variant="cream">
       <SheetMeta
         sheetCode="A-005"
         lines={["Layer · CONTACT", "Reply · < 1 business day"]}

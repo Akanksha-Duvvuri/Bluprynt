@@ -13,9 +13,9 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <Sheet id="about" variant="cream">
+    <Sheet id="about" variant="dark">
       <SheetMeta
-        sheetCode="A-004"
+        sheetCode="A-005"
         lines={["Layer · ABOUT / Founders", "Drawn by · BCG"]}
       />
       <TitleBlock
