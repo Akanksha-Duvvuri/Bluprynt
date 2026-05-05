@@ -1,0 +1,124 @@
+/* ===== Section frame ===================================================== */
+.section {
+  position: relative;
+  isolation: isolate;
+  padding: var(--space-section) 0;
+  overflow: hidden;
+}
+
+/* Default: leave the right side for the fixed BuildingDraft on desktop */
+.content {
+  position: relative;
+  z-index: var(--z-content);
+  width: 100%;
+  max-width: var(--max-content);
+  margin: 0 auto;
+  padding: 0 var(--space-3);
+}
+
+@media (min-width: 961px) {
+  .section:not(.full) .content {
+    /* Reserve right column for BuildingDraft (matches its width) */
+    padding-right: clamp(380px, 44vw, 620px);
+    padding-left: var(--space-6);
+  }
+}
+
+/* ===== Corner registration ticks ========================================= */
+.tick {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  z-index: 2;
+}
+.tick::before,
+.tick::after {
+  content: "";
+  position: absolute;
+  background: var(--accent-gold);
+  opacity: 0.55;
+}
+.tick::before { width: 14px; height: 1px; }
+.tick::after  { width: 1px;  height: 14px; }
+
+.tickTL { top: var(--space-3); left: var(--space-3); }
+.tickTL::before { top: 0; left: 0; }
+.tickTL::after  { top: 0; left: 0; }
+
+.tickTR { top: var(--space-3); right: var(--space-3); }
+.tickTR::before { top: 0; right: 0; }
+.tickTR::after  { top: 0; right: 0; }
+
+.tickBL { bottom: var(--space-3); left: var(--space-3); }
+.tickBL::before { bottom: 0; left: 0; }
+.tickBL::after  { bottom: 0; left: 0; }
+
+.tickBR { bottom: var(--space-3); right: var(--space-3); }
+.tickBR::before { bottom: 0; right: 0; }
+.tickBR::after  { bottom: 0; right: 0; }
+
+/* ===== Cursor spotlight =================================================== */
+.spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(
+      circle 280px at var(--mx, -9999px) var(--my, -9999px),
+      rgba(255, 238, 198, 0.06) 0%,
+      rgba(255, 238, 198, 0.02) 40%,
+      transparent 70%
+    ),
+    radial-gradient(
+      circle at 1px 1px,
+      rgba(196, 165, 100, 0.04) 1px,
+      transparent 1px
+    );
+  background-size: auto, 14px 14px;
+  background-position: 0 0, 0 0;
+  transition: background-color 200ms;
+}
+
+/* ===== Section head (sheet code + eyebrow) =============================== */
+.head {
+  position: relative;
+  z-index: var(--z-content);
+  width: 100%;
+  max-width: var(--max-content);
+  margin: 0 auto;
+  padding: 0 var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: 0.18em;
+  color: var(--accent-gold);
+}
+
+@media (min-width: 961px) {
+  .section:not(.full) .head {
+    padding-right: clamp(380px, 44vw, 620px);
+    padding-left: var(--space-6);
+  }
+}
+
+.codeBlock {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+}
+.code { font-weight: 700; }
+.codeSep { opacity: 0.4; }
+.codeLabel {
+  color: var(--cream-65);
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  color: var(--cream-50);
+  text-transform: uppercase;
+}

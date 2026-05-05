@@ -1,0 +1,41 @@
+/* ═══════════════════════════════════════════════════════════════
+   PATCHES — apply these to existing files (do NOT replace them)
+   These add the mint accents per the all-dark refresh spec.
+   ═══════════════════════════════════════════════════════════════ */
+
+
+/* ── 1. Mint left-border on the Outcome paragraph in case studies ─
+        File: app/projects/[slug]/page.module.css
+        Find the existing `.storySection` rule and ADD a NEW rule
+        below it (don't modify .storySection itself):                 */
+
+.storySection:nth-child(3) {
+  /* The third .storySection in the case study is "Outcome".
+     Mint left-border signals: this is the part that worked. */
+  position: relative;
+}
+
+.storySection:nth-child(3) .storyLabel {
+  color: var(--mint);
+}
+
+.storySection:nth-child(3) .storyBody {
+  border-left: 2px solid var(--mint);
+  padding-left: 32px;
+  margin-left: -34px;
+}
+
+
+/* ── 2. Mint stat numbers in the admin dashboard ──────────────────
+        File: app/admin/(authed)/page.module.css
+        Find the existing `.statNum` rule. Modify ONLY the third
+        stat ("Auth status") which already uses inline mint color.
+        For Project + Testimonial counts: add this rule:               */
+
+.statGrid > .stat:nth-child(1) .statNum,
+.statGrid > .stat:nth-child(2) .statNum {
+  color: var(--mint);
+}
+
+
+/* That's it for patches. Apply these manually to the two files. */

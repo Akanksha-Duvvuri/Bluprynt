@@ -1,0 +1,24 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: 0.15em;
+  line-height: 1;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+}
+
+.code {
+  font-weight: 700;
+}
+
+.sep {
+  opacity: 0.4;
+}
+
+.label {
+  color: var(--cream-65);
+  font-weight: 400;
+}

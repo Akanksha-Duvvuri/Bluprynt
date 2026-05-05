@@ -1,74 +1,92 @@
-import Link from "next/link";
-import Sheet from "../Sheet";
-import { TitleBlock, SheetMeta } from "../TitleBlock";
-import { SERVICES } from "@/lib/services";
+import { SectionShell } from "@/components/cad/SectionShell";
 import styles from "./ServicesPreview.module.css";
+
+const SERVICES = [
+  {
+    n: "01",
+    title: "Feasibility & site analysis",
+    line: "Confirm the project before you commit.",
+    region: "US · IN",
+  },
+  {
+    n: "02",
+    title: "Cost estimation & BOQ",
+    line: "Numbers that survive contact with the contractor.",
+    region: "US · IN",
+  },
+  {
+    n: "03",
+    title: "Constructability review",
+    line: "Catch it now, not at handover.",
+    region: "US · IN",
+  },
+  {
+    n: "04",
+    title: "Design coordination",
+    line: "MEP, structural, architectural — clashed and cleared.",
+    region: "US",
+  },
+  {
+    n: "05",
+    title: "Tender & bid support",
+    line: "Documents that procure the right contractor.",
+    region: "IN",
+  },
+  {
+    n: "06",
+    title: "Risk & value engineering",
+    line: "Where the dollars actually hide.",
+    region: "US · IN",
+  },
+] as const;
 
 export default function ServicesPreview() {
   return (
-    <Sheet id="services" variant="dark">
-      <SheetMeta
-        sheetCode="A-003"
-        lines={["Layer · SERVICES", "Engagement matrix"]}
-      />
-      <TitleBlock
-        title="Bluprynt / Services"
-        rows={[
-          { k: "Drwg No.", v: "BCG-003" },
-          { k: "Sheet", v: "03 / 05" },
-          { k: "Items", v: "04" },
-        ]}
-      />
+    <SectionShell
+      code="A-003"
+      label="Frame"
+      tone="base"
+      eyebrow="Six disciplines · one practice"
+    >
+      <header className={styles.head}>
+        <h2 className={styles.heading}>
+          What we do, <span className={styles.gold}>plainly</span>.
+        </h2>
+        <p className={styles.lede}>
+          We work in the window where decisions are still cheap. Six
+          disciplines, scoped to your project, sequenced to keep work moving
+          downstream.
+        </p>
+      </header>
 
-      <div className="sheet-body">
-        <div className="section-head">
-          <div className="section-head-left">
-            <div className="label">▸ A-003 · Services</div>
-            <h2 className="title">
-              Four ways
-              <br />
-              we <span className="em">work.</span>
-            </h2>
-          </div>
-          <div className="section-head-right">
-            Tap any line for the full spec sheet — deliverables, timelines, and
-            what we need from you to start.
-          </div>
-        </div>
+      <ul className={styles.grid}>
+        {SERVICES.map((s, i) => (
+          <li
+            key={s.n}
+            className={styles.tile}
+            style={{ ['--i' as string]: i }}
+          >
+            <div className={styles.leader} aria-hidden="true">
+              <span className={styles.leaderDot} />
+              <span className={styles.leaderLine} />
+            </div>
+            <div className={styles.tileHead}>
+              <span className={styles.tileN}>{s.n}</span>
+              <span className={styles.tileRegion}>{s.region}</span>
+            </div>
+            <h3 className={styles.tileTitle}>{s.title}</h3>
+            <p className={styles.tileLine}>{s.line}</p>
+            <div className={styles.tileFoot}>
+              <span className={styles.tileTag}>SHEET A-003.{s.n}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
 
-        <div className={styles.grid}>
-          {SERVICES.map((s) => (
-            <Link
-              key={s.slug}
-              href={`/services/${s.slug}`}
-              className={styles.row}
-            >
-              <div className={styles.num}>{s.num}</div>
-              <h3 className={styles.title}>
-                {s.name}
-                <span className={styles.em}>{s.nameEm}</span>
-              </h3>
-              <p className={styles.desc}>{s.shortDesc}</p>
-              <div className={styles.deliverables}>
-                {s.deliverables.map((d) => (
-                  <span key={d} className={styles.deliv}>
-                    {d}
-                  </span>
-                ))}
-              </div>
-              <div className={styles.engage}>
-                ▸ {s.engagement} · {s.timeline}
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        <div className="section-foot">
-          <Link href="/services" className="text-link">
-            Open the full services sheet →
-          </Link>
-        </div>
-      </div>
-    </Sheet>
+      <p className={styles.note}>
+        ▸ Engagements scoped per project. Most clients start with feasibility or
+        a constructability review.
+      </p>
+    </SectionShell>
   );
 }

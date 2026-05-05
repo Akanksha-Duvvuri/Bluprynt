@@ -1,0 +1,115 @@
+/* ===== Wrap ============================================================== */
+.wrap {
+  position: fixed;
+  top: var(--navbar-h);
+  right: 0;
+  bottom: var(--statusbar-h);
+  width: clamp(360px, 42vw, 600px);
+  pointer-events: none;
+  z-index: var(--z-spotlight);
+  padding: var(--space-4) var(--space-3);
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 960px) {
+  .wrap {
+    /* On tablet & mobile, building lives behind the hero only */
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    opacity: 0.35;
+  }
+}
+
+/* ===== Top-left stamp ==================================================== */
+.stamp {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-3);
+  display: grid;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--accent-gold);
+  border-left: 1px solid var(--gold-33);
+  padding-left: var(--space-1);
+}
+
+.stampRow { display: flex; gap: var(--space-1); }
+.stampK { width: 40px; opacity: 0.7; }
+.stampV { color: var(--accent-cream); font-variant-numeric: tabular-nums; }
+
+/* ===== SVG =============================================================== */
+.svg {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Always-visible decoration (north arrow, dot grid) */
+.always { opacity: 0.9; }
+
+/* ── Layer reveals ────────────────────────────────────────────────────────
+   Each layer fades in over its slice of [0..1] scroll progress (--p).
+   `clamp(0, (p - start) / range, 1)` produces a 0→1 ramp.
+   For L1 we *also* use stroke-dashoffset for the classic draw-in look. */
+
+.l1 {
+  opacity: clamp(0, (var(--p) - 0.0) * 12, 1);
+}
+.draw1 {
+  stroke-dasharray: 1700;
+  stroke-dashoffset: calc(1700 * (1 - clamp(0, var(--p) * 8, 1)));
+  transition: stroke-dashoffset 100ms linear;
+}
+
+.l2 {
+  opacity: clamp(0, (var(--p) - 0.15) * 8, 1);
+}
+
+.l3 {
+  opacity: clamp(0, (var(--p) - 0.3) * 6, 1);
+}
+
+.l4 {
+  opacity: clamp(0, (var(--p) - 0.5) * 6, 1);
+}
+
+.l5 {
+  opacity: clamp(0, (var(--p) - 0.7) * 8, 1);
+}
+
+.l6 {
+  opacity: clamp(0, (var(--p) - 0.85) * 10, 1);
+}
+
+/* ===== Bottom progress readout =========================================== */
+.readout {
+  position: absolute;
+  bottom: var(--space-2);
+  right: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--cream-65);
+  border-right: 1px solid var(--gold-33);
+  padding-right: var(--space-1);
+}
+.readoutK { color: var(--accent-gold); }
+.readoutV {
+  color: var(--accent-cream);
+  font-variant-numeric: tabular-nums;
+}
+.readoutSep { color: var(--gold-33); }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Show everything at full opacity; skip the draw-in */
+  .l1, .l2, .l3, .l4, .l5, .l6 { opacity: 1; }
+  .draw1 { stroke-dashoffset: 0; transition: none; }
+}

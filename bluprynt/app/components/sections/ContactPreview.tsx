@@ -1,82 +1,234 @@
-import Sheet from "../Sheet";
-import { TitleBlock, SheetMeta } from "../TitleBlock";
-import ContactForm from "../ContactForm";
+"use client";
+
+import { useState } from "react";
+import { SectionShell } from "@/components/cad/SectionShell";
 import styles from "./ContactPreview.module.css";
 
-interface ContactInfoBlock {
-  label: string;
-  value: React.ReactNode;
-}
-
-const CONTACT_INFO: ContactInfoBlock[] = [
-  {
-    label: "▸ Email",
-    value: <a href="mailto:hello@bluprynt.com">hello@bluprynt.com</a>,
-  },
-  {
-    label: "▸ Office",
-    value: "Hyderabad · Remote-first · Worldwide engagements",
-  },
-  {
-    label: "▸ Response time",
-    value: "< 1 business day",
-  },
-  {
-    label: "▸ Connect",
-    value: (
-      <>
-        <a href="https://linkedin.com">LinkedIn</a> ·{" "}
-        <a href="/reports">Reports</a>
-      </>
-    ),
-  },
-];
+const PROJECT_TYPES = [
+  { value: "", label: "Select a project type…" },
+  { value: "bridge", label: "Bridge / structure" },
+  { value: "transit", label: "Transit / rail" },
+  { value: "water", label: "Water / utilities" },
+  { value: "building", label: "Building / mixed-use" },
+  { value: "other", label: "Other" },
+] as const;
 
 export default function ContactPreview() {
-  return (
-    <Sheet id="contact" variant="cream">
-      <SheetMeta
-        sheetCode="A-005"
-        lines={["Layer · CONTACT", "Reply · < 1 business day"]}
-      />
-      <TitleBlock
-        title="Bluprynt / Contact"
-        rows={[
-          { k: "Drwg No.", v: "BCG-005" },
-          { k: "Sheet", v: "05 / 05" },
-          { k: "Status", v: "OPEN" },
-        ]}
-      />
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-      <div className="sheet-body">
-        <div className="section-head">
-          <div className="section-head-left">
-            <div className="label">▸ A-005 · Start a project</div>
-            <h2 className="title">
-              Tell us
-              <br />
-              what you&apos;re <span className="em">building.</span>
-            </h2>
-          </div>
-          <div className="section-head-right">
-            One reply within a business day. If your message mentions a service
-            area, you&apos;ll get a tailored FAQ alongside our reply.
-          </div>
+  // Visual handler only — wire this to your form_submissions schema later.
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      // TODO: replace with your existing submit action.
+      // const fd = new FormData(e.currentTarget);
+      // await submitContact(fd);
+      await new Promise((r) => setTimeout(r, 600));
+      setSubmitted(true);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <SectionShell
+      code="A-006"
+      label="Title block"
+      tone="deep"
+      eyebrow="Tell us about your project"
+    >
+      <div className={styles.split}>
+        {/* ── Left: pitch ────────────────────────────────────────────── */}
+        <div className={styles.col}>
+          <h2 className={styles.heading}>
+            Tell us about your{" "}
+            <span className={styles.gold}>project</span>.
+          </h2>
+          <p className={styles.lede}>
+            Most engagements start with a 30-minute call. We'll tell you whether
+            we're the right fit before we send a proposal.
+          </p>
+
+          <ul className={styles.bullets}>
+            <li>
+              <span className={styles.bMark}>▸</span>
+              <span>Brief us in one form, get a routing within two business days.</span>
+            </li>
+            <li>
+              <span className={styles.bMark}>▸</span>
+              <span>If we're not the right firm, we'll say so — and tell you who is.</span>
+            </li>
+            <li>
+              <span className={styles.bMark}>▸</span>
+              <span>Confidential by default. NDAs available on request.</span>
+            </li>
+          </ul>
         </div>
 
-        <div className={styles.wrap}>
-          <ContactForm />
-
-          <aside>
-            {CONTACT_INFO.map((block) => (
-              <div key={block.label} className={styles.infoBlock}>
-                <div className={styles.infoLabel}>{block.label}</div>
-                <div className={styles.infoValue}>{block.value}</div>
+        {/* ── Right: form ────────────────────────────────────────────── */}
+        <div className={styles.col}>
+          {submitted ? (
+            <div className={styles.success}>
+              <span className={styles.successCode}>RECEIVED · A-006</span>
+              <h3 className={styles.successHead}>Brief received.</h3>
+              <p className={styles.successBody}>
+                We'll review and route to the right team within two business
+                days. If your project is time-sensitive, mark{" "}
+                <em>Urgent</em> in the subject of any follow-up email.
+              </p>
+            </div>
+          ) : (
+            <form className={styles.form} onSubmit={handleSubmit} noValidate>
+              <div className={styles.formHead}>
+                <span className={styles.formTag}>BRIEF · INPUT FORM</span>
+                <span className={styles.formRev}>REV 01</span>
               </div>
-            ))}
-          </aside>
+
+              <Field id="name" label="Name">
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  required
+                  className={styles.input}
+                />
+              </Field>
+
+              <Field id="email" label="Email">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  className={styles.input}
+                />
+              </Field>
+
+              <Field id="company" label="Company / org.">
+                <input
+                  id="company"
+                  name="company"
+                  type="text"
+                  autoComplete="organization"
+                  className={styles.input}
+                />
+              </Field>
+
+              <div className={styles.row2}>
+                <Field id="type" label="Project type">
+                  <select
+                    id="type"
+                    name="type"
+                    required
+                    defaultValue=""
+                    className={styles.input}
+                  >
+                    {PROJECT_TYPES.map((p) => (
+                      <option key={p.value} value={p.value} disabled={p.value === ""}>
+                        {p.label}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+                <Field id="location" label="Location">
+                  <input
+                    id="location"
+                    name="location"
+                    type="text"
+                    placeholder="City, country"
+                    className={styles.input}
+                  />
+                </Field>
+              </div>
+
+              <Field id="message" label="Brief">
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  rows={5}
+                  placeholder="Project stage, scope, what you need from us…"
+                  className={`${styles.input} ${styles.textarea}`}
+                />
+              </Field>
+
+              <div className={styles.formFoot}>
+                <span className={styles.formNote}>
+                  We'll reply within two business days.
+                </span>
+                <button
+                  type="submit"
+                  className={styles.submit}
+                  disabled={submitting}
+                >
+                  {submitting ? "Sending…" : "Send brief"}
+                  <span className={styles.submitArrow}>→</span>
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
-    </Sheet>
+
+      {/* ── Title block at the bottom ────────────────────────────────── */}
+      <div className={styles.titleBlock}>
+        <div className={styles.tbMain}>
+          <span className={styles.tbBrand}>BLUPRYNT</span>
+          <span className={styles.tbDot}>·</span>
+          <span className={styles.tbTagline}>
+            Engineering accuracy. Consulting excellence.
+          </span>
+        </div>
+
+        <div className={styles.tbGrid}>
+          <div className={styles.tbCell}>
+            <span className={styles.tbK}>OFFICE 01</span>
+            <span className={styles.tbV}>Hyderabad, IN</span>
+            <span className={styles.tbSm}>hello@bluprynt.example</span>
+          </div>
+          <div className={styles.tbCell}>
+            <span className={styles.tbK}>OFFICE 02</span>
+            <span className={styles.tbV}>United States</span>
+            <span className={styles.tbSm}>us@bluprynt.example</span>
+          </div>
+          <div className={styles.tbCell}>
+            <span className={styles.tbK}>DISCIPLINE</span>
+            <span className={styles.tbV}>Pre-construction</span>
+            <span className={styles.tbSm}>Civil · Infrastructure</span>
+          </div>
+          <div className={styles.tbCell}>
+            <span className={styles.tbK}>SHEET</span>
+            <span className={styles.tbV}>A-006 / 06</span>
+            <span className={styles.tbSm}>REV 01 · ISSUED FOR REVIEW</span>
+          </div>
+        </div>
+      </div>
+    </SectionShell>
+  );
+}
+
+/* ---------- Field wrapper ---------- */
+
+function Field({
+  id,
+  label,
+  children,
+}: {
+  id: string;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={styles.field}>
+      <label htmlFor={id} className={styles.label}>
+        <span className={styles.labelDot} aria-hidden="true" />
+        {label}
+      </label>
+      {children}
+    </div>
   );
 }

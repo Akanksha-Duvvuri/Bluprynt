@@ -1,72 +1,47 @@
 import type { Metadata, Viewport } from "next";
 import { Inter_Tight, Nunito, Space_Mono } from "next/font/google";
-import { headers } from "next/headers";
-import Crosshair from "./components/Crosshair";
-import TopBar from "./components/TopBar";
-import StatusBar from "./components/StatusBar";
-import Footer from "./components/Footer";
+import { SheetProvider } from "@/lib/cad/SheetProvider";
 import "./globals.css";
 
-const primary = Inter_Tight({
+const interTight = Inter_Tight({
   subsets: ["latin"],
-  variable: "--font-primary",
-  weight: ["200", "300", "400", "500", "600", "700"],
+  variable: "--font-inter-tight",
   display: "swap",
+  weight: ["300", "400", "500", "600"],
 });
 
-const secondary = Nunito({
+const nunito = Nunito({
   subsets: ["latin"],
-  variable: "--font-secondary",
-  weight: ["400", "600", "700", "800", "900"],
+  variable: "--font-nunito",
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
-const mono = Space_Mono({
+const spaceMono = Space_Mono({
   subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--font-space-mono",
+  display: "swap",
   weight: ["400", "700"],
-  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: "Bluprynt Consulting Group",
-    template: "%s — Bluprynt Consulting Group",
-  },
+  title: "Bluprynt · Pre-Construction Consulting",
   description:
-    "Civil and infrastructure consulting for the decisions that matter most. Feasibility, structural review, and owner-side advisory — before the first drawing goes to site.",
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://bluprynt.com"
-  ),
+    "The firm you call before you build. Pre-construction consulting for civil and infrastructure projects across the US and India.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#15130D",
+  themeColor: "#0D0C08",
 };
 
-export default async function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
-  // Detect whether we're on an /admin/* route.
-  // x-pathname is set by middleware (or we can read x-invoke-path).
-  // Simpler: just always render the chrome, and let admin pages CSS-hide it.
-  // But the cleanest approach: read the path from headers.
-  const headersList = await headers();
-  const pathname = headersList.get("x-pathname") ?? headersList.get("x-invoke-path") ?? "";
-  const isAdminRoute = pathname.startsWith("/admin");
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${primary.variable} ${secondary.variable} ${mono.variable}`}
+      className={`${interTight.variable} ${nunito.variable} ${spaceMono.variable}`}
     >
       <body>
-        {/* {!isAdminRoute && <Crosshair />} */}
-        <Crosshair />
-        {!isAdminRoute && <TopBar />}
-        <main>{children}</main>
-        {!isAdminRoute && <Footer />}
-        {!isAdminRoute && <StatusBar />}
+        <SheetProvider>{children}</SheetProvider>
       </body>
     </html>
   );

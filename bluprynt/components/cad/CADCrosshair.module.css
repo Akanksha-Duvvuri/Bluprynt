@@ -1,0 +1,77 @@
+.wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: var(--z-crosshair);
+  /* No CSS transition — RAF handles all motion */
+  will-change: transform;
+}
+
+.crosshair {
+  position: relative;
+  display: block;
+  width: 0;
+  height: 0;
+}
+
+.armV,
+.armH,
+.pickbox {
+  position: absolute;
+  pointer-events: none;
+}
+
+.armV {
+  left: -0.5px;
+  top: -16px;
+  width: 1px;
+  height: 32px;
+  background: var(--accent-gold);
+}
+
+.armH {
+  left: -16px;
+  top: -0.5px;
+  width: 32px;
+  height: 1px;
+  background: var(--accent-gold);
+}
+
+.pickbox {
+  left: -2px;
+  top: -2px;
+  width: 4px;
+  height: 4px;
+  background: transparent;
+  border: 1px solid var(--accent-gold);
+  transition:
+    width var(--t-fast) var(--ease-out),
+    height var(--t-fast) var(--ease-out),
+    top var(--t-fast) var(--ease-out),
+    left var(--t-fast) var(--ease-out),
+    background var(--t-fast) var(--ease-out);
+}
+
+.expand .pickbox {
+  width: 10px;
+  height: 10px;
+  top: -5px;
+  left: -5px;
+  background: var(--gold-12);
+}
+
+.label {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--accent-gold);
+  white-space: pre;
+  text-shadow: 0 0 6px var(--bg-deep), 0 0 4px var(--bg-deep);
+  font-variant-numeric: tabular-nums;
+}

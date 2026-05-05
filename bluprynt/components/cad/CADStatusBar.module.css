@@ -1,0 +1,64 @@
+.bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--statusbar-h);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-3);
+  background: rgba(13, 12, 8, 0.92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-top: 1px solid var(--gold-20);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--cream-80);
+  z-index: var(--z-statusbar);
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.fieldEnd { margin-left: auto; }
+
+.k {
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+
+.dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-mint);
+  margin-right: 2px;
+  animation: pulse 2s var(--ease-in-out) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(0.85); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot { animation: none; }
+}
+
+/* Drop the less-essential fields on small screens */
+@media (max-width: 640px) {
+  .bar { gap: var(--space-2); font-size: 9px; padding: 0 var(--space-2); }
+  .field:nth-child(1),  /* Layer */
+  .field:nth-child(3) { /* Grid */
+    display: none;
+  }
+}

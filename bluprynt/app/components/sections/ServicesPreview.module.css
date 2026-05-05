@@ -1,110 +1,162 @@
+/* ===== Section head ===================================================== */
+.head { margin-bottom: var(--space-5); max-width: 60ch; }
+.heading {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-section);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--accent-cream);
+}
+.gold { color: var(--accent-mint); font-weight: 400; }
+.lede {
+  margin: 0;
+  color: var(--cream-65);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+/* ===== Grid ============================================================= */
 .grid {
+  list-style: none;
+  margin: 0 0 var(--space-5);
+  padding: 0;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  border: 1px solid var(--sheet-divider);
+  gap: var(--space-3);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) and (max-width: 1280px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1281px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
 }
 
-.row {
-  padding: 36px 32px;
+/* ===== Tile ============================================================= */
+.tile {
   position: relative;
-  border-right: 1px solid var(--sheet-divider);
-  border-bottom: 1px solid var(--sheet-divider);
-  background: var(--sheet-card-bg);
-  transition: background 0.2s ease;
- 
-  /* New: make the Link feel like a card, not a hyperlink */
-  display: block;
-  text-decoration: none;
-  color: inherit;
-}
- 
-.row:nth-child(2n) {
-  border-right: none;
-}
-.row:nth-last-child(-n + 2) {
-  border-bottom: none;
-}
-:global(.sheet-dark) .row:hover {
-  background: rgba(196, 165, 100, 0.04);
-}
-:global(.sheet-cream) .row:hover {
-  background: rgba(196, 165, 100, 0.12);
-}
- 
-
-
-.num {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--gold);
-  letter-spacing: 0.22em;
-  margin-bottom: 18px;
-}
-:global(.sheet-cream) .num {
-  color: var(--gold-deep);
-}
-
-.title {
-  font-family: var(--primary);
-  font-size: 28px;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  margin-bottom: 14px;
-}
-.em {
-  color: var(--gold);
-  font-weight: 400;
-}
-:global(.sheet-cream) .em {
-  color: var(--gold-deep);
-}
-
-.desc {
-  font-family: var(--secondary);
-  font-size: 13px;
-  color: var(--sheet-text-soft);
-  line-height: 1.55;
-  margin-bottom: 22px;
-  max-width: 420px;
-}
-
-.deliverables {
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  border: 0.5px solid var(--gold-20);
+  border-radius: 2px;
+  background: var(--bg-soft);
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 18px;
+  flex-direction: column;
+  gap: var(--space-1);
+  transition:
+    border-color 200ms var(--ease-out),
+    background 200ms var(--ease-out),
+    transform 200ms var(--ease-out);
+  animation: tileIn 500ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 60ms + 50ms);
 }
-.deliv {
-  font-family: var(--mono);
-  font-size: 7.5px;
-  color: var(--sheet-text-soft);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  border: 1px solid var(--sheet-divider);
-  padding: 3px 7px;
+@keyframes tileIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) { .tile { animation: none; } }
+
+.tile:hover {
+  border-color: var(--accent-gold);
+  background: linear-gradient(180deg, var(--bg-soft) 0%, rgba(196,165,100,0.04) 100%);
+  transform: translateY(-2px);
 }
 
-.engage {
-  font-family: var(--mono);
-  font-size: 8px;
-  color: var(--gold);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+/* Leader: a dot at the top-left and a vertical dashed line down the side */
+.leader {
+  position: absolute;
+  left: 12px;
+  top: var(--space-3);
+  bottom: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
 }
-:global(.sheet-cream) .engage {
-  color: var(--gold-deep);
+.leaderDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  margin-bottom: 4px;
+  transition: box-shadow 200ms var(--ease-out);
+}
+.tile:hover .leaderDot {
+  box-shadow: 0 0 8px var(--accent-gold);
+}
+.leaderLine {
+  flex: 1;
+  width: 1px;
+  background-image: linear-gradient(
+    to bottom,
+    var(--accent-gold) 0 4px,
+    transparent 4px 8px
+  );
+  background-size: 1px 8px;
+  background-repeat: repeat-y;
+  opacity: 0.5;
 }
 
-@media (max-width: 900px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-  .row {
-    border-right: none !important;
-    border-bottom: 1px solid var(--sheet-divider) !important;
-  }
-  .row:last-child {
-    border-bottom: none !important;
-  }
+/* ===== Tile head ======================================================== */
+.tileHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--cream-50);
+}
+.tileN { color: var(--accent-gold); font-weight: 700; font-size: var(--fs-mono-sm); }
+.tileRegion {
+  padding: 2px 6px;
+  border: 0.5px solid var(--gold-33);
+  border-radius: 2px;
+  color: var(--accent-gold);
+}
+
+/* ===== Title + line ===================================================== */
+.tileTitle {
+  margin: 4px 0 0;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--accent-cream);
+  line-height: 1.3;
+}
+
+.tileLine {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--cream-80);
+}
+
+/* ===== Tile foot ======================================================== */
+.tileFoot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--gold-20);
+}
+.tileTag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+/* ===== Footer note ====================================================== */
+.note {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: 0.1em;
+  color: var(--cream-65);
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--gold-20);
 }
