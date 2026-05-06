@@ -1,15 +1,13 @@
 /* ===========================================================================
-   3D Building — pure CSS transforms
-     - rotation driven by --cx (cursor X position)
-     - floor reveals driven by --p (scroll progress)
+   3D Building — pure CSS transforms, scroll-driven
+     - rotation driven by --p (scroll progress) — full 360° across page
+     - floor reveals driven by --p
      - APPROVED stamp toggles via [data-approved] on the wrap
    ========================================================================= */
 
 .wrap {
-  /* Must match SectionShell.module.css */
   --section-max: 1600px;
 
-  /* ---- Box dimensions — tune to retune building proportions ----------- */
   --found-w: 280px;
   --found-d: 200px;
   --found-h: 28px;
@@ -55,18 +53,26 @@
 }
 
 /* ===========================================================================
-   Scene — rotates based on cursor X position.
+   Scene — rotates 360° as you scroll the page.
 
-   Math: at --cx 0.5 (cursor centered), rotateY = 0deg (head-on view).
-         at --cx 0.0 (cursor far left), rotateY = -180deg.
-         at --cx 1.0 (cursor far right), rotateY = +180deg.
-   So sweeping the mouse across the screen spins the building 360°.
+   --tilt-x controls the camera angle relative to the building:
+     POSITIVE = camera looks DOWN at the building (you see the top)
+     ZERO     = head-on elevation view (no top, no bottom)
+     NEGATIVE = camera looks UP at the building (you see the bottom)
+
+   The current value (-15deg) means looking up at the building from
+   slightly below — heroic / monumental angle, more bottom face visible.
+   Tune to taste:
+       0deg   = perfectly head-on (no top or bottom faces visible)
+      -10deg  = mild upward angle
+      -25deg  = strong upward angle
+      +15deg  = looking down at the roof
    ========================================================================= */
 
 .scene {
   --shift-x: 30px;
-  --shift-y: 140px;
-  --tilt-x: 24deg;
+  --shift-y: 80px;     /* less downward shift now that the camera angles up */
+  --tilt-x: -15deg;    /* negative = camera looks UP at the building */
 
   position: relative;
   width: 0;
@@ -75,10 +81,8 @@
   transform:
     translate(var(--shift-x), var(--shift-y))
     rotateX(var(--tilt-x))
-    rotateY(calc((var(--cx, 0.5) - 0.5) * 360deg));
-  /* Slightly longer transition than scroll-driven so cursor flicks feel
-     smooth instead of jittery. Tune lower for tighter feel. */
-  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+    rotateY(calc(var(--p, 0) * 360deg - 25deg));
+  transition: transform 200ms linear;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -86,12 +90,15 @@
     transform:
       translate(var(--shift-x), var(--shift-y))
       rotateX(var(--tilt-x))
-      rotateY(0deg);
+      rotateY(-25deg);
     transition: none;
   }
 }
 
-/* ===== Ground plane ===================================================== */
+/* ===== Ground plane =====================================================
+   Note: when --tilt-x is negative (camera looks up), the ground plane
+   becomes slightly visible from underneath. We keep it but lower its
+   opacity a touch via the mask radius so it doesn't feel out of place. */
 .ground {
   position: absolute;
   top: 0;
@@ -101,17 +108,13 @@
   transform: translate(-50%, -50%) rotateX(90deg) translateZ(-2px);
   background-image:
     repeating-linear-gradient(
-      0deg,
-      transparent 0 24px,
-      rgba(196, 165, 100, 0.08) 24px 25px
+      0deg, transparent 0 24px, rgba(196, 165, 100, 0.06) 24px 25px
     ),
     repeating-linear-gradient(
-      90deg,
-      transparent 0 24px,
-      rgba(196, 165, 100, 0.08) 24px 25px
+      90deg, transparent 0 24px, rgba(196, 165, 100, 0.06) 24px 25px
     );
-  -webkit-mask-image: radial-gradient(ellipse 50% 50% at center, black 0%, transparent 70%);
-  mask-image: radial-gradient(ellipse 50% 50% at center, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 45% 45% at center, black 0%, transparent 70%);
+  mask-image: radial-gradient(ellipse 45% 45% at center, black 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -302,27 +305,15 @@
 }
 
 /* ===========================================================================
-   APPROVED stamp
-   ===========================================================================
-   2D overlay sitting in front of the 3D scene. Doesn't rotate with the
-   building. Visibility toggled by [data-approved="true"] on .wrap, which
-   the JS sets when scroll progress crosses the threshold.
-
-   The "thunk" effect: by default the stamp is invisible and scaled to
-   2.5x; when it activates, scale interpolates back to 1x using a
-   back-out bezier (slight overshoot below 1, then settles) and opacity
-   fades up. Reads as a stamp being slammed onto the drawing.
+   APPROVED stamp — 2D overlay, doesn't rotate with the building.
    ========================================================================= */
 
 .approved {
   position: absolute;
-  /* Tuned to land roughly on the building's middle in the panel */
   top: 55%;
   left: 50%;
   z-index: 10;
   pointer-events: none;
-
-  /* Default state: invisible + zoomed up, ready to thunk down */
   opacity: 0;
   transform: translate(-50%, -50%) rotate(-8deg) scale(2.5);
   transition:
@@ -330,7 +321,6 @@
     transform 480ms cubic-bezier(0.34, 1.6, 0.64, 1);
 }
 
-/* Active state: triggered when [data-approved="true"] is on the wrap */
 .wrap[data-approved="true"] .approved {
   opacity: 1;
   transform: translate(-50%, -50%) rotate(-8deg) scale(1);

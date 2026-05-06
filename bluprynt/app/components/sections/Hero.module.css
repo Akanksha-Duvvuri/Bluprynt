@@ -1,34 +1,62 @@
-/* ===========================================================================
-   Hero — vertical clearance is driven by two knobs at the top of .hero.
-   Tune them if the navbar / statusbar are taller than the defaults.
-   ========================================================================= */
-
 .hero {
-  /* Shared layout vars — match SectionShell + BuildingDraft */
   --section-max: 1600px;
   --building-zone: clamp(380px, 44vw, 620px);
-  --grid-cell: 14px;
 
-  /* ---- Clearance knobs ----------------------------------------------------
-     --clear-top    = navbar height + breathing room above the topmost things
-     --clear-bottom = statusbar height + breathing room below the cmd line
-     The var(--xxx, fallback) syntax means: use the global token if it's
-     defined, otherwise use the fallback value. So even if globals.css
-     doesn't declare --navbar-h / --statusbar-h, the layout still works. */
+  /* Clearance for navbar/statusbar */
   --clear-top: calc(var(--navbar-h, 48px) + 32px);
   --clear-bottom: calc(var(--statusbar-h, 28px) + 20px);
 
+  /* Reveal radius — how big the grid window around the cursor is */
+  --reveal-radius: 130px;
+
   position: relative;
   min-height: 100vh;
-  
+
+  /* Dark base bg, no always-on grid pattern */
+  background: var(--bg-deep, #0D0C08);
+
   isolation: isolate;
   display: flex;
   align-items: center;
   overflow: hidden;
-  /* Padding pushes the centered .inner content into the safe area. */
   padding: var(--clear-top) 0 var(--clear-bottom);
 }
 
+/* ===========================================================================
+   Cursor-revealed CAD grid
+
+   Two background layers form the grid (vertical + horizontal lines, every
+   40px). The mask-image hides everything outside a circle around the
+   cursor — so the grid is only visible where the cursor is, as if your
+   crosshair is illuminating a CAD blueprint underneath.
+   ========================================================================= */
+.gridHighlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+
+  background-image:
+    linear-gradient(0deg, var(--accent-gold, #C4A564) 0 1px, transparent 1px),
+    linear-gradient(90deg, var(--accent-gold, #C4A564) 0 1px, transparent 1px);
+  background-size: 40px 40px;
+
+  -webkit-mask-image: radial-gradient(
+    circle var(--reveal-radius) at var(--mx, -9999px) var(--my, -9999px),
+    black 30%,
+    transparent 90%
+  );
+  mask-image: radial-gradient(
+    circle var(--reveal-radius) at var(--mx, -9999px) var(--my, -9999px),
+    black 30%,
+    transparent 90%
+  );
+
+  opacity: 0.55;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gridHighlight { display: none; }
+}
 
 /* ===== Corner ticks ====================================================== */
 .cornerTick {
@@ -43,20 +71,12 @@
 }
 .mounted .cornerTick path { stroke-dashoffset: 0; }
 
-/* All top-positioned things use --clear-top so a single knob shifts them. */
 .tickTL { top: var(--clear-top); left: var(--space-3, 16px); }
 .tickTR { top: var(--clear-top); right: var(--space-3, 16px); }
-/* Bottom positioned things use --clear-bottom (+ extra for the cmd bar row) */
-.tickBL {
-  bottom: calc(var(--clear-bottom) + 36px);
-  left: var(--space-3, 16px);
-}
-.tickBR {
-  bottom: calc(var(--clear-bottom) + 36px);
-  right: var(--space-3, 16px);
-}
+.tickBL { bottom: calc(var(--clear-bottom) + 36px); left: var(--space-3, 16px); }
+.tickBR { bottom: calc(var(--clear-bottom) + 36px); right: var(--space-3, 16px); }
 
-/* ===== Sheet stamp (top-left) ============================================ */
+/* ===== Sheet stamp + meta ============================================== */
 .stamp {
   position: absolute;
   top: var(--clear-top);
@@ -78,7 +98,6 @@
 .stampSep { opacity: 0.4; }
 .stampLabel { color: var(--cream-65); }
 
-/* ===== Top-right meta ==================================================== */
 .meta {
   position: absolute;
   top: var(--clear-top);
@@ -98,10 +117,7 @@
 .metaRow { display: flex; gap: 0.6em; justify-content: flex-end; }
 .metaK { color: var(--accent-gold); width: 64px; text-align: right; }
 .metaV { color: var(--accent-cream); }
-
-@media (max-width: 720px) {
-  .meta { display: none; }
-}
+@media (max-width: 720px) { .meta { display: none; } }
 
 /* ===== Inner content ==================================================== */
 .inner {
@@ -112,7 +128,6 @@
   margin: 0 auto;
   padding: 0 var(--space-3, 16px);
 }
-
 @media (min-width: 961px) {
   .inner {
     padding-right: var(--building-zone);
@@ -120,7 +135,7 @@
   }
 }
 
-/* ===== Eyebrow =========================================================== */
+/* ===== Eyebrow / Headline / Sub / CTAs / Dim row ======================== */
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -146,15 +161,9 @@
   box-shadow: 0 0 8px var(--accent-mint);
   animation: pulseDot 2s var(--ease-in-out) infinite;
 }
-@keyframes pulseDot {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .eyebrowDot { animation: none; }
-}
+@keyframes pulseDot { 0%,100%{opacity:1} 50%{opacity:.4} }
+@media (prefers-reduced-motion: reduce) { .eyebrowDot { animation: none; } }
 
-/* ===== Headline ========================================================== */
 .headline {
   margin: 0 0 var(--space-3, 24px);
   font-family: var(--font-display);
@@ -189,7 +198,6 @@
 
 .h1Period { position: absolute; visibility: hidden; }
 
-/* ===== Sub paragraph ===================================================== */
 .sub {
   max-width: 56ch;
   margin: 0 0 var(--space-5, 40px);
@@ -202,7 +210,6 @@
 }
 .mounted .sub { transition-delay: 500ms; opacity: 1; transform: translateY(0); }
 
-/* ===== CTAs ============================================================== */
 .ctas {
   display: flex;
   gap: var(--space-2, 16px);
@@ -214,8 +221,7 @@
 }
 .mounted .ctas { transition-delay: 600ms; opacity: 1; transform: translateY(0); }
 
-.ctaPrimary,
-.ctaGhost {
+.ctaPrimary, .ctaGhost {
   display: inline-flex;
   align-items: center;
   gap: 0.6em;
@@ -245,7 +251,6 @@
 .ctaGhost { color: var(--accent-cream); border: 1px solid var(--gold-33); }
 .ctaGhost:hover { border-color: var(--accent-gold); background: var(--gold-08); }
 
-/* ===== Dimension callout ================================================ */
 .dimRow {
   display: flex;
   align-items: center;
@@ -260,22 +265,15 @@
 .mounted .dimRow { transition-delay: 800ms; opacity: 0.85; }
 
 .dim { display: inline-flex; align-items: center; gap: 6px; }
-.dimTick {
-  display: inline-block;
-  width: 1px;
-  height: 10px;
-  background: var(--accent-gold);
-}
+.dimTick { display: inline-block; width: 1px; height: 10px; background: var(--accent-gold); }
 .dimLine {
-  flex: 1;
-  height: 1px;
+  flex: 1; height: 1px;
   background: linear-gradient(to right, var(--accent-gold) 0 4px, transparent 4px 8px);
   background-size: 8px 1px;
   background-repeat: repeat-x;
   max-width: 200px;
 }
 
-/* ===== Command line ====================================================== */
 .cmdBar {
   position: absolute;
   bottom: var(--clear-bottom);
@@ -293,20 +291,8 @@
   padding-top: var(--space-1, 8px);
 }
 .cmdPrompt { color: var(--accent-gold); font-weight: 700; }
-.cmdText {
-  color: var(--cream-80);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.caret {
-  display: inline-block;
-  margin-left: 2px;
-  color: var(--accent-gold);
-  transform: translateY(-1px);
-}
+.cmdText { color: var(--cream-80); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.caret { display: inline-block; margin-left: 2px; color: var(--accent-gold); transform: translateY(-1px); }
 .blink { animation: blink 0.9s steps(2, jump-none) infinite; }
 @keyframes blink { to { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) {
-  .blink { animation: none; opacity: 0.5; }
-}
+@media (prefers-reduced-motion: reduce) { .blink { animation: none; opacity: 0.5; } }

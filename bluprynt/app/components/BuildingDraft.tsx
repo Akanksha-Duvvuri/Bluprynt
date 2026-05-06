@@ -2,20 +2,15 @@
 
 import { useEffect, useRef } from "react";
 import { useScrollProgress } from "@/lib/cad/useScrollProgress";
-import { useCursorX } from "@/lib/cad/Usecursorx";
 import styles from "./BuildingDraft.module.css";
 
 /**
  * 3D scroll-driven building.
  *
- * Two inputs drive the visual:
- *   - `--p`  scroll progress (0..1) → reveals foundation, floors, roof, antenna
- *   - `--cx` cursor X position (0..1) → rotates the scene 360° around Y axis
- *
- * Both are written as CSS custom properties on the wrap element. CSS
- * inherits these into the whole 3D scene; calc() expressions downstream
- * pick them up automatically — no animation library, no rAF loop beyond
- * the listeners.
+ * Single input drives everything: `--p` = scroll progress (0..1).
+ *   - rotates the scene 360° (rotateY(--p * 360deg))
+ *   - reveals foundation, floors, roof, antenna at thresholds
+ *   - flips the APPROVED stamp on once it crosses the threshold
  */
 
 const FLOOR_COUNT = 7;
@@ -30,17 +25,11 @@ const APPROVED_THRESHOLD = 0.92;
 
 export function BuildingDraft() {
   const progress = useScrollProgress();
-  const cursorX = useCursorX();
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
-  // Two custom properties, two effects — keeps each update minimal.
   useEffect(() => {
     wrapRef.current?.style.setProperty("--p", String(progress));
   }, [progress]);
-
-  useEffect(() => {
-    wrapRef.current?.style.setProperty("--cx", String(cursorX));
-  }, [cursorX]);
 
   return (
     <div
@@ -119,10 +108,7 @@ function Antenna({ reveal }: { reveal: number }) {
   );
 }
 
-/* ---------- APPROVED stamp ----------
-   2D overlay. Visibility flips via the [data-approved] attribute on the
-   wrap, which the CSS reads to swap between hidden/scaled-up and
-   visible/scaled-down states. */
+/* ---------- APPROVED stamp ---------- */
 
 function ApprovedStamp() {
   return (

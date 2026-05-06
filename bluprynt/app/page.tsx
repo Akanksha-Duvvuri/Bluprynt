@@ -1,5 +1,5 @@
 import { BuildingDraft } from "./components/BuildingDraft";
-import SectionDivider from "./components/SectionDivider";
+import { Divider } from "./components/SectionDivider";
 import Hero from "./components/sections/Hero";
 import WorkPreview from "./components/sections/WorkPreview";
 import ServicesPreview from "./components/sections/ServicesPreview";
@@ -30,19 +30,20 @@ export default function HomePage() {
       {/* <TopBar /> */}
       <Hero />
 
-      <SectionDivider from="A-001" to="A-002" />
+      {/* <SectionDivider fromCode="A-001" toCode="A-002" dimension="+1280" /> */}
+      <Divider />
       <WorkPreview />
 
-      <SectionDivider from="A-002" to="A-003" />
+      {/* <Divider fromCode="A-002" toCode="A-003" /> */}
       <ServicesPreview />
 
-      <SectionDivider from="A-003" to="A-004" />
+      {/* <SectionDivider fromCode="A-003" toCode="A-004" /> */}
       <Testimonials />
 
-      <SectionDivider from="A-004" to="A-005" />
+      {/* <SectionDivider fromCode="A-004" toCode="A-005" /> */}
       <AboutPreview />
 
-      <SectionDivider from="A-005" to="A-006" />
+      {/* <SectionDivider fromCode="A-005" toCode="A-006" /> */}
       <ContactPreview />
     </>
   );

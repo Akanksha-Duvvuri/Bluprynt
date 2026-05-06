@@ -2,8 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter_Tight, Nunito, Space_Mono } from "next/font/google";
 import { headers } from "next/headers";
 import { SheetProvider } from "@/lib/cad/SheetProvider";
-// import Crosshair from "./components/Crosshair";
-import  Crosshair  from "./components/Crosshair";
+import CADCrosshair from "./components/CADCrosshair";
 import { CADNavbar } from "@/app/components/CADNavbar";
 import { CADStatusBar } from "@/app/components/CADStatusBar";
 import "./globals.css";
@@ -57,7 +56,7 @@ export default async function RootLayout({
     >
       <body>
         <SheetProvider>
-          <Crosshair />
+          <CADCrosshair />
           <CADNavbar />
           {children}
           <CADStatusBar />

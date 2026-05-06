@@ -70,6 +70,11 @@
   --z-navbar:    200;
   --z-drawer:    300;
   --z-crosshair: 9999;
+
+  --crosshair-arm: 14px;
+  --crosshair-pickbox: 12px;
+  /* --gold-dim: rgba(196, 165, 100, 0.4); */
+   --spot-radius: 280px;
 }
 
 
@@ -93,6 +98,7 @@ body {
   line-height: 1.75;
   /* Status bar pinned to viewport bottom — leave room so it never overlaps content */
   padding-bottom: var(--statusbar-h);
+  cursor: none;
 }
 
 /* Crosshair cursor is opt-in via body attribute — falls back to native if disabled */
@@ -140,22 +146,61 @@ img, svg, video { display: block; max-width: 100%; }
 
 @media (hover: none), (pointer: coarse) {
   .drawing-base { opacity: 0.18; }
+  body { cursor: auto; }
 }
 
-/* Bright grid — only visible inside the cursor's spotlight radius */
+/* ═══════════════════════════════════════════════════════════════
+   ORIGINAL CAD SPOTLIGHT SYSTEM — every Sheet section has this
+   The Crosshair component writes --mx-local / --my-local to each
+   .sheet element. These rules use those vars to mask a circular
+   spotlight of brighter grid + warm cream wash under the cursor.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --crosshair-arm: 14px;
+  --crosshair-pickbox: 12px;
+  --spot-radius: 280px;
+}
+
+body {
+  cursor: none;
+}
+
+@media (hover: none), (pointer: coarse) {
+  body { cursor: auto; }
+}
+
+/* Faint default grid — barely visible, always on every sheet */
+.drawing-base {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(196, 165, 100, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196, 165, 100, 0.22) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .drawing-base { opacity: 0.18; }
+}
+
+/* Bright grid — only visible inside the spotlight circle */
 .drawing-bright {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 0;
   -webkit-mask-image: radial-gradient(
-    280px at var(--mx-local, 50%) var(--my-local, 50%),
+    var(--spot-radius) at var(--mx-local, 50%) var(--my-local, 50%),
     rgba(0, 0, 0, 1) 0%,
     rgba(0, 0, 0, 0.6) 50%,
     rgba(0, 0, 0, 0) 100%
   );
   mask-image: radial-gradient(
-    280px at var(--mx-local, 50%) var(--my-local, 50%),
+    var(--spot-radius) at var(--mx-local, 50%) var(--my-local, 50%),
     rgba(0, 0, 0, 1) 0%,
     rgba(0, 0, 0, 0.6) 50%,
     rgba(0, 0, 0, 0) 100%
@@ -195,7 +240,7 @@ img, svg, video { display: block; max-width: 100%; }
   pointer-events: none;
   z-index: 0;
   background: radial-gradient(
-    280px at var(--mx-local, 50%) var(--my-local, 50%),
+    var(--spot-radius) at var(--mx-local, 50%) var(--my-local, 50%),
     rgba(255, 238, 198, 0.04),
     rgba(255, 238, 198, 0.015) 40%,
     transparent 75%
@@ -230,4 +275,83 @@ img, svg, video { display: block; max-width: 100%; }
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+:root {
+  --crosshair-arm: 14px;
+  --crosshair-pickbox: 12px;
+  --spot-radius: 280px;
+  --gold: #C4A564;
+}
+
+body {
+  cursor: none;
+}
+
+@media (hover: none), (pointer: coarse) {
+  body { cursor: auto; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CAD spotlight — applies to anything with [data-sheet]
+   The useSpotlight hook writes --mx and --my to those sections.
+   ═══════════════════════════════════════════════════════════════ */
+
+[data-sheet] {
+  position: relative;
+  isolation: isolate;
+}
+
+[data-sheet]::before,
+[data-sheet]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Faint default grid — barely visible, always on */
+[data-sheet]::before {
+  background-image:
+    linear-gradient(rgba(196, 165, 100, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196, 165, 100, 0.22) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.04;
+}
+
+/* Bright grid + warm cream wash — visible only inside cursor radius */
+[data-sheet]::after {
+  background-image:
+    linear-gradient(rgba(196, 165, 100, 0.55) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196, 165, 100, 0.55) 1px, transparent 1px),
+    radial-gradient(
+      var(--spot-radius) at var(--mx, -9999px) var(--my, -9999px),
+      rgba(255, 238, 198, 0.05),
+      transparent 70%
+    );
+  background-size: 22px 22px, 22px 22px, 100% 100%;
+  -webkit-mask-image: radial-gradient(
+    var(--spot-radius) at var(--mx, -9999px) var(--my, -9999px),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: radial-gradient(
+    var(--spot-radius) at var(--mx, -9999px) var(--my, -9999px),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+@media (hover: none), (pointer: coarse) {
+  [data-sheet]::before { opacity: 0.18; }
+  [data-sheet]::after { display: none; }
+}
+
+/* Make sure section content sits above the spotlight pseudos */
+[data-sheet] > * {
+  position: relative;
+  z-index: 1;
 }

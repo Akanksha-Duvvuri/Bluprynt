@@ -1,15 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react"; //hooks - special functions that let the component managestate, run side effects and hold references and they only work inside client components
-import styles from "./Crosshair.module.css";
-
-//hooks are called inside a component funtion at the top level - NEVER inside loops or funtions. 
+import { useEffect, useRef, useState } from "react";
+import styles from "./CADCrosshair.module.css";
 
 /* ──────────────────────────────────────────────────────────────
    Maps section IDs to drawing sheet codes shown in the readout
    and status bar. Add new sections here as the site grows.
    ────────────────────────────────────────────────────────────── */
-const SHEET_MAP: Record<string, string> = { //keys and values both are strings
+const SHEET_MAP: Record<string, string> = {
   hero: "A-001",
   work: "A-002",
   services: "A-003",
@@ -48,8 +46,8 @@ export default function Crosshair() {
       pendingFrame = false;
 
       // crosshair + readout follow pointer
-      root.style.setProperty("--mx", `${mouseX}px`);
-      root.style.setProperty("--my", `${mouseY}px`);
+      root.style.setProperty("--cursor-x", `${mouseX}px`);
+      root.style.setProperty("--cursor-y", `${mouseY}px`);
 
       // CAD-style coordinate readout — origin is screen center
       if (readXRef.current) {
@@ -73,18 +71,6 @@ export default function Crosshair() {
           }
         }
       }
-
-      // update each sheet's local spotlight position (relative to the sheet)
-      document.querySelectorAll<HTMLElement>(".sheet").forEach((sec) => {
-        const r = sec.getBoundingClientRect();
-        const lx = mouseX - r.left;
-        const ly = mouseY - r.top;
-        // skip sheets nowhere near the cursor — saves work on tall pages
-        if (ly > -400 && ly < r.height + 400) {
-          sec.style.setProperty("--mx-local", `${lx}px`);
-          sec.style.setProperty("--my-local", `${ly}px`);
-        }
-      });
     };
 
     const requestUpdate = () => {

@@ -1,11 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSheetObserver } from "@/lib/cad/useSheetObserver";
 import { useSpotlight } from "@/lib/cad/useSpotlight";
 import { useTypewriter } from "@/lib/cad/useTypewriter";
-import { useCallback } from "react";
 import styles from "./Hero.module.css";
 
 const CMD =
@@ -26,7 +25,6 @@ export default function Hero() {
     [sheetRef, spotlightRef],
   );
 
-  // Trigger entry animation after first paint
   useEffect(() => {
     const t = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(t);
@@ -38,18 +36,17 @@ export default function Hero() {
       className={`${styles.hero} ${mounted ? styles.mounted : ""}`}
       data-sheet="A-001"
     >
+      {/* Cursor-revealed CAD grid layer */}
+      <div className={styles.gridHighlight} aria-hidden="true" />
 
-      {/* Corner registration ticks — animate stroke on mount */}
       <CornerTicks />
 
-      {/* Sheet stamp (top-left of hero) */}
       <div className={styles.stamp}>
         <span className={styles.stampCode}>A-001 / 06</span>
         <span className={styles.stampSep}>·</span>
         <span className={styles.stampLabel}>SITE</span>
       </div>
 
-      {/* Top-right project meta */}
       <div className={styles.meta}>
         <span className={styles.metaRow}>
           <span className={styles.metaK}>Active</span>
@@ -95,7 +92,6 @@ export default function Hero() {
           </Link>
         </div>
 
-        {/* Static dimension callout under the buttons */}
         <div className={styles.dimRow}>
           <span className={styles.dim}>
             <span className={styles.dimTick} /> 0
@@ -108,7 +104,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Bottom: command-line typewriter */}
       <div className={styles.cmdBar}>
         <span className={styles.cmdPrompt}>›</span>
         <span className={styles.cmdText}>

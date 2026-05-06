@@ -10,7 +10,7 @@ type Props = {
   code: string;
   /** Label shown next to the code, e.g. "Foundation" */
   label: string;
-  /** Background variant. Defaults to "base". */
+  /** Background variant. Defaults to "deep" — darkest charcoal. */
   tone?: "deep" | "base" | "soft";
   /** When true, content spans full viewport width (under the BuildingDraft on desktop). */
   full?: boolean;
@@ -24,7 +24,7 @@ type Props = {
 export function SectionShell({
   code,
   label,
-  tone = "base",
+  tone = "deep",
   full = false,
   eyebrow,
   id,
@@ -33,7 +33,6 @@ export function SectionShell({
   const sheetRef = useSheetObserver<HTMLElement>(code);
   const spotlightRef = useSpotlight<HTMLElement>();
 
-  // Combine refs so the section element gets both observers.
   const setRef = useCallback(
     (node: HTMLElement | null) => {
       sheetRef.current = node;
@@ -44,11 +43,11 @@ export function SectionShell({
 
   const styleVar: CSSProperties = {
     background:
-      tone === "deep"
-        ? "var(--bg-deep)"
-        : tone === "soft"
-          ? "var(--bg-soft)"
-          : "var(--bg-base)",
+      tone === "soft"
+        ? "var(--bg-soft, #1C1A14)"
+        : tone === "base"
+          ? "var(--bg-base, #15130D)"
+          : "var(--bg-deep, #0D0C08)",
   };
 
   return (
@@ -64,10 +63,7 @@ export function SectionShell({
       <span className={`${styles.tick} ${styles.tickBL}`} aria-hidden="true" />
       <span className={`${styles.tick} ${styles.tickBR}`} aria-hidden="true" />
 
-      {/* Layer 1: faint baseline grid + cream wash that follows the cursor */}
-      <div className={styles.spotlight} aria-hidden="true" />
-
-      {/* Layer 2: bright gold dot grid masked to a circle around the cursor */}
+      {/* Cursor-revealed CAD grid overlay */}
       <div className={styles.gridHighlight} aria-hidden="true" />
 
       <div className={styles.head}>
