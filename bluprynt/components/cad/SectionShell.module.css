@@ -1,25 +1,31 @@
 /* ===== Section frame ===================================================== */
 .section {
+  /* Shared layout vars — must match BuildingDraft.module.css */
+  --section-max: 1600px;
+  --building-zone: clamp(380px, 44vw, 620px);
+  --grid-cell: 14px;
+
   position: relative;
   isolation: isolate;
   padding: var(--space-section) 0;
   overflow: hidden;
 }
 
-/* Default: leave the right side for the fixed BuildingDraft on desktop */
+/* Centered content + head, capped at --section-max so the building stays
+   visually attached to the right edge of the same container on wide screens. */
 .content {
   position: relative;
   z-index: var(--z-content);
   width: 100%;
-  max-width: var(--max-content);
+  max-width: var(--section-max);
   margin: 0 auto;
   padding: 0 var(--space-3);
 }
 
 @media (min-width: 961px) {
   .section:not(.full) .content {
-    /* Reserve right column for BuildingDraft (matches its width) */
-    padding-right: clamp(380px, 44vw, 620px);
+    /* Reserve right column for the building draft */
+    padding-right: var(--building-zone);
     padding-left: var(--space-6);
   }
 }
@@ -58,27 +64,68 @@
 .tickBR::before { bottom: 0; right: 0; }
 .tickBR::after  { bottom: 0; right: 0; }
 
-/* ===== Cursor spotlight =================================================== */
+/* ===== Spotlight (layer 1: cream wash + faint baseline grid) ============= */
 .spotlight {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 1;
+
+  /* Cream wash that follows the cursor */
   background:
     radial-gradient(
-      circle 280px at var(--mx, -9999px) var(--my, -9999px),
-      rgba(255, 238, 198, 0.06) 0%,
+      circle 320px at var(--mx, -9999px) var(--my, -9999px),
+      rgba(255, 238, 198, 0.05) 0%,
       rgba(255, 238, 198, 0.02) 40%,
-      transparent 70%
+      transparent 72%
     ),
+    /* Faint always-on dot grid so the background isn't empty */
     radial-gradient(
       circle at 1px 1px,
-      rgba(196, 165, 100, 0.04) 1px,
+      rgba(196, 165, 100, 0.05) 1px,
       transparent 1px
     );
-  background-size: auto, 14px 14px;
-  background-position: 0 0, 0 0;
-  transition: background-color 200ms;
+  background-size: auto, var(--grid-cell) var(--grid-cell);
+}
+
+/* ===== Grid highlight (layer 2: bright dots masked to cursor circle) ===== */
+.gridHighlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+
+  /* Bright gold dot grid */
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    var(--accent-gold) 1px,
+    transparent 1px
+  );
+  background-size: var(--grid-cell) var(--grid-cell);
+  background-position: 0 0;
+
+  /* Mask: opaque inside cursor circle, fading out to transparent */
+  -webkit-mask-image: radial-gradient(
+    circle 220px at var(--mx, -9999px) var(--my, -9999px),
+    black 0%,
+    rgba(0, 0, 0, 0.7) 35%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(
+    circle 220px at var(--mx, -9999px) var(--my, -9999px),
+    black 0%,
+    rgba(0, 0, 0, 0.7) 35%,
+    transparent 78%
+  );
+
+  opacity: 0.55;
+  /* Subtle additive blend so dots feel illuminated rather than painted */
+  mix-blend-mode: screen;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Stop the grid from "following" the cursor — keep it faint/static */
+  .gridHighlight { display: none; }
 }
 
 /* ===== Section head (sheet code + eyebrow) =============================== */
@@ -86,7 +133,7 @@
   position: relative;
   z-index: var(--z-content);
   width: 100%;
-  max-width: var(--max-content);
+  max-width: var(--section-max);
   margin: 0 auto;
   padding: 0 var(--space-3);
   display: flex;
@@ -101,7 +148,7 @@
 
 @media (min-width: 961px) {
   .section:not(.full) .head {
-    padding-right: clamp(380px, 44vw, 620px);
+    padding-right: var(--building-zone);
     padding-left: var(--space-6);
   }
 }

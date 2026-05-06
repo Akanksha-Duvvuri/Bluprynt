@@ -1,15 +1,64 @@
 .hero {
+  /* Shared layout vars — match SectionShell + BuildingDraft */
+  --section-max: 1600px;
+  --building-zone: clamp(380px, 44vw, 620px);
+  --grid-cell: 14px;
+
   position: relative;
   min-height: calc(100vh - var(--navbar-h) - var(--statusbar-h));
   background: var(--bg-deep);
-  background-image:
-    radial-gradient(circle at 1px 1px, rgba(196,165,100,0.04) 1px, transparent 1px);
-  background-size: 14px 14px;
+
+  /* Faint baseline grid — always visible. The bright cursor-illuminated
+     grid lives in .gridHighlight below. */
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(196, 165, 100, 0.05) 1px,
+    transparent 1px
+  );
+  background-size: var(--grid-cell) var(--grid-cell);
+
   isolation: isolate;
   display: flex;
   align-items: center;
   overflow: hidden;
-  padding: var(--space-6) 0 var(--space-8);
+  /* Reserve space at the top so the navbar doesn't overlap top-positioned
+     children (corner ticks, sheet stamp, meta block). */
+  padding: calc(var(--navbar-h) + var(--space-3)) 0
+           calc(var(--statusbar-h) + var(--space-3));
+}
+
+/* ===== Cursor-illuminated grid =========================================== */
+.gridHighlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    var(--accent-gold) 1px,
+    transparent 1px
+  );
+  background-size: var(--grid-cell) var(--grid-cell);
+
+  -webkit-mask-image: radial-gradient(
+    circle 240px at var(--mx, -9999px) var(--my, -9999px),
+    black 0%,
+    rgba(0, 0, 0, 0.7) 35%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(
+    circle 240px at var(--mx, -9999px) var(--my, -9999px),
+    black 0%,
+    rgba(0, 0, 0, 0.7) 35%,
+    transparent 78%
+  );
+
+  opacity: 0.6;
+  mix-blend-mode: screen;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gridHighlight { display: none; }
 }
 
 /* ===== Corner ticks ====================================================== */
@@ -25,15 +74,23 @@
 }
 .mounted .cornerTick path { stroke-dashoffset: 0; }
 
-.tickTL { top: var(--space-3); left: var(--space-3); }
-.tickTR { top: var(--space-3); right: var(--space-3); }
-.tickBL { bottom: calc(var(--space-3) + 36px); left: var(--space-3); }
-.tickBR { bottom: calc(var(--space-3) + 36px); right: var(--space-3); }
+/* Top ticks pushed below the navbar */
+.tickTL { top: calc(var(--navbar-h) + var(--space-3)); left: var(--space-3); }
+.tickTR { top: calc(var(--navbar-h) + var(--space-3)); right: var(--space-3); }
+/* Bottom ticks pushed above the statusbar (and above the cmd bar row) */
+.tickBL {
+  bottom: calc(var(--statusbar-h) + var(--space-3) + 36px);
+  left: var(--space-3);
+}
+.tickBR {
+  bottom: calc(var(--statusbar-h) + var(--space-3) + 36px);
+  right: var(--space-3);
+}
 
 /* ===== Sheet stamp (top-left) ============================================ */
 .stamp {
   position: absolute;
-  top: var(--space-3);
+  top: calc(var(--navbar-h) + var(--space-3));
   left: calc(var(--space-3) + 36px);
   display: inline-flex;
   align-items: center;
@@ -55,7 +112,7 @@
 /* ===== Top-right meta ==================================================== */
 .meta {
   position: absolute;
-  top: var(--space-3);
+  top: calc(var(--navbar-h) + var(--space-3));
   right: calc(var(--space-3) + 36px);
   display: grid;
   gap: 4px;
@@ -69,15 +126,10 @@
   transition: opacity 400ms var(--ease-out) 300ms, transform 400ms var(--ease-out) 300ms;
 }
 .mounted .meta { opacity: 1; transform: translateY(0); }
-.metaRow {
-  display: flex;
-  gap: 0.6em;
-  justify-content: flex-end;
-}
+.metaRow { display: flex; gap: 0.6em; justify-content: flex-end; }
 .metaK { color: var(--accent-gold); width: 64px; text-align: right; }
 .metaV { color: var(--accent-cream); }
 
-/* On mobile, hide the right meta (BuildingDraft becomes a backdrop) */
 @media (max-width: 720px) {
   .meta { display: none; }
 }
@@ -87,14 +139,14 @@
   position: relative;
   z-index: 3;
   width: 100%;
-  max-width: var(--max-content);
+  max-width: var(--section-max);
   margin: 0 auto;
   padding: 0 var(--space-3);
 }
 
 @media (min-width: 961px) {
   .inner {
-    padding-right: clamp(380px, 44vw, 620px);
+    padding-right: var(--building-zone);
     padding-left: var(--space-6);
   }
 }
@@ -160,17 +212,13 @@
   display: inline-block;
   color: var(--accent-gold);
   font-weight: 400;
-  /* slight stagger on the gold word, per spec */
   opacity: 0;
   transform: translateY(8px);
   transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out);
 }
 .mounted .h1Gold { transition-delay: 400ms; opacity: 1; transform: translateY(0); }
 
-.h1Period {
-  position: absolute;
-  visibility: hidden;
-}
+.h1Period { position: absolute; visibility: hidden; }
 
 /* ===== Sub paragraph ===================================================== */
 .sub {
@@ -209,12 +257,13 @@
   font-weight: 600;
   letter-spacing: 0.02em;
   border-radius: 2px;
-  transition: transform var(--t-fast) var(--ease-out), background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+  transition:
+    transform var(--t-fast) var(--ease-out),
+    background var(--t-fast),
+    color var(--t-fast),
+    border-color var(--t-fast);
 }
-.ctaPrimary {
-  background: var(--accent-gold);
-  color: var(--bg-deep);
-}
+.ctaPrimary { background: var(--accent-gold); color: var(--bg-deep); }
 .ctaPrimary:hover { transform: scale(1.02); filter: brightness(1.08); }
 .ctaPrimary:active { transform: scale(0.99); }
 
@@ -224,16 +273,10 @@
 }
 .ctaPrimary:hover .ctaArrow { transform: translateX(3px); }
 
-.ctaGhost {
-  color: var(--accent-cream);
-  border: 1px solid var(--gold-33);
-}
-.ctaGhost:hover {
-  border-color: var(--accent-gold);
-  background: var(--gold-08);
-}
+.ctaGhost { color: var(--accent-cream); border: 1px solid var(--gold-33); }
+.ctaGhost:hover { border-color: var(--accent-gold); background: var(--gold-08); }
 
-/* ===== Dimension callout under CTAs ===================================== */
+/* ===== Dimension callout ================================================ */
 .dimRow {
   display: flex;
   align-items: center;
@@ -266,7 +309,7 @@
 /* ===== Command line ====================================================== */
 .cmdBar {
   position: absolute;
-  bottom: var(--space-3);
+  bottom: calc(var(--statusbar-h) + var(--space-3));
   left: calc(var(--space-3) + 36px);
   right: calc(var(--space-3) + 36px);
   display: flex;
@@ -280,10 +323,7 @@
   border-top: 1px dashed var(--gold-20);
   padding-top: var(--space-1);
 }
-.cmdPrompt {
-  color: var(--accent-gold);
-  font-weight: 700;
-}
+.cmdPrompt { color: var(--accent-gold); font-weight: 700; }
 .cmdText {
   color: var(--cream-80);
   white-space: nowrap;
@@ -297,9 +337,7 @@
   transform: translateY(-1px);
 }
 .blink { animation: blink 0.9s steps(2, jump-none) infinite; }
-@keyframes blink {
-  to { opacity: 0; }
-}
+@keyframes blink { to { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
   .blink { animation: none; opacity: 0.5; }
 }

@@ -1,23 +1,18 @@
 "use client";
 
-import {
-  type ReactNode,
-  type CSSProperties,
-  useCallback,
-  useEffect,
-  useRef,
-} from "react";
+import { type ReactNode, type CSSProperties, useCallback } from "react";
 import { useSheetObserver } from "@/lib/cad/useSheetObserver";
+import { useSpotlight } from "@/lib/cad/useSpotlight";
 import styles from "./SectionShell.module.css";
 
 type Props = {
   /** Sheet code, e.g. "A-002" */
   code: string;
-  /** Label that appears next to the code, e.g. "Foundation" */
+  /** Label shown next to the code, e.g. "Foundation" */
   label: string;
   /** Background variant. Defaults to "base". */
   tone?: "deep" | "base" | "soft";
-  /** When true, content spans the full viewport width (under the BuildingDraft on desktop). */
+  /** When true, content spans full viewport width (under the BuildingDraft on desktop). */
   full?: boolean;
   /** Top eyebrow line shown in mono above the heading area. */
   eyebrow?: string;
@@ -26,14 +21,6 @@ type Props = {
   children: ReactNode;
 };
 
-/**
- * Standard section frame. Provides:
- *   – sheet code + label in the top-left, mono
- *   – four corner registration ticks
- *   – cursor-tracking spotlight via CSS custom props on the section
- *   – consistent padding and max-content width
- *   – sheet observer wired to the sheet code (drives status bar / crosshair)
- */
 export function SectionShell({
   code,
   label,
@@ -44,55 +31,16 @@ export function SectionShell({
   children,
 }: Props) {
   const sheetRef = useSheetObserver<HTMLElement>(code);
-  const innerRef = useRef<HTMLElement | null>(null);
-  const rafRef = useRef(0);
-  const queuedRef = useRef(false);
-  const lastEvent = useRef<{ x: number; y: number } | null>(null);
+  const spotlightRef = useSpotlight<HTMLElement>();
 
-  // Combine refs (sheet observer + spotlight target)
+  // Combine refs so the section element gets both observers.
   const setRef = useCallback(
     (node: HTMLElement | null) => {
-      innerRef.current = node;
       sheetRef.current = node;
+      spotlightRef.current = node;
     },
-    [sheetRef],
+    [sheetRef, spotlightRef],
   );
-
-  // Spotlight: update CSS custom props on the section based on cursor position.
-  useEffect(() => {
-    const el = innerRef.current;
-    if (!el) return;
-
-    const flush = () => {
-      rafRef.current = 0;
-      queuedRef.current = false;
-      const evt = lastEvent.current;
-      if (!evt) return;
-      const rect = el.getBoundingClientRect();
-      el.style.setProperty("--mx", `${evt.x - rect.left}px`);
-      el.style.setProperty("--my", `${evt.y - rect.top}px`);
-    };
-
-    const onMove = (e: MouseEvent) => {
-      lastEvent.current = { x: e.clientX, y: e.clientY };
-      if (queuedRef.current) return;
-      queuedRef.current = true;
-      rafRef.current = requestAnimationFrame(flush);
-    };
-
-    const onLeave = () => {
-      el.style.setProperty("--mx", `-9999px`);
-      el.style.setProperty("--my", `-9999px`);
-    };
-
-    el.addEventListener("mousemove", onMove);
-    el.addEventListener("mouseleave", onLeave);
-    return () => {
-      el.removeEventListener("mousemove", onMove);
-      el.removeEventListener("mouseleave", onLeave);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
 
   const styleVar: CSSProperties = {
     background:
@@ -116,7 +64,11 @@ export function SectionShell({
       <span className={`${styles.tick} ${styles.tickBL}`} aria-hidden="true" />
       <span className={`${styles.tick} ${styles.tickBR}`} aria-hidden="true" />
 
+      {/* Layer 1: faint baseline grid + cream wash that follows the cursor */}
       <div className={styles.spotlight} aria-hidden="true" />
+
+      {/* Layer 2: bright gold dot grid masked to a circle around the cursor */}
+      <div className={styles.gridHighlight} aria-hidden="true" />
 
       <div className={styles.head}>
         <div className={styles.codeBlock}>

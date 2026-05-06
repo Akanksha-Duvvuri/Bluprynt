@@ -1,18 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSheetObserver } from "@/lib/cad/useSheetObserver";
+import { useSpotlight } from "@/lib/cad/useSpotlight";
 import { useTypewriter } from "@/lib/cad/useTypewriter";
+import { useCallback } from "react";
 import styles from "./Hero.module.css";
 
 const CMD =
   "Cmd: _SELECT — move cursor to inspect · scroll to assemble drawing";
 
 export default function Hero() {
-  const sectionRef = useSheetObserver<HTMLElement>("A-001");
+  const sheetRef = useSheetObserver<HTMLElement>("A-001");
+  const spotlightRef = useSpotlight<HTMLElement>();
   const [mounted, setMounted] = useState(false);
   const cmd = useTypewriter(CMD, { delay: 800, charMs: 22 });
+
+  // Combine refs so the section element gets both observers.
+  const setRef = useCallback(
+    (node: HTMLElement | null) => {
+      sheetRef.current = node;
+      spotlightRef.current = node;
+    },
+    [sheetRef, spotlightRef],
+  );
 
   // Trigger entry animation after first paint
   useEffect(() => {
@@ -22,10 +34,13 @@ export default function Hero() {
 
   return (
     <section
-      ref={sectionRef}
+      ref={setRef}
       className={`${styles.hero} ${mounted ? styles.mounted : ""}`}
       data-sheet="A-001"
     >
+      {/* Cursor-illuminated dot grid layer (uses --mx/--my from the hero) */}
+      <div className={styles.gridHighlight} aria-hidden="true" />
+
       {/* Corner registration ticks — animate stroke on mount */}
       <CornerTicks />
 
@@ -109,9 +124,6 @@ export default function Hero() {
   );
 }
 
-/**
- * Four corner ticks that draw in via stroke-dashoffset on mount.
- */
 function CornerTicks() {
   return (
     <>
