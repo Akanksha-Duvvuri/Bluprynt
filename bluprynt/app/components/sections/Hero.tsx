@@ -36,8 +36,8 @@ export default function Hero() {
       className={`${styles.hero} ${mounted ? styles.mounted : ""}`}
       data-sheet="A-001"
     >
-      {/* Cursor-revealed CAD grid layer */}
-      <div className={styles.gridHighlight} aria-hidden="true" />
+      {/* The CAD spotlight is now provided globally by [data-sheet]
+          rules in globals.css. No per-section grid layer needed. */}
 
       <CornerTicks />
 
@@ -98,7 +98,7 @@ export default function Hero() {
           </span>
           <span className={styles.dimLine} />
           <span className={styles.dim}>
-            32'-0" · OVERALL
+            32&apos;-0&quot; · OVERALL
             <span className={styles.dimTick} />
           </span>
         </div>

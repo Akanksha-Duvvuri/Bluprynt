@@ -55,12 +55,12 @@ useEffect(() => {
       readoutEl.style.transform = `translate3d(${mouseX + 14}px, ${mouseY + 14}px, 0)`;
     }
 
-    if (readXRef.current) {
-      readXRef.current.textContent = pad(mouseX - window.innerWidth / 2);
-    }
-    if (readYRef.current) {
-      readYRef.current.textContent = pad(window.innerHeight / 2 - mouseY);
-    }
+   if (readXRef.current) {
+  readXRef.current.textContent = pad(mouseX + window.scrollX);
+}
+if (readYRef.current) {
+  readYRef.current.textContent = pad(mouseY + window.scrollY);
+}
 
     // Sheet detection — runs on each frame but cheap
     const el = document.elementFromPoint(mouseX, mouseY);

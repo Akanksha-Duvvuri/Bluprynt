@@ -14,6 +14,7 @@
   --accent-cream: #FFEEC6;
   --accent-mint:  #CAFFD1;
   --accent-red:   #C16565;
+  --gold:         #C4A564;   /* alias for components that use --gold */
 
   /* ----- Alpha variants for borders, overlays, dividers -------------------- */
   --gold-08:  rgba(196, 165, 100, 0.08);
@@ -35,9 +36,9 @@
   --fs-hero:      clamp(2.5rem, 5vw, 4.5rem);
   --fs-section:   clamp(2rem,   4vw, 3.5rem);
   --fs-body:      1rem;
-  --fs-button:    0.875rem;   /* 14 */
-  --fs-mono-sm:   0.6875rem;  /* 11 */
-  --fs-mono-xs:   0.625rem;   /* 10 */
+  --fs-button:    0.875rem;
+  --fs-mono-sm:   0.6875rem;
+  --fs-mono-xs:   0.625rem;
 
   /* ----- Spacing — all multiples of 8 -------------------------------------- */
   --space-1: 8px;
@@ -71,13 +72,11 @@
   --z-drawer:    300;
   --z-crosshair: 9999;
 
+  /* ----- Crosshair + spotlight tokens -------------------------------------- */
   --crosshair-arm: 14px;
   --crosshair-pickbox: 12px;
-  /* --gold-dim: rgba(196, 165, 100, 0.4); */
-   --spot-radius: 280px;
+  --spot-radius: 100px;
 }
-
-
 
 /* === Reset / base ========================================================= */
 
@@ -101,16 +100,9 @@ body {
   cursor: none;
 }
 
-/* Crosshair cursor is opt-in via body attribute — falls back to native if disabled */
-body[data-crosshair="active"],
-body[data-crosshair="active"] a,
-body[data-crosshair="active"] button,
-body[data-crosshair="active"] [role="button"],
-body[data-crosshair="active"] input,
-body[data-crosshair="active"] textarea,
-body[data-crosshair="active"] select,
-body[data-crosshair="active"] label {
-  cursor: none;
+/* Touch devices fall back to native cursor */
+@media (hover: none), (pointer: coarse) {
+  body { cursor: auto; }
 }
 
 ::selection {
@@ -125,181 +117,21 @@ img, svg, video { display: block; max-width: 100%; }
 
 
 /* ═══════════════════════════════════════════════════════════════
-   CAD SPOTLIGHT SYSTEM
-   The Crosshair component writes to --mx and --my on body. Sheet.tsx
-   renders four divs (.drawing-base, .drawing-bright, .spot-wash,
-   .corner-tick) — these rules style them.
-   ═══════════════════════════════════════════════════════════════ */
-
-/* Faint default grid — barely visible, always on */
-.drawing-base {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(196, 165, 100, 0.22) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196, 165, 100, 0.22) 1px, transparent 1px);
-  background-size: 22px 22px;
-  opacity: 0.025;
-  pointer-events: none;
-  z-index: 0;
-}
-
-@media (hover: none), (pointer: coarse) {
-  .drawing-base { opacity: 0.18; }
-  body { cursor: auto; }
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   ORIGINAL CAD SPOTLIGHT SYSTEM — every Sheet section has this
-   The Crosshair component writes --mx-local / --my-local to each
-   .sheet element. These rules use those vars to mask a circular
-   spotlight of brighter grid + warm cream wash under the cursor.
-   ═══════════════════════════════════════════════════════════════ */
-
-:root {
-  --crosshair-arm: 14px;
-  --crosshair-pickbox: 12px;
-  --spot-radius: 280px;
-}
-
-body {
-  cursor: none;
-}
-
-@media (hover: none), (pointer: coarse) {
-  body { cursor: auto; }
-}
-
-/* Faint default grid — barely visible, always on every sheet */
-.drawing-base {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(196, 165, 100, 0.22) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196, 165, 100, 0.22) 1px, transparent 1px);
-  background-size: 22px 22px;
-  opacity: 0.025;
-  pointer-events: none;
-  z-index: 0;
-}
-
-@media (hover: none), (pointer: coarse) {
-  .drawing-base { opacity: 0.18; }
-}
-
-/* Bright grid — only visible inside the spotlight circle */
-.drawing-bright {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  -webkit-mask-image: radial-gradient(
-    var(--spot-radius) at var(--mx-local, 50%) var(--my-local, 50%),
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.6) 50%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  mask-image: radial-gradient(
-    var(--spot-radius) at var(--mx-local, 50%) var(--my-local, 50%),
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.6) 50%,
-    rgba(0, 0, 0, 0) 100%
-  );
-}
-
-@media (hover: none), (pointer: coarse) {
-  .drawing-bright { display: none; }
-}
-
-.grid-fine,
-.grid-coarse {
-  position: absolute;
-  inset: 0;
-}
-
-.grid-fine {
-  background-image:
-    linear-gradient(rgba(196, 165, 100, 0.55) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196, 165, 100, 0.55) 1px, transparent 1px);
-  background-size: 22px 22px;
-  opacity: 0.42;
-}
-
-.grid-coarse {
-  background-image:
-    linear-gradient(rgba(196, 165, 100, 0.55) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196, 165, 100, 0.55) 1px, transparent 1px);
-  background-size: 100px 100px;
-  opacity: 0.62;
-}
-
-/* Warm cream glow under the cursor */
-.spot-wash {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background: radial-gradient(
-    var(--spot-radius) at var(--mx-local, 50%) var(--my-local, 50%),
-    rgba(255, 238, 198, 0.04),
-    rgba(255, 238, 198, 0.015) 40%,
-    transparent 75%
-  );
-}
-
-@media (hover: none), (pointer: coarse) {
-  .spot-wash { display: none; }
-}
-
-/* Corner ticks — drafting registration marks at each corner of every Sheet */
-.corner-tick {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border-color: #C4A564;
-  border-style: solid;
-  z-index: 1;
-  opacity: 0.4;
-}
-.corner-tick.tl { top: 22px; left: 22px;     border-width: 1px 0 0 1px; }
-.corner-tick.tr { top: 22px; right: 22px;    border-width: 1px 1px 0 0; }
-.corner-tick.bl { bottom: 22px; left: 22px;  border-width: 0 0 1px 1px; }
-.corner-tick.br { bottom: 22px; right: 22px; border-width: 0 1px 1px 0; }
-
-/* === Reduced motion ======================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-:root {
-  --crosshair-arm: 14px;
-  --crosshair-pickbox: 12px;
-  --spot-radius: 280px;
-  --gold: #C4A564;
-}
-
-body {
-  cursor: none;
-}
-
-@media (hover: none), (pointer: coarse) {
-  body { cursor: auto; }
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   CAD spotlight — applies to anything with [data-sheet]
-   The useSpotlight hook writes --mx and --my to those sections.
+   CAD SPOTLIGHT SYSTEM — single canonical rule set
+   
+   How it works:
+   1. Every section that should glow has the data-sheet attribute
+      and uses the useSpotlight hook to track the cursor.
+   2. The hook writes --mx and --my to that section, in pixels
+      relative to the section's top-left.
+   3. Pseudo elements ::before (faint baseline grid) and ::after
+      (bright spotlight grid + cream wash) read those vars.
+   4. The ::after element is masked to a soft circle around the
+      cursor — outside that circle, only the faint baseline shows.
    ═══════════════════════════════════════════════════════════════ */
 
 [data-sheet] {
   position: relative;
-  /* isolation: isolate; */
 }
 
 [data-sheet]::before,
@@ -311,42 +143,74 @@ body {
   z-index: 0;
 }
 
-/* Faint default grid — barely visible, always on */
+/* Baseline grid — barely visible, always on. Like blank drafting paper. */
 [data-sheet]::before {
   background-image:
     linear-gradient(rgba(196, 165, 100, 0.22) 1px, transparent 1px),
     linear-gradient(90deg, rgba(196, 165, 100, 0.22) 1px, transparent 1px);
   background-size: 22px 22px;
-  opacity: 0.04;
+  opacity: 0.05;
 }
 
-
-/* Bright grid — visible only inside cursor radius. Sharp edge, no glow. */
+/* Spotlight: bright grid + warm cream wash, masked to a soft circle. */
 [data-sheet]::after {
   background-image:
+    /* Warm cream radial wash inside the spotlight */
+    radial-gradient(
+      circle var(--spot-radius) at var(--mx, -9999px) var(--my, -9999px),
+      rgba(255, 238, 198, 0.04),
+      rgba(255, 238, 198, 0.015) 40%,
+      transparent 75%
+    ),
+    /* Bright fine grid (22px) */
+    linear-gradient(rgba(196, 165, 100, 0.55) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196, 165, 100, 0.55) 1px, transparent 1px),
+    /* Bright coarse grid (100px) — major drafting lines */
     linear-gradient(rgba(196, 165, 100, 0.55) 1px, transparent 1px),
     linear-gradient(90deg, rgba(196, 165, 100, 0.55) 1px, transparent 1px);
-  background-size: 22px 22px;
+  background-size:
+    100% 100%,
+    22px 22px, 22px 22px,
+    100px 100px, 100px 100px;
 
+  /* Soft circular mask centred on cursor — gives the gentle fade,
+     no sharp 3D-looking edge. */
   -webkit-mask-image: radial-gradient(
     circle var(--spot-radius) at var(--mx, -9999px) var(--my, -9999px),
-    black 100%,
+    black 0%,
+    rgba(0, 0, 0, 0.6) 50%,
     transparent 100%
   );
   mask-image: radial-gradient(
     circle var(--spot-radius) at var(--mx, -9999px) var(--my, -9999px),
-    black 100%,
+    black 0%,
+    rgba(0, 0, 0, 0.6) 50%,
     transparent 100%
   );
+
+  opacity: 0.85;
 }
 
+/* Touch / no-hover devices: show baseline grid, hide spotlight entirely */
 @media (hover: none), (pointer: coarse) {
   [data-sheet]::before { opacity: 0.18; }
-  [data-sheet]::after { display: none; }
+  [data-sheet]::after  { display: none; }
 }
 
 /* Make sure section content sits above the spotlight pseudos */
 [data-sheet] > * {
   position: relative;
   z-index: 1;
+}
+
+
+/* === Reduced motion ======================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

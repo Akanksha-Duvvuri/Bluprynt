@@ -63,9 +63,6 @@ export function SectionShell({
       <span className={`${styles.tick} ${styles.tickBL}`} aria-hidden="true" />
       <span className={`${styles.tick} ${styles.tickBR}`} aria-hidden="true" />
 
-      {/* Cursor-revealed CAD grid overlay */}
-      <div className={styles.gridHighlight} aria-hidden="true" />
-
       <div className={styles.head}>
         <div className={styles.codeBlock}>
           <span className={styles.code}>{code}</span>

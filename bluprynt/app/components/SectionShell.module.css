@@ -2,7 +2,6 @@
 .section {
   --section-max: 1600px;
   --building-zone: clamp(380px, 44vw, 620px);
-  --reveal-radius: 220px;
 
   position: relative;
   isolation: isolate;
@@ -26,31 +25,6 @@
   }
 }
 
-/* ===== Cursor-revealed CAD grid ========================================= */
-.gridHighlight {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-
-  background-image:
-    linear-gradient(0deg, var(--accent-gold, #C4A564) 0 1px, transparent 1px),
-    linear-gradient(90deg, var(--accent-gold, #C4A564) 0 1px, transparent 1px);
-  background-size: 40px 40px;
-
-  -webkit-mask-image: radial-gradient(
-    circle var(--reveal-radius) at var(--mx, -9999px) var(--my, -9999px),
-    black 30%,
-    transparent 90%
-  );
-  mask-image: radial-gradient(
-    circle var(--reveal-radius) at var(--mx, -9999px) var(--my, -9999px),
-    black 30%,
-    transparent 90%
-  );
-
-  opacity: 0.5;
-}
 @media (prefers-reduced-motion: reduce) {
   .gridHighlight { display: none; }
 }
