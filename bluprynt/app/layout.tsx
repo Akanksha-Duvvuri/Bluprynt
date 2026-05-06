@@ -1,6 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Inter_Tight, Nunito, Space_Mono } from "next/font/google";
+import { headers } from "next/headers";
 import { SheetProvider } from "@/lib/cad/SheetProvider";
+// import Crosshair from "./components/Crosshair";
+import  Crosshair  from "./components/Crosshair";
+import { CADNavbar } from "@/app/components/CADNavbar";
+import { CADStatusBar } from "@/app/components/CADStatusBar";
 import "./globals.css";
 
 const interTight = Inter_Tight({
@@ -34,14 +39,29 @@ export const viewport: Viewport = {
   themeColor: "#0D0C08",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Read pathname from the x-pathname header set by middleware.ts.
+  // Lets us hide public chrome (Crosshair, etc.) on /admin/* routes.
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") ?? "";
+  const isAdminRoute = pathname.startsWith("/admin");
+
   return (
     <html
       lang="en"
       className={`${interTight.variable} ${nunito.variable} ${spaceMono.variable}`}
     >
       <body>
-        <SheetProvider>{children}</SheetProvider>
+        <SheetProvider>
+          <Crosshair />
+          <CADNavbar />
+          {children}
+          <CADStatusBar />
+        </SheetProvider>
       </body>
     </html>
   );

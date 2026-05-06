@@ -38,8 +38,6 @@ export default function Hero() {
       className={`${styles.hero} ${mounted ? styles.mounted : ""}`}
       data-sheet="A-001"
     >
-      {/* Cursor-illuminated dot grid layer (uses --mx/--my from the hero) */}
-      <div className={styles.gridHighlight} aria-hidden="true" />
 
       {/* Corner registration ticks — animate stroke on mount */}
       <CornerTicks />

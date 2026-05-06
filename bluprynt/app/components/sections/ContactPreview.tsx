@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SectionShell } from "@/components/cad/SectionShell";
+import { SectionShell } from "@/app/components/SectionShell";
 import styles from "./ContactPreview.module.css";
 
 const PROJECT_TYPES = [

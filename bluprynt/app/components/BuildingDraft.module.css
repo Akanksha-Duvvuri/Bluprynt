@@ -1,60 +1,49 @@
 /* ===========================================================================
    3D Building — pure CSS transforms, scroll-driven
-   ===========================================================================
-   Coordinate notes (CSS conventions):
-     +X = right
-     +Y = down (screen-relative)
-     +Z = toward viewer (out of screen)
-   So "up" (the direction the building grows) is -Y.
    ========================================================================= */
 
-/* ===== Wrap (fixed positioning, holds the whole scene) =================== */
 .wrap {
   /* Must match SectionShell.module.css */
   --section-max: 1600px;
 
-  /* ---- Box dimensions — change these to retune building proportions ----- */
+  /* ---- Box dimensions — tune to retune building proportions ----------- */
   --found-w: 280px;
   --found-d: 200px;
-  --found-h: 32px;
+  --found-h: 28px;
 
   --floor-w: 240px;
   --floor-d: 180px;
-  --floor-h: 48px;
+  --floor-h: 38px;
 
   --roof-w: 160px;
   --roof-d: 120px;
-  --roof-h: 28px;
+  --roof-h: 24px;
 
   --ant-w: 6px;
-  --ant-h: 80px;
+  --ant-h: 60px;
 
-  /* ---- Number of floors must match FLOOR_COUNT in BuildingDraft.tsx ---- */
+  /* Number of floors must match FLOOR_COUNT in BuildingDraft.tsx */
   --floors: 7;
 
   position: fixed;
-  top: var(--navbar-h);
-  /* On viewports wider than --section-max, pull the building inward so its
-     right edge tracks the right edge of the centered content container. */
-  right: max(0px, calc((100vw - var(--section-max)) / 2));
-  bottom: var(--statusbar-h);
+  top: var(--navbar-h, 48px);
+  /* Cap the inward pull at 60px so the building stays near the viewport's
+     right edge on ultra-wide monitors. Increase the max (60px) if you want
+     it pulled further inward; set to 0 to keep it flush right always. */
+  right: clamp(0px, calc((100vw - var(--section-max)) / 2), 60px);
+  bottom: var(--statusbar-h, 28px);
   width: clamp(360px, 42vw, 600px);
   pointer-events: none;
-  z-index: var(--z-spotlight);
-  padding: var(--space-4) var(--space-3);
+  z-index: var(--z-spotlight, 5);
+  padding: var(--space-4, 32px) var(--space-3, 24px);
   display: flex;
   flex-direction: column;
 }
 
-/* On tablet & mobile, building lives behind the hero only as a backdrop. */
+/* Hide entirely on small screens — the section content takes the full
+   width below 961px (SectionShell removes the right reservation). */
 @media (max-width: 960px) {
-  .wrap {
-    position: absolute;
-    right: 0;
-    width: 100%;
-    height: 100vh;
-    opacity: 0.32;
-  }
+  .wrap { display: none; }
 }
 
 /* ===== Stage (perspective container) ==================================== */
@@ -67,30 +56,47 @@
   justify-content: center;
 }
 
-/* ===== Scene (the 3D root that rotates) ================================= */
+/* ===========================================================================
+   Scene — the 3D root that rotates and shifts
+   ===========================================================================
+   Transform composition (CSS applies these from LEFT TO RIGHT in terms of
+   coordinate-system changes):
+
+     1. translate(...)  — shifts the scene origin in screen space
+                          (right by --shift-x, down by --shift-y)
+     2. rotateX(...)    — tilts the scene so we look down at the top of
+                          the building (--tilt-x)
+     3. rotateY(...)    — continuous spin driven by scroll progress
+
+   Because translate is FIRST in the chain, it's applied to the original
+   screen-space coordinates. The rotations then happen around the new,
+   shifted origin — so the whole building both shifts AND tilts in place.
+   Tune --shift-x / --shift-y / --tilt-x to retune.
+   ========================================================================= */
+
 .scene {
+  /* Single point of tuning — adjust these three to reposition + retilt. */
+  --shift-x: 30px;     /* nudge building right within its panel */
+  --shift-y: 140px;    /* nudge building down so its top isn't clipped */
+  --tilt-x: 24deg;     /* downward tilt — bigger = more top-down view */
+
   position: relative;
   width: 0;
   height: 0;
   transform-style: preserve-3d;
-
-  /* The continuous revolve. rotateX(15deg) tilts the building so we see a
-     bit of the top of each floor; rotateY uses --p (0..1) for one full
-     rotation across the page, starting from a natural -25deg angle. */
   transform:
-    rotateX(15deg)
+    translate(var(--shift-x), var(--shift-y))
+    rotateX(var(--tilt-x))
     rotateY(calc(var(--p, 0) * 360deg - 25deg));
-
-  /* Smooth out the per-scroll-frame jumps in --p. Each new --p value
-     animates over 200ms toward its target — so the rotation flows even if
-     scroll events are sparse. */
   transition: transform 200ms linear;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .scene {
-    /* Static angle, no scroll-driven rotation */
-    transform: rotateX(15deg) rotateY(-25deg);
+    transform:
+      translate(var(--shift-x), var(--shift-y))
+      rotateX(var(--tilt-x))
+      rotateY(-25deg);
     transition: none;
   }
 }
@@ -102,12 +108,7 @@
   left: 0;
   width: 1000px;
   height: 1000px;
-  /* Lay it flat (rotateX 90deg = horizontal plane), centered, slightly
-     below the foundation's footprint. */
-  transform:
-    translate(-50%, -50%)
-    rotateX(90deg)
-    translateZ(-2px);
+  transform: translate(-50%, -50%) rotateX(90deg) translateZ(-2px);
   background-image:
     repeating-linear-gradient(
       0deg,
@@ -119,13 +120,12 @@
       transparent 0 24px,
       rgba(196, 165, 100, 0.08) 24px 25px
     );
-  /* Fade the grid out at the edges so it doesn't read as a hard square */
   -webkit-mask-image: radial-gradient(ellipse 50% 50% at center, black 0%, transparent 70%);
   mask-image: radial-gradient(ellipse 50% 50% at center, black 0%, transparent 70%);
   pointer-events: none;
 }
 
-/* ===== Box (parent of 5 faces; a 0×0 anchor in 3D space) ================= */
+/* ===== Box (5-faced cuboid anchor) ====================================== */
 .box {
   position: absolute;
   top: 0;
@@ -133,57 +133,38 @@
   width: 0;
   height: 0;
   transform-style: preserve-3d;
-
-  /* `--rev` is computed from --p crossing this box's --reveal threshold.
-     0 = not yet revealed, 1 = fully in place. The clamp produces a 0→1
-     ramp over a small window of scroll progress. */
   --rev: clamp(0, (var(--p, 0) - var(--reveal, 0)) * 18, 1);
 }
 
-/* ===== Foundation ======================================================== */
+/* ===== Variants ========================================================= */
 .foundation {
   --w: var(--found-w);
   --d: var(--found-d);
   --h: var(--found-h);
-  /* Sit just below the scene origin: center at -h/2 places the foundation's
-     top face exactly at y=0 (ground level). */
   transform: translateY(calc(var(--found-h) / -2));
 }
 
-/* ===== Floor (stacks on top of foundation; --i is 0..FLOOR_COUNT-1) ===== */
 .floor {
   --w: var(--floor-w);
   --d: var(--floor-d);
   --h: var(--floor-h);
-
-  /* Where this floor finally settles (in -Y direction = upward).
-     Stack: foundation height + (i+0.5) floor heights upward from origin. */
   --home-y: calc(
     -1 * var(--found-h)
     - var(--i) * var(--floor-h)
     - var(--floor-h) / 2
   );
-
-  /* Drop-in offset: starts 120px above the home, settles to 0 as --rev → 1. */
   --drop: calc(120px * (1 - var(--rev)));
-
   transform: translateY(calc(var(--home-y) - var(--drop)));
   opacity: var(--rev);
-
   transition:
-    transform 600ms cubic-bezier(0.34, 1.4, 0.64, 1),  /* slight overshoot */
+    transform 600ms cubic-bezier(0.34, 1.4, 0.64, 1),
     opacity 400ms ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .floor {
-    --drop: 0px;
-    transition: none;
-    opacity: 1;
-  }
+  .floor { --drop: 0px; transition: none; opacity: 1; }
 }
 
-/* ===== Roof (smaller box on top of the last floor) ====================== */
 .roof {
   --w: var(--roof-w);
   --d: var(--roof-d);
@@ -205,7 +186,6 @@
   .roof { --drop: 0px; transition: none; opacity: 1; }
 }
 
-/* ===== Antenna (thin spire on top of the roof) ========================== */
 .antenna {
   --w: var(--ant-w);
   --d: var(--ant-w);
@@ -226,13 +206,7 @@
   .antenna { --drop: 0px; transition: none; opacity: 1; }
 }
 
-/* ===========================================================================
-   Faces
-   Each face is absolutely positioned at the box's (0,0) corner. The
-   `translate(-50%, -50%)` shift centers the face on the box's anchor; the
-   following 3D transforms push it out to its position on the cuboid.
-   ========================================================================= */
-
+/* ===== Faces ============================================================ */
 .face {
   position: absolute;
   top: 0;
@@ -245,61 +219,38 @@
 .faceFront {
   width: var(--w);
   height: var(--h);
-  transform:
-    translate(-50%, -50%)
-    translateZ(calc(var(--d) / 2));
+  transform: translate(-50%, -50%) translateZ(calc(var(--d) / 2));
 }
 .faceBack {
   width: var(--w);
   height: var(--h);
-  transform:
-    translate(-50%, -50%)
-    rotateY(180deg)
-    translateZ(calc(var(--d) / 2));
+  transform: translate(-50%, -50%) rotateY(180deg) translateZ(calc(var(--d) / 2));
 }
 .faceRight {
   width: var(--d);
   height: var(--h);
-  transform:
-    translate(-50%, -50%)
-    rotateY(90deg)
-    translateZ(calc(var(--w) / 2));
+  transform: translate(-50%, -50%) rotateY(90deg) translateZ(calc(var(--w) / 2));
 }
 .faceLeft {
   width: var(--d);
   height: var(--h);
-  transform:
-    translate(-50%, -50%)
-    rotateY(-90deg)
-    translateZ(calc(var(--w) / 2));
+  transform: translate(-50%, -50%) rotateY(-90deg) translateZ(calc(var(--w) / 2));
 }
 .faceTop {
   width: var(--w);
   height: var(--d);
-  /* rotateX(-90deg) lays the face flat above the box (toward viewer's "up"). */
-  transform:
-    translate(-50%, -50%)
-    rotateX(-90deg)
-    translateZ(calc(var(--h) / 2));
+  transform: translate(-50%, -50%) rotateX(-90deg) translateZ(calc(var(--h) / 2));
 }
 
-/* ===========================================================================
-   Per-variant face patterns
-   Builds the architectural feel. All patterns are CSS gradients so there
-   are no image assets and no extra HTTP requests.
-   ========================================================================= */
-
-/* Floors: window grid on front/back, vertical structure line on sides */
+/* ===== Per-variant patterns ============================================= */
 .floor .faceFront,
 .floor .faceBack {
   background:
-    /* Horizontal floor lines */
     repeating-linear-gradient(
       0deg,
       transparent 0 12px,
       rgba(196, 165, 100, 0.20) 12px 13px
     ),
-    /* Vertical mullions */
     repeating-linear-gradient(
       90deg,
       transparent 0 14px,
@@ -311,7 +262,6 @@
 .floor .faceLeft,
 .floor .faceRight {
   background:
-    /* Single vertical structural line down the center */
     linear-gradient(
       90deg,
       transparent 0 calc(50% - 0.5px),
@@ -323,7 +273,6 @@
 
 .floor .faceTop {
   background:
-    /* Diagonal hatch suggesting concrete slab */
     repeating-linear-gradient(
       45deg,
       transparent 0 6px,
@@ -332,7 +281,6 @@
     rgba(13, 12, 8, 0.85);
 }
 
-/* Foundation: heavy cross-hatch, almost opaque */
 .foundation .face {
   background:
     repeating-linear-gradient(
@@ -343,7 +291,6 @@
     rgba(28, 26, 20, 0.95);
 }
 
-/* Roof: clean panels with a horizontal accent line */
 .roof .faceFront,
 .roof .faceBack,
 .roof .faceLeft,
@@ -367,7 +314,6 @@
     rgba(28, 26, 20, 0.92);
 }
 
-/* Antenna: solid gold, thin */
 .antenna .face {
   background: var(--accent-gold);
   border: none;
@@ -375,32 +321,11 @@
   opacity: 0.9;
 }
 
-/* ===========================================================================
-   Stamp (top-left of panel) and progress readout (bottom-right)
-   ========================================================================= */
-
-.stamp {
-  position: absolute;
-  top: var(--space-2);
-  left: var(--space-3);
-  display: grid;
-  gap: 4px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  color: var(--accent-gold);
-  border-left: 1px solid var(--gold-33);
-  padding-left: var(--space-1);
-  z-index: 5;
-}
-.stampRow { display: flex; gap: var(--space-1); }
-.stampK { width: 40px; opacity: 0.7; }
-.stampV { color: var(--accent-cream); font-variant-numeric: tabular-nums; }
-
+/* ===== Bottom-right progress readout (only chrome on the panel) ========== */
 .readout {
   position: absolute;
-  bottom: var(--space-2);
-  right: var(--space-3);
+  bottom: var(--space-2, 16px);
+  right: var(--space-3, 24px);
   display: flex;
   align-items: center;
   gap: 0.5em;
@@ -409,7 +334,7 @@
   letter-spacing: 0.15em;
   color: var(--cream-65);
   border-right: 1px solid var(--gold-33);
-  padding-right: var(--space-1);
+  padding-right: var(--space-1, 8px);
   z-index: 5;
 }
 .readoutK { color: var(--accent-gold); }

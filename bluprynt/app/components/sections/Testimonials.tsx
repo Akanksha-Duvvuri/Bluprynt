@@ -1,4 +1,4 @@
-import { SectionShell } from "@/components/cad/SectionShell";
+import { SectionShell } from "@/app/components/SectionShell";
 import styles from "./Testimonials.module.css";
 
 export type Testimonial = {

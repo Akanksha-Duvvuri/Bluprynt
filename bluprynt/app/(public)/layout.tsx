@@ -1,6 +1,6 @@
-import { CADNavbar } from "@/components/cad/CADNavbar";
-import { CADStatusBar } from "@/components/cad/CADStatusBar";
-import { CADCrosshair } from "@/components/cad/CADCrosshair";
+import { CADNavbar } from "@/app/components/CADNavbar";
+import { CADStatusBar } from "@/app/components/CADStatusBar";
+import { CADCrosshair } from "@/components/cad/Crosshair";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (

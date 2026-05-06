@@ -72,6 +72,8 @@
   --z-crosshair: 9999;
 }
 
+
+
 /* === Reset / base ========================================================= */
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -114,6 +116,110 @@ a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: transparent; border: 0; padding: 0; }
 
 img, svg, video { display: block; max-width: 100%; }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CAD SPOTLIGHT SYSTEM
+   The Crosshair component writes to --mx and --my on body. Sheet.tsx
+   renders four divs (.drawing-base, .drawing-bright, .spot-wash,
+   .corner-tick) — these rules style them.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Faint default grid — barely visible, always on */
+.drawing-base {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(196, 165, 100, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196, 165, 100, 0.22) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .drawing-base { opacity: 0.18; }
+}
+
+/* Bright grid — only visible inside the cursor's spotlight radius */
+.drawing-bright {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  -webkit-mask-image: radial-gradient(
+    280px at var(--mx-local, 50%) var(--my-local, 50%),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: radial-gradient(
+    280px at var(--mx-local, 50%) var(--my-local, 50%),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+@media (hover: none), (pointer: coarse) {
+  .drawing-bright { display: none; }
+}
+
+.grid-fine,
+.grid-coarse {
+  position: absolute;
+  inset: 0;
+}
+
+.grid-fine {
+  background-image:
+    linear-gradient(rgba(196, 165, 100, 0.55) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196, 165, 100, 0.55) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.42;
+}
+
+.grid-coarse {
+  background-image:
+    linear-gradient(rgba(196, 165, 100, 0.55) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196, 165, 100, 0.55) 1px, transparent 1px);
+  background-size: 100px 100px;
+  opacity: 0.62;
+}
+
+/* Warm cream glow under the cursor */
+.spot-wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    280px at var(--mx-local, 50%) var(--my-local, 50%),
+    rgba(255, 238, 198, 0.04),
+    rgba(255, 238, 198, 0.015) 40%,
+    transparent 75%
+  );
+}
+
+@media (hover: none), (pointer: coarse) {
+  .spot-wash { display: none; }
+}
+
+/* Corner ticks — drafting registration marks at each corner of every Sheet */
+.corner-tick {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: #C4A564;
+  border-style: solid;
+  z-index: 1;
+  opacity: 0.4;
+}
+.corner-tick.tl { top: 22px; left: 22px;     border-width: 1px 0 0 1px; }
+.corner-tick.tr { top: 22px; right: 22px;    border-width: 1px 1px 0 0; }
+.corner-tick.bl { bottom: 22px; left: 22px;  border-width: 0 0 1px 1px; }
+.corner-tick.br { bottom: 22px; right: 22px; border-width: 0 1px 1px 0; }
 
 /* === Reduced motion ======================================================= */
 

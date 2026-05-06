@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SectionShell } from "@/components/cad/SectionShell";
+import { SectionShell } from "@/app/components/SectionShell";
 import styles from "./AboutPreview.module.css";
 
 export default function AboutPreview() {

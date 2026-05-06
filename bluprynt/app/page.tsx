@@ -1,5 +1,5 @@
-import { BuildingDraft } from "@/components/cad/BuildingDraft";
-import { SectionDivider } from "@/components/cad/SectionDivider";
+import { BuildingDraft } from "@/app/components/BuildingDraft";
+import { SectionDivider } from "./components/SectionDivider.module.css";
 
 import Hero from "./components/sections/Hero";
 import WorkPreview from "./components/sections/WorkPreview";
@@ -29,7 +29,7 @@ export default function HomePage() {
       {/* Fixed right-side panel; renders behind content via z-index. */}
       <BuildingDraft />
     
-      <TopBar />
+      {/* <TopBar /> */}
       <Hero />
 
       <SectionDivider fromCode="A-001" toCode="A-002" />

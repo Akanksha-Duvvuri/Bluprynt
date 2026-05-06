@@ -20,17 +20,13 @@ import styles from "./BuildingDraft.module.css";
  *         `transform: translateY(...)` settles down from above.
  * 3. Each box is composed of 5 absolutely-positioned `.face` divs (4 walls
  *    plus a top). The faces are transformed out from the box's center via
- *    `translateZ` so they form a cuboid in 3D space. The parent (scene) has
- *    `transform-style: preserve-3d` so the rotation applies cohesively.
- *
- * No animation library, no requestAnimationFrame loop beyond the scroll
- * listener — the GPU handles all the transitions.
+ *    `translateZ` so they form a cuboid in 3D space.
  */
 
 const FLOOR_COUNT = 7;
-const FOUNDATION_REVEAL = 0; // always visible
-const FLOOR_REVEAL_BASE = 0.10; // first floor appears at 10% scroll
-const FLOOR_REVEAL_GAP = 0.10; // each floor 10% later
+const FOUNDATION_REVEAL = 0;
+const FLOOR_REVEAL_BASE = 0.10;
+const FLOOR_REVEAL_GAP = 0.10;
 const ROOF_REVEAL = 0.82;
 const ANTENNA_REVEAL = 0.92;
 
@@ -38,9 +34,8 @@ export function BuildingDraft() {
   const progress = useScrollProgress();
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
-  // Write scroll progress into --p on the wrap element every frame.
-  // Custom property inherits through the whole 3D scene, so all the calc()s
-  // downstream pick it up automatically.
+  // Write scroll progress into --p on the wrap element. Inherits to the
+  // whole 3D scene; CSS calc()s downstream pick it up automatically.
   useEffect(() => {
     if (wrapRef.current) {
       wrapRef.current.style.setProperty("--p", String(progress));
@@ -49,17 +44,12 @@ export function BuildingDraft() {
 
   return (
     <div ref={wrapRef} className={styles.wrap} aria-hidden="true">
-      <Stamp />
-
       <div className={styles.stage}>
         <div className={styles.scene}>
-          {/* Ground plane sitting flat under the building */}
           <div className={styles.ground} />
 
-          {/* Foundation: always visible from p=0 */}
           <Box variant="foundation" reveal={FOUNDATION_REVEAL} index={-1} />
 
-          {/* Stack of floors */}
           {Array.from({ length: FLOOR_COUNT }, (_, i) => (
             <Box
               key={i}
@@ -69,10 +59,7 @@ export function BuildingDraft() {
             />
           ))}
 
-          {/* Roof box */}
           <Box variant="roof" reveal={ROOF_REVEAL} index={FLOOR_COUNT} />
-
-          {/* Antenna spire (4 faces, no top — it's tiny enough not to matter) */}
           <Antenna reveal={ANTENNA_REVEAL} />
         </div>
       </div>
@@ -96,7 +83,6 @@ function Box({
   reveal: number;
 }) {
   const cls = `${styles.box} ${styles[variant]}`;
-  // CSS custom properties as inline style — React supports this if cast.
   const cssVars = {
     "--reveal": reveal,
     "--i": index,
@@ -125,28 +111,7 @@ function Antenna({ reveal }: { reveal: number }) {
   );
 }
 
-/* ---------- Stamp + progress readout ---------- */
-
-function Stamp() {
-  return (
-    <div className={styles.stamp}>
-      <div className={styles.stampRow}>
-        <span className={styles.stampK}>SHEET</span>
-        <span className={styles.stampV}>A-001 → A-006</span>
-      </div>
-      <div className={styles.stampRow}>
-        <span className={styles.stampK}>SCALE</span>
-        <span className={styles.stampV}>1 : 100</span>
-      </div>
-      <div className={styles.stampRow}>
-        <span className={styles.stampK}>PROG.</span>
-        <span className={styles.stampV} data-prog>
-          00%
-        </span>
-      </div>
-    </div>
-  );
-}
+/* ---------- Bottom-right progress readout ---------- */
 
 function ProgressReadout({ floorCount }: { floorCount: number }) {
   const progress = useScrollProgress();
@@ -156,7 +121,6 @@ function ProgressReadout({ floorCount }: { floorCount: number }) {
     if (!ref.current) return;
     const pct = Math.round(progress * 100);
 
-    // Compute the floor count: foundation (1) + floors crossed.
     const floorsRevealed = Math.min(
       floorCount,
       Math.max(
@@ -175,10 +139,6 @@ function ProgressReadout({ floorCount }: { floorCount: number }) {
     ref.current.querySelector("[data-pct]")!.textContent =
       `${String(pct).padStart(3, "0")}%`;
     ref.current.querySelector("[data-stage]")!.textContent = stage;
-
-    // Also mirror percentage to the top-left stamp
-    const stampProg = document.querySelector("[data-prog]");
-    if (stampProg) stampProg.textContent = `${String(pct).padStart(2, "0")}%`;
   }, [progress, floorCount]);
 
   return (
