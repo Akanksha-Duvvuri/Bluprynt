@@ -299,7 +299,7 @@ body {
 
 [data-sheet] {
   position: relative;
-  isolation: isolate;
+  /* isolation: isolate; */
 }
 
 [data-sheet]::before,
@@ -320,28 +320,23 @@ body {
   opacity: 0.04;
 }
 
-/* Bright grid + warm cream wash — visible only inside cursor radius */
+
+/* Bright grid — visible only inside cursor radius. Sharp edge, no glow. */
 [data-sheet]::after {
   background-image:
     linear-gradient(rgba(196, 165, 100, 0.55) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(196, 165, 100, 0.55) 1px, transparent 1px),
-    radial-gradient(
-      var(--spot-radius) at var(--mx, -9999px) var(--my, -9999px),
-      rgba(255, 238, 198, 0.05),
-      transparent 70%
-    );
-  background-size: 22px 22px, 22px 22px, 100% 100%;
+    linear-gradient(90deg, rgba(196, 165, 100, 0.55) 1px, transparent 1px);
+  background-size: 22px 22px;
+
   -webkit-mask-image: radial-gradient(
-    var(--spot-radius) at var(--mx, -9999px) var(--my, -9999px),
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.6) 50%,
-    rgba(0, 0, 0, 0) 100%
+    circle var(--spot-radius) at var(--mx, -9999px) var(--my, -9999px),
+    black 100%,
+    transparent 100%
   );
   mask-image: radial-gradient(
-    var(--spot-radius) at var(--mx, -9999px) var(--my, -9999px),
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.6) 50%,
-    rgba(0, 0, 0, 0) 100%
+    circle var(--spot-radius) at var(--mx, -9999px) var(--my, -9999px),
+    black 100%,
+    transparent 100%
   );
 }
 

@@ -10,7 +10,7 @@
   z-index: 9999;
   top: 0;
   left: 0;
-  transform: translate3d(var(--cursor-x, 50vw), var(--cursor-y, 50vh), 0);
+  /* transform: translate3d(var(--cursor-x, 50vw), var(--cursor-y, 50vh), 0); */
   will-change: transform;
   transition: opacity 0.18s ease;
 }
@@ -57,7 +57,7 @@
   z-index: 9998;
   top: 0;
   left: 0;
- transform: translate3d(calc(var(--cursor-x, 50vw) + 14px), calc(var(--cursor-y, 50vh) + 14px), 0);
+ /* transform: translate3d(calc(var(--cursor-x, 50vw) + 14px), calc(var(--cursor-y, 50vh) + 14px), 0); */
   font-family: var(--font-mono);
   font-size: 9px;
   color: var(--gold);

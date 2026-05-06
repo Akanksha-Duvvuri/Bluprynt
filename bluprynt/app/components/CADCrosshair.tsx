@@ -27,82 +27,87 @@ export default function Crosshair() {
   const readYRef = useRef<HTMLSpanElement>(null);
   const readZRef = useRef<HTMLSpanElement>(null);
 
-  useEffect(() => {
-    // Detect touch — bail entirely if not a hover device
-    const touch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
-    if (touch) {
-      setIsTouch(true);
-      return;
+useEffect(() => {
+  const touch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+  if (touch) {
+    setIsTouch(true);
+    return;
+  }
+
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let pendingFrame = false;
+  let lastSheet = "A-001";
+
+  // Read DOM refs once
+  const crosshairEl = document.querySelector<HTMLElement>(`.${styles.crosshair}`);
+  const readoutEl = document.querySelector<HTMLElement>(`.${styles.readout}`);
+
+  const update = () => {
+    pendingFrame = false;
+
+    // Direct transform write — bypass CSS variable + recompute cycle.
+    // This is the single biggest factor in cursor smoothness.
+    if (crosshairEl) {
+      crosshairEl.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+    }
+    if (readoutEl) {
+      readoutEl.style.transform = `translate3d(${mouseX + 14}px, ${mouseY + 14}px, 0)`;
     }
 
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let pendingFrame = false;
-    let lastSheet = "A-001";
+    if (readXRef.current) {
+      readXRef.current.textContent = pad(mouseX - window.innerWidth / 2);
+    }
+    if (readYRef.current) {
+      readYRef.current.textContent = pad(window.innerHeight / 2 - mouseY);
+    }
 
-    const root = document.documentElement;
-
-    const update = () => {
-      pendingFrame = false;
-
-      // crosshair + readout follow pointer
-      root.style.setProperty("--cursor-x", `${mouseX}px`);
-      root.style.setProperty("--cursor-y", `${mouseY}px`);
-
-      // CAD-style coordinate readout — origin is screen center
-      if (readXRef.current) {
-        readXRef.current.textContent = pad(mouseX - window.innerWidth / 2);
-      }
-      if (readYRef.current) {
-        readYRef.current.textContent = pad(window.innerHeight / 2 - mouseY);
-      }
-
-      // detect which sheet the cursor is over → update Z readout + status bar
-      const el = document.elementFromPoint(mouseX, mouseY);
-      if (el) {
-        const sheetEl = el.closest<HTMLElement>(".sheet");
-        if (sheetEl?.id && SHEET_MAP[sheetEl.id]) {
-          const code = SHEET_MAP[sheetEl.id];
-          if (code !== lastSheet) {
-            lastSheet = code;
-            if (readZRef.current) readZRef.current.textContent = `SHEET ${code}`;
-            const indicator = document.getElementById("sheetIndicator");
-            if (indicator) indicator.textContent = `SHEET ${code}`;
-          }
+    // Sheet detection — runs on each frame but cheap
+    const el = document.elementFromPoint(mouseX, mouseY);
+    if (el) {
+      const sheetEl = el.closest<HTMLElement>("[data-sheet]");
+      if (sheetEl) {
+        const code = sheetEl.dataset.sheet;
+        if (code && code !== lastSheet) {
+          lastSheet = code;
+          if (readZRef.current) readZRef.current.textContent = `SHEET ${code}`;
+          const indicator = document.getElementById("sheetIndicator");
+          if (indicator) indicator.textContent = `SHEET ${code}`;
         }
       }
-    };
+    }
+  };
 
-    const requestUpdate = () => {
-      if (!pendingFrame) {
-        pendingFrame = true;
-        requestAnimationFrame(update);
-      }
-    };
+  const requestUpdate = () => {
+    if (!pendingFrame) {
+      pendingFrame = true;
+      requestAnimationFrame(update);
+    }
+  };
 
-    const onMove = (e: PointerEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      requestUpdate();
-    };
+  const onMove = (e: PointerEvent) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    requestUpdate();
+  };
 
-    const onLeave = () => setHidden(true);
-    const onEnter = () => setHidden(false);
+  const onLeave = () => setHidden(true);
+  const onEnter = () => setHidden(false);
 
-    window.addEventListener("pointermove", onMove, { passive: true });
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    document.addEventListener("mouseleave", onLeave);
-    document.addEventListener("mouseenter", onEnter);
+  window.addEventListener("pointermove", onMove, { passive: true });
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  document.addEventListener("mouseleave", onLeave);
+  document.addEventListener("mouseenter", onEnter);
 
-    update();
+  update();
 
-    return () => {
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("scroll", requestUpdate);
-      document.removeEventListener("mouseleave", onLeave);
-      document.removeEventListener("mouseenter", onEnter);
-    };
-  }, []);
+  return () => {
+    window.removeEventListener("pointermove", onMove);
+    window.removeEventListener("scroll", requestUpdate);
+    document.removeEventListener("mouseleave", onLeave);
+    document.removeEventListener("mouseenter", onEnter);
+  };
+}, []);
 
   if (isTouch) return null;
 
