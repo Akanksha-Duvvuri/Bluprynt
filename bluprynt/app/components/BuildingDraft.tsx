@@ -9,8 +9,12 @@ import styles from "./BuildingDraft.module.css";
  *
  * Single input drives everything: `--p` = scroll progress (0..1).
  *   - rotates the scene 360° (rotateY(--p * 360deg))
- *   - reveals foundation, floors, roof, antenna at thresholds
+ *   - reveals foundation, floors, roof, logo at thresholds
  *   - flips the APPROVED stamp on once it crosses the threshold
+ *
+ * Brand integration: the logo glyph (the Bluprynt roof+chimney mark from
+ * the favicon) is the topmost element. As the building "completes," the
+ * logo settles onto its peak — building literally crowned by the brand.
  */
 
 const FLOOR_COUNT = 7;
@@ -18,7 +22,7 @@ const FOUNDATION_REVEAL = 0;
 const FLOOR_REVEAL_BASE = 0.10;
 const FLOOR_REVEAL_GAP = 0.10;
 const ROOF_REVEAL = 0.82;
-const ANTENNA_REVEAL = 0.92;
+const LOGO_REVEAL = 0.92;
 
 // When scroll progress crosses this threshold, the APPROVED stamp slams down.
 const APPROVED_THRESHOLD = 0.92;
@@ -54,13 +58,13 @@ export function BuildingDraft() {
           ))}
 
           <Box variant="roof" reveal={ROOF_REVEAL} index={FLOOR_COUNT} />
-          <Antenna reveal={ANTENNA_REVEAL} />
+
+          {/* Bluprynt logo glyph — sits where the antenna used to be */}
+          <LogoMark reveal={LOGO_REVEAL} />
         </div>
       </div>
 
-      {/* APPROVED stamp — 2D overlay, doesn't rotate with the building */}
       <ApprovedStamp />
-
       <ProgressReadout floorCount={FLOOR_COUNT} />
     </div>
   );
@@ -96,14 +100,28 @@ function Box({
   );
 }
 
-function Antenna({ reveal }: { reveal: number }) {
+/* ---------- LogoMark: Bluprynt roof+chimney glyph as SVG ----------
+   The path traces the favicon shape:
+     - Bottom-left start
+     - Up to peak (left of center)
+     - Down right roof slope
+     - Up the chimney's left side
+     - Across the chimney top
+     - Down the chimney's right side to baseline
+
+   Drawn with stroke (no fill) at width 14, miter joins — matches the
+   thick-line look of the actual logo. */
+
+function LogoMark({ reveal }: { reveal: number }) {
   const cssVars = { "--reveal": reveal } as React.CSSProperties;
   return (
-    <div className={`${styles.box} ${styles.antenna}`} style={cssVars}>
-      <div className={`${styles.face} ${styles.faceFront}`} />
-      <div className={`${styles.face} ${styles.faceBack}`} />
-      <div className={`${styles.face} ${styles.faceRight}`} />
-      <div className={`${styles.face} ${styles.faceLeft}`} />
+    <div className={`${styles.box} ${styles.logoMark}`} style={cssVars}>
+      <img
+        className={styles.logoImg}
+        src="/Favicon-04.png"
+        alt=""
+        aria-hidden="true"
+      />
     </div>
   );
 }

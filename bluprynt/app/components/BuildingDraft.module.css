@@ -1,8 +1,5 @@
 /* ===========================================================================
    3D Building — pure CSS transforms, scroll-driven
-     - rotation driven by --p (scroll progress) — full 360° across page
-     - floor reveals driven by --p
-     - APPROVED stamp toggles via [data-approved] on the wrap
    ========================================================================= */
 
 .wrap {
@@ -20,8 +17,9 @@
   --roof-d: 120px;
   --roof-h: 24px;
 
-  --ant-w: 6px;
-  --ant-h: 60px;
+  /* Logo glyph dimensions (matches the SVG's 2:1 aspect ratio) */
+  --logo-w: 96px;
+  --logo-h: 48px;
 
   /* Number of floors must match FLOOR_COUNT in BuildingDraft.tsx */
   --floors: 7;
@@ -52,27 +50,11 @@
   justify-content: center;
 }
 
-/* ===========================================================================
-   Scene — rotates 360° as you scroll the page.
-
-   --tilt-x controls the camera angle relative to the building:
-     POSITIVE = camera looks DOWN at the building (you see the top)
-     ZERO     = head-on elevation view (no top, no bottom)
-     NEGATIVE = camera looks UP at the building (you see the bottom)
-
-   The current value (-15deg) means looking up at the building from
-   slightly below — heroic / monumental angle, more bottom face visible.
-   Tune to taste:
-       0deg   = perfectly head-on (no top or bottom faces visible)
-      -10deg  = mild upward angle
-      -25deg  = strong upward angle
-      +15deg  = looking down at the roof
-   ========================================================================= */
-
+/* ===== Scene ============================================================ */
 .scene {
   --shift-x: 30px;
-  --shift-y: 80px;     /* less downward shift now that the camera angles up */
-  --tilt-x: -15deg;    /* negative = camera looks UP at the building */
+  --shift-y: 80px;
+  --tilt-x: -15deg;
 
   position: relative;
   width: 0;
@@ -95,10 +77,7 @@
   }
 }
 
-/* ===== Ground plane =====================================================
-   Note: when --tilt-x is negative (camera looks up), the ground plane
-   becomes slightly visible from underneath. We keep it but lower its
-   opacity a touch via the mask radius so it doesn't feel out of place. */
+/* ===== Ground plane ===================================================== */
 .ground {
   position: absolute;
   top: 0;
@@ -179,24 +158,61 @@
   .roof { --drop: 0px; transition: none; opacity: 1; }
 }
 
-.antenna {
-  --w: var(--ant-w);
-  --d: var(--ant-w);
-  --h: var(--ant-h);
+/* ===========================================================================
+   LogoMark — flat SVG plane that sits on top of the building.
+
+   The logoMark is positioned at the same anchor pattern as the boxes
+   above (--home-y for vertical position, --drop for the entrance fall).
+   But instead of containing 5 .face divs forming a cuboid, it contains
+   a single SVG centered on the anchor — a flat 2D shape sitting in the
+   3D scene, rotating with everything else. From edge-on it appears as
+   a thin line; from front/back angles, the logo silhouette is visible.
+
+   color: var(--accent-cream) drives `currentColor` on the SVG stroke,
+   so the logo glows in the brand's cream/gold accent.
+   ========================================================================= */
+
+.logoMark {
+  --w: var(--logo-w);
+  --h: var(--logo-h);
   --home-y: calc(
     -1 * var(--found-h)
     - var(--floors) * var(--floor-h)
     - var(--roof-h)
-    - var(--ant-h) / 2
+    - var(--logo-h) / 2
+    - 12px  /* small breathing room between roof and logo */
   );
-  --drop: calc(80px * (1 - var(--rev)));
+  --drop: calc(100px * (1 - var(--rev)));
+
   transform: translateY(calc(var(--home-y) - var(--drop)));
   opacity: var(--rev);
-  transition: transform 500ms ease-out, opacity 400ms ease-out;
+  transition:
+    transform 700ms cubic-bezier(0.34, 1.6, 0.64, 1),  /* more overshoot */
+    opacity 400ms ease-out;
+
+  /* Drives the SVG stroke via `currentColor`; pick the brand cream to
+     match the logo's actual color in the favicon. */
+  color: var(--accent-cream, #FFEEC6);
+
+  /* Soft glow so it reads as the brand's apex */
+  filter: drop-shadow(0 0 10px rgba(255, 238, 198, 0.45));
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .antenna { --drop: 0px; transition: none; opacity: 1; }
+  .logoMark { --drop: 0px; transition: none; opacity: 1; }
+}
+
+.logoImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--w);
+  height: auto;
+  transform: translate(-50%, -50%);
+  display: block;
+  pointer-events: none;
+  /* Drop-shadow gives the same glow as before */
+  filter: drop-shadow(0 0 10px rgba(255, 238, 198, 0.45));
 }
 
 /* ===== Faces ============================================================ */
@@ -297,15 +313,8 @@
     rgba(28, 26, 20, 0.92);
 }
 
-.antenna .face {
-  background: var(--accent-gold);
-  border: none;
-  box-shadow: 0 0 6px rgba(196, 165, 100, 0.5);
-  opacity: 0.9;
-}
-
 /* ===========================================================================
-   APPROVED stamp — 2D overlay, doesn't rotate with the building.
+   APPROVED stamp — 2D overlay
    ========================================================================= */
 
 .approved {

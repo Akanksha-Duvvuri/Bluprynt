@@ -64,22 +64,22 @@ export default function Hero() {
 
       <div className={styles.inner}>
         <p className={styles.eyebrow}>
-          <span className={styles.eyebrowDot} /> The firm called before
-          construction
+          <span className={styles.eyebrowDot} /> Your Trusted Preconstruction Partner
         </p>
 
         <h1 className={styles.headline}>
-          <span className={styles.h1Line}>The firm you call</span>
+          <span className={styles.h1Line}>Engineering Accuracy.</span>
           <span className={styles.h1Line}>
-            <span className={styles.h1Gold}>before</span> you build
+            <span className={styles.h1Gold}>Consulting Excellence.</span> 
           </span>
           <span className={styles.h1Period}>.</span>
         </h1>
 
         <p className={styles.sub}>
-          Pre-construction consulting for civil and infrastructure projects
-          across the US and India. Cost certainty, constructability, and clean
-          documentation — settled before you break ground.
+          Bluprynt delivers preconstruction services to US general contractors, 
+concrete subcontractors, and rebar fabricators. Our delivery team is 
+based in India; our standards are American. We operate on your time 
+zone, talk to your field teams, and hit your bid deadlines
         </p>
 
         <div className={styles.ctas}>

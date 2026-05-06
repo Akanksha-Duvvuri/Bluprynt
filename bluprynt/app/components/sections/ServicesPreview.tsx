@@ -50,12 +50,12 @@ export default function ServicesPreview() {
     >
       <header className={styles.head}>
         <h2 className={styles.heading}>
-          What we do, <span className={styles.gold}>plainly</span>.
+          What we do_
         </h2>
         <p className={styles.lede}>
-          We work in the window where decisions are still cheap. Six
-          disciplines, scoped to your project, sequenced to keep work moving
-          downstream.
+          Scale Smart. Pay only for the 
+          preconstruction work you 
+          need, when you need it.
         </p>
       </header>
 

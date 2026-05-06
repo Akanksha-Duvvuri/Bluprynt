@@ -81,9 +81,9 @@ export function CADNavbar() {
     <>
       <header className={`${styles.bar} ${scrolled ? styles.scrolled : ""}`}>
         <Link href="/" className={styles.logo} aria-label="Bluprynt — Home">
-          <span className={styles.logoB}>B</span>
-          <span className={styles.logoSep}>·</span>
-          <span className={styles.logoText}>BLUPRYNT</span>
+          <span className={styles.logo}>
+            <img src="Logo.png"></img>
+          </span>
         </Link>
 
         <nav

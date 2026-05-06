@@ -34,9 +34,9 @@
   color: var(--accent-gold);
   font-weight: 400;
 }
-.logoB { font-weight: 700; }
-.logoSep { opacity: 0.45; }
-.logoText { font-weight: 400; }
+.logo{
+  width: 130px;
+}
 
 /* ===== Nav ============================================================== */
 .nav {
