@@ -1,5 +1,8 @@
 /* ===========================================================================
-   3D Building — pure CSS transforms, scroll-driven
+   3D Building — pure CSS transforms
+     - rotation driven by --cx (cursor X position)
+     - floor reveals driven by --p (scroll progress)
+     - APPROVED stamp toggles via [data-approved] on the wrap
    ========================================================================= */
 
 .wrap {
@@ -27,9 +30,6 @@
 
   position: fixed;
   top: var(--navbar-h, 48px);
-  /* Cap the inward pull at 60px so the building stays near the viewport's
-     right edge on ultra-wide monitors. Increase the max (60px) if you want
-     it pulled further inward; set to 0 to keep it flush right always. */
   right: clamp(0px, calc((100vw - var(--section-max)) / 2), 60px);
   bottom: var(--statusbar-h, 28px);
   width: clamp(360px, 42vw, 600px);
@@ -40,8 +40,6 @@
   flex-direction: column;
 }
 
-/* Hide entirely on small screens — the section content takes the full
-   width below 961px (SectionShell removes the right reservation). */
 @media (max-width: 960px) {
   .wrap { display: none; }
 }
@@ -57,28 +55,18 @@
 }
 
 /* ===========================================================================
-   Scene — the 3D root that rotates and shifts
-   ===========================================================================
-   Transform composition (CSS applies these from LEFT TO RIGHT in terms of
-   coordinate-system changes):
+   Scene — rotates based on cursor X position.
 
-     1. translate(...)  — shifts the scene origin in screen space
-                          (right by --shift-x, down by --shift-y)
-     2. rotateX(...)    — tilts the scene so we look down at the top of
-                          the building (--tilt-x)
-     3. rotateY(...)    — continuous spin driven by scroll progress
-
-   Because translate is FIRST in the chain, it's applied to the original
-   screen-space coordinates. The rotations then happen around the new,
-   shifted origin — so the whole building both shifts AND tilts in place.
-   Tune --shift-x / --shift-y / --tilt-x to retune.
+   Math: at --cx 0.5 (cursor centered), rotateY = 0deg (head-on view).
+         at --cx 0.0 (cursor far left), rotateY = -180deg.
+         at --cx 1.0 (cursor far right), rotateY = +180deg.
+   So sweeping the mouse across the screen spins the building 360°.
    ========================================================================= */
 
 .scene {
-  /* Single point of tuning — adjust these three to reposition + retilt. */
-  --shift-x: 30px;     /* nudge building right within its panel */
-  --shift-y: 140px;    /* nudge building down so its top isn't clipped */
-  --tilt-x: 24deg;     /* downward tilt — bigger = more top-down view */
+  --shift-x: 30px;
+  --shift-y: 140px;
+  --tilt-x: 24deg;
 
   position: relative;
   width: 0;
@@ -87,8 +75,10 @@
   transform:
     translate(var(--shift-x), var(--shift-y))
     rotateX(var(--tilt-x))
-    rotateY(calc(var(--p, 0) * 360deg - 25deg));
-  transition: transform 200ms linear;
+    rotateY(calc((var(--cx, 0.5) - 0.5) * 360deg));
+  /* Slightly longer transition than scroll-driven so cursor flicks feel
+     smooth instead of jittery. Tune lower for tighter feel. */
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -96,7 +86,7 @@
     transform:
       translate(var(--shift-x), var(--shift-y))
       rotateX(var(--tilt-x))
-      rotateY(-25deg);
+      rotateY(0deg);
     transition: none;
   }
 }
@@ -247,14 +237,10 @@
 .floor .faceBack {
   background:
     repeating-linear-gradient(
-      0deg,
-      transparent 0 12px,
-      rgba(196, 165, 100, 0.20) 12px 13px
+      0deg, transparent 0 12px, rgba(196, 165, 100, 0.20) 12px 13px
     ),
     repeating-linear-gradient(
-      90deg,
-      transparent 0 14px,
-      rgba(196, 165, 100, 0.20) 14px 15px
+      90deg, transparent 0 14px, rgba(196, 165, 100, 0.20) 14px 15px
     ),
     rgba(13, 12, 8, 0.7);
 }
@@ -274,9 +260,7 @@
 .floor .faceTop {
   background:
     repeating-linear-gradient(
-      45deg,
-      transparent 0 6px,
-      rgba(196, 165, 100, 0.12) 6px 7px
+      45deg, transparent 0 6px, rgba(196, 165, 100, 0.12) 6px 7px
     ),
     rgba(13, 12, 8, 0.85);
 }
@@ -284,9 +268,7 @@
 .foundation .face {
   background:
     repeating-linear-gradient(
-      45deg,
-      transparent 0 4px,
-      rgba(196, 165, 100, 0.35) 4px 5px
+      45deg, transparent 0 4px, rgba(196, 165, 100, 0.35) 4px 5px
     ),
     rgba(28, 26, 20, 0.95);
 }
@@ -307,9 +289,7 @@
 .roof .faceTop {
   background:
     repeating-linear-gradient(
-      90deg,
-      transparent 0 8px,
-      rgba(196, 165, 100, 0.15) 8px 9px
+      90deg, transparent 0 8px, rgba(196, 165, 100, 0.15) 8px 9px
     ),
     rgba(28, 26, 20, 0.92);
 }
@@ -321,7 +301,94 @@
   opacity: 0.9;
 }
 
-/* ===== Bottom-right progress readout (only chrome on the panel) ========== */
+/* ===========================================================================
+   APPROVED stamp
+   ===========================================================================
+   2D overlay sitting in front of the 3D scene. Doesn't rotate with the
+   building. Visibility toggled by [data-approved="true"] on .wrap, which
+   the JS sets when scroll progress crosses the threshold.
+
+   The "thunk" effect: by default the stamp is invisible and scaled to
+   2.5x; when it activates, scale interpolates back to 1x using a
+   back-out bezier (slight overshoot below 1, then settles) and opacity
+   fades up. Reads as a stamp being slammed onto the drawing.
+   ========================================================================= */
+
+.approved {
+  position: absolute;
+  /* Tuned to land roughly on the building's middle in the panel */
+  top: 55%;
+  left: 50%;
+  z-index: 10;
+  pointer-events: none;
+
+  /* Default state: invisible + zoomed up, ready to thunk down */
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(-8deg) scale(2.5);
+  transition:
+    opacity 320ms ease-out,
+    transform 480ms cubic-bezier(0.34, 1.6, 0.64, 1);
+}
+
+/* Active state: triggered when [data-approved="true"] is on the wrap */
+.wrap[data-approved="true"] .approved {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(-8deg) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .approved {
+    transition: opacity 200ms ease-out;
+    transform: translate(-50%, -50%) rotate(-8deg) scale(1);
+  }
+}
+
+.approvedInner {
+  border: 3px double var(--accent-red);
+  padding: 14px 28px;
+  background: rgba(28, 26, 20, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  box-shadow:
+    0 0 24px rgba(193, 101, 101, 0.25),
+    inset 0 0 0 1px rgba(193, 101, 101, 0.4);
+}
+
+.approvedTop {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: var(--accent-red);
+  text-shadow: 0 0 10px rgba(193, 101, 101, 0.3);
+}
+
+.approvedDivider {
+  width: 80%;
+  height: 1px;
+  background: var(--accent-red);
+  opacity: 0.5;
+}
+
+.approvedSub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--accent-red);
+}
+
+.approvedMeta {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  color: var(--cream-65);
+  opacity: 0.85;
+}
+
+/* ===== Bottom-right progress readout ==================================== */
 .readout {
   position: absolute;
   bottom: var(--space-2, 16px);

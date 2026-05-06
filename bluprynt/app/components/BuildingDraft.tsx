@@ -2,25 +2,20 @@
 
 import { useEffect, useRef } from "react";
 import { useScrollProgress } from "@/lib/cad/useScrollProgress";
+import { useCursorX } from "@/lib/cad/Usecursorx";
 import styles from "./BuildingDraft.module.css";
 
 /**
  * 3D scroll-driven building.
  *
- * How it works:
- * 1. `useScrollProgress` returns a number 0..1 representing how far down the
- *    page the user has scrolled. We write that number into `--p` on the wrap
- *    element on every animation frame.
- * 2. The CSS reads `--p` from anywhere in this subtree (custom properties
- *    inherit) and uses it for two things:
- *      a) rotating the scene: `rotateY(calc(var(--p) * 360deg))` — one full
- *         revolution as you scroll the page.
- *      b) revealing each floor: each box has a `--reveal` threshold; when
- *         `--p` crosses it, the box's `opacity` goes 0→1 and its
- *         `transform: translateY(...)` settles down from above.
- * 3. Each box is composed of 5 absolutely-positioned `.face` divs (4 walls
- *    plus a top). The faces are transformed out from the box's center via
- *    `translateZ` so they form a cuboid in 3D space.
+ * Two inputs drive the visual:
+ *   - `--p`  scroll progress (0..1) → reveals foundation, floors, roof, antenna
+ *   - `--cx` cursor X position (0..1) → rotates the scene 360° around Y axis
+ *
+ * Both are written as CSS custom properties on the wrap element. CSS
+ * inherits these into the whole 3D scene; calc() expressions downstream
+ * pick them up automatically — no animation library, no rAF loop beyond
+ * the listeners.
  */
 
 const FLOOR_COUNT = 7;
@@ -30,20 +25,30 @@ const FLOOR_REVEAL_GAP = 0.10;
 const ROOF_REVEAL = 0.82;
 const ANTENNA_REVEAL = 0.92;
 
+// When scroll progress crosses this threshold, the APPROVED stamp slams down.
+const APPROVED_THRESHOLD = 0.92;
+
 export function BuildingDraft() {
   const progress = useScrollProgress();
+  const cursorX = useCursorX();
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
-  // Write scroll progress into --p on the wrap element. Inherits to the
-  // whole 3D scene; CSS calc()s downstream pick it up automatically.
+  // Two custom properties, two effects — keeps each update minimal.
   useEffect(() => {
-    if (wrapRef.current) {
-      wrapRef.current.style.setProperty("--p", String(progress));
-    }
+    wrapRef.current?.style.setProperty("--p", String(progress));
   }, [progress]);
 
+  useEffect(() => {
+    wrapRef.current?.style.setProperty("--cx", String(cursorX));
+  }, [cursorX]);
+
   return (
-    <div ref={wrapRef} className={styles.wrap} aria-hidden="true">
+    <div
+      ref={wrapRef}
+      className={styles.wrap}
+      aria-hidden="true"
+      data-approved={progress >= APPROVED_THRESHOLD}
+    >
       <div className={styles.stage}>
         <div className={styles.scene}>
           <div className={styles.ground} />
@@ -64,12 +69,15 @@ export function BuildingDraft() {
         </div>
       </div>
 
+      {/* APPROVED stamp — 2D overlay, doesn't rotate with the building */}
+      <ApprovedStamp />
+
       <ProgressReadout floorCount={FLOOR_COUNT} />
     </div>
   );
 }
 
-/* ---------- Box: 5-faced cuboid (4 walls + top) ---------- */
+/* ---------- Box: 5-faced cuboid ---------- */
 
 type BoxVariant = "foundation" | "floor" | "roof";
 
@@ -111,6 +119,24 @@ function Antenna({ reveal }: { reveal: number }) {
   );
 }
 
+/* ---------- APPROVED stamp ----------
+   2D overlay. Visibility flips via the [data-approved] attribute on the
+   wrap, which the CSS reads to swap between hidden/scaled-up and
+   visible/scaled-down states. */
+
+function ApprovedStamp() {
+  return (
+    <div className={styles.approved}>
+      <div className={styles.approvedInner}>
+        <span className={styles.approvedTop}>APPROVED</span>
+        <span className={styles.approvedDivider} />
+        <span className={styles.approvedSub}>FOR CONSTRUCTION</span>
+        <span className={styles.approvedMeta}>REV 01 · 2026</span>
+      </div>
+    </div>
+  );
+}
+
 /* ---------- Bottom-right progress readout ---------- */
 
 function ProgressReadout({ floorCount }: { floorCount: number }) {
@@ -132,9 +158,11 @@ function ProgressReadout({ floorCount }: { floorCount: number }) {
     const stage =
       progress < FLOOR_REVEAL_BASE
         ? "FOUNDATION"
-        : progress >= ROOF_REVEAL
-          ? "ROOF · COMPLETE"
-          : `FL ${String(floorsRevealed).padStart(2, "0")} / ${String(floorCount).padStart(2, "0")}`;
+        : progress >= APPROVED_THRESHOLD
+          ? "APPROVED"
+          : progress >= ROOF_REVEAL
+            ? "ROOF · COMPLETE"
+            : `FL ${String(floorsRevealed).padStart(2, "0")} / ${String(floorCount).padStart(2, "0")}`;
 
     ref.current.querySelector("[data-pct]")!.textContent =
       `${String(pct).padStart(3, "0")}%`;
