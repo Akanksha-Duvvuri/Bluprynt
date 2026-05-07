@@ -5,7 +5,7 @@ import styles from "./WorkPreview.module.css";
 
 const STATUS_TONE: Record<string, string> = {
   live: "mint",
-  ongoing: "mint",
+  ongoing: "red",
   review: "gold",
   complete: "cream",
 };

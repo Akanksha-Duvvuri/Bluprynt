@@ -70,9 +70,8 @@ const currentSheet =
   return (
     <header className={`${styles.navbar} ${scrolled ? styles.scrolled : ""}`}>
       <div className={styles.inner}>
-        <Link href="/" className={styles.brand}>
-          BLUPRYNT
-          <span className={styles.brandSub}>· CONSULTING</span>
+        <Link href="/" className={styles.logo}>
+        <img src="/Logo.png"></img>
         </Link>
 
         <nav className={styles.nav} aria-label="Primary">
@@ -91,6 +90,11 @@ const currentSheet =
             ))}
           </ul>
         </nav>
+
+        <Link href="/#contact" className={styles.navCta}>
+  <span>Start a project</span>
+  <span className={styles.navCtaArrow}>→</span>
+</Link>
 
         <button
           type="button"

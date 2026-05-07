@@ -76,14 +76,13 @@ export default function Hero() {
         </h1>
 
         <p className={styles.sub}>
-          Bluprynt delivers preconstruction services to US general contractors, 
-concrete subcontractors, and rebar fabricators. Our delivery team is 
+         Our delivery team is 
 based in India; our standards are American. We operate on your time 
 zone, talk to your field teams, and hit your bid deadlines
         </p>
 
         <div className={styles.ctas}>
-          <Link href="/contact" className={styles.ctaPrimary}>
+          <Link href="/#contact" className={styles.ctaPrimary}>
             Start a project
             <span className={styles.ctaArrow}>→</span>
           </Link>
