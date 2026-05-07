@@ -1,5 +1,5 @@
-import { PageShell } from "@/components/cad/PageShell";
-import styles from "./contact.module.css";
+import { PageShell } from "../components/Pageshell";
+import styles from "./page.module.css";
 
 export const metadata = {
   title: "Start a project · Bluprynt",

@@ -6,7 +6,7 @@ import {
   allFounderSlugs,
   FOUNDERS,
 } from "@/lib/Founders";
-import styles from "./Founderdetail.module.css";
+import styles from "./page.module.css";
 
 type Params = { slug: string };
 

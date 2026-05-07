@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import styles from "./PageShell.module.css";
+import styles from "./Pageshell.module.css";
 
 type PageShellProps = {
   /** Sheet code stamp, e.g. "A-100" */

@@ -1,0 +1,56 @@
+.grid {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+
+  /* Gold grid: vertical and horizontal 1px lines every 40px */
+  background-image:
+    linear-gradient(
+      to right,
+      var(--gold-20, rgba(196, 165, 100, 0.20)) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      var(--gold-20, rgba(196, 165, 100, 0.20)) 1px,
+      transparent 1px
+    );
+  background-size: 40px 40px;
+
+  /* Radial mask centered on cursor — grid only visible inside the circle.
+     Knob: change `220px` for a bigger / smaller spotlight. */
+  -webkit-mask-image: radial-gradient(
+    circle 220px at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.30) 55%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    circle 220px at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.30) 55%,
+    transparent 100%
+  );
+}
+
+/* On touch devices there's no real cursor — hide the grid entirely. */
+@media (pointer: coarse) {
+  .grid { display: none; }
+}
+
+/* For users who prefer reduced motion, show a static centered glow. */
+@media (prefers-reduced-motion: reduce) {
+  .grid {
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% 60% at center,
+      rgba(0, 0, 0, 0.4) 0%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 70% 60% at center,
+      rgba(0, 0, 0, 0.4) 0%,
+      transparent 100%
+    );
+  }
+}

@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { CursorGrid } from "./CursorGrid";
 import styles from "./PageShell.module.css";
 
 type PageShellProps = {
@@ -32,8 +33,8 @@ export function PageShell({
 }: PageShellProps) {
   return (
     <main className={styles.page}>
-      {/* Background grid — subtle, identical on all pages */}
-      <div className={styles.grid} aria-hidden="true" />
+      {/* Cursor-illuminated grid — fixed to viewport, behind content */}
+      <CursorGrid />
 
       <div
         className={styles.inner}

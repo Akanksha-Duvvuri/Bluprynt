@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { PageShell } from "@/components/cad/PageShell";
+import { PageShell } from "../components/Pageshell";
 import {
   getServiceBySlug,
   allServiceSlugs,
   SERVICES,
 } from "@/lib/services";
-import styles from "./service-detail.module.css";
+import styles from "./page.module.css";
 
 type Params = { slug: string };
 
