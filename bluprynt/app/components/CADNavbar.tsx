@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSheet } from "@/lib/cad/SheetProvider";
 import {
   useEffect,
   useLayoutEffect,
@@ -11,10 +12,13 @@ import {
 } from "react";
 import styles from "./CADNavbar.module.css";
 
+
+
 const NAV = [
   { label: "Home", href: "/" },
   { label: "Work", href: "/work" },
   { label: "Services", href: "/services" },
+  { label: "Testimonials", href: "testimonials" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ] as const;

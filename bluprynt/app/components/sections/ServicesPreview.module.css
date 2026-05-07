@@ -43,10 +43,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+  /* Lift effect — same family as work cards */
   transition:
-    border-color 200ms var(--ease-out),
-    background 200ms var(--ease-out),
-    transform 200ms var(--ease-out);
+    border-color 220ms var(--ease-out),
+    background 220ms var(--ease-out),
+    transform 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-out);
   animation: tileIn 500ms var(--ease-out) both;
   animation-delay: calc(var(--i, 0) * 60ms + 50ms);
 }
@@ -58,11 +60,15 @@
 
 .tile:hover {
   border-color: var(--accent-gold);
-  background: linear-gradient(180deg, var(--bg-soft) 0%, rgba(196,165,100,0.04) 100%);
-  transform: translateY(-2px);
+  background: linear-gradient(180deg, var(--bg-soft) 0%, rgba(196,165,100,0.06) 100%);
+  /* Stronger lift than before (-4px), with shadow */
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 0 1px var(--gold-33),
+    0 14px 32px -16px rgba(0, 0, 0, 0.6);
 }
 
-/* Leader: a dot at the top-left and a vertical dashed line down the side */
+/* Leader: dot at top-left + dashed vertical line down the side */
 .leader {
   position: absolute;
   left: 12px;
@@ -79,10 +85,10 @@
   border-radius: 50%;
   background: var(--accent-gold);
   margin-bottom: 4px;
-  transition: box-shadow 200ms var(--ease-out);
+  transition: box-shadow 220ms var(--ease-out);
 }
 .tile:hover .leaderDot {
-  box-shadow: 0 0 8px var(--accent-gold);
+  box-shadow: 0 0 12px var(--accent-gold);
 }
 .leaderLine {
   flex: 1;
@@ -115,7 +121,6 @@
   color: var(--accent-gold);
 }
 
-/* ===== Title + line ===================================================== */
 .tileTitle {
   margin: 4px 0 0;
   font-family: var(--font-display);
@@ -133,7 +138,6 @@
   color: var(--cream-80);
 }
 
-/* ===== Tile foot ======================================================== */
 .tileFoot {
   display: flex;
   justify-content: flex-end;
@@ -150,7 +154,6 @@
   opacity: 0.7;
 }
 
-/* ===== Footer note ====================================================== */
 .note {
   margin: 0;
   font-family: var(--font-mono);

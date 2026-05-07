@@ -1,0 +1,126 @@
+.footer {
+  position: relative;
+  /* High z-index so we sit on top of the (fading) BuildingDraft when it
+     lingers — but the building fades to opacity 0 by the time the user
+     reaches us, so this is just belt-and-suspenders. */
+  z-index: 20;
+
+  /* Make sure the statusbar at the bottom doesn't eat into us */
+  padding-bottom: var(--statusbar-h, 28px);
+
+  background: var(--bg-deep, #0D0C08);
+  border-top: 1px solid var(--gold-33, rgba(196, 165, 100, 0.33));
+}
+
+/* Reserve right padding on the homepage so the BuildingDraft (right-side
+   panel) doesn't visually overlap the footer's content area on desktop.
+   On other pages there's no building, so we use full width. */
+@media (min-width: 961px) {
+  .footer.onHome .inner {
+    padding-right: clamp(380px, 44vw, 620px);
+  }
+}
+
+.inner {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: var(--space-5, 40px) var(--space-3, 24px) var(--space-3, 24px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 32px);
+}
+
+/* ===== Top: brand + nav ================================================ */
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 24px);
+  align-items: flex-start;
+  justify-content: space-between;
+}
+@media (min-width: 720px) {
+  .top { flex-direction: row; align-items: center; }
+}
+
+.brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+.brandName {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: var(--accent-gold, #C4A564);
+}
+.brandSub {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--cream-65, rgba(255, 238, 198, 0.65));
+}
+
+.navList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: var(--space-3, 24px);
+  flex-wrap: wrap;
+}
+
+.navLink {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cream-80, rgba(255, 238, 198, 0.8));
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: color 200ms ease-out, border-color 200ms ease-out;
+}
+.navLink:hover {
+  color: var(--accent-gold, #C4A564);
+  border-bottom-color: var(--accent-gold, #C4A564);
+}
+
+/* ===== Bottom: copy + stamp ============================================ */
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 16px);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-top: var(--space-3, 24px);
+  border-top: 1px dashed var(--gold-20, rgba(196, 165, 100, 0.2));
+}
+@media (min-width: 720px) {
+  .bottom { flex-direction: row; align-items: center; }
+}
+
+.copy {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--cream-65, rgba(255, 238, 198, 0.65));
+}
+
+.stamp {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+}
+.stampK { color: var(--cream-65, rgba(255, 238, 198, 0.65)); }
+.stampV {
+  color: var(--accent-cream, #FFEEC6);
+  font-variant-numeric: tabular-nums;
+}
+.stampSep { color: var(--gold-33, rgba(196, 165, 100, 0.33)); }

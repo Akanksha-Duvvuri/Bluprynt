@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Sheet from "@/app/components/Sheet";
 import { TitleBlock, SheetMeta } from "@/app/components/TitleBlock";
-import { FOUNDERS } from "@/lib/founders";
+import { FOUNDERS } from "@/lib/Founders";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {

@@ -1,0 +1,233 @@
+.head { margin-bottom: var(--space-5); max-width: 60ch; }
+.heading {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-section);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--accent-cream);
+}
+.gold { color: var(--accent-gold); font-weight: 400; }
+.lede {
+  margin: 0;
+  color: var(--cream-65);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+/* ===== Grid ============================================================= */
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.card {
+  animation: cardIn 600ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 80ms + 100ms);
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) { .card { animation: none; } }
+
+/* ===== Card ============================================================= */
+.cardLink {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  height: 100%;
+  padding: var(--space-3) var(--space-3) var(--space-3);
+  background: var(--bg-soft);
+  border: 0.5px solid var(--gold-33);
+  border-radius: 2px;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 220ms var(--ease-out),
+    transform 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-out);
+}
+.cardLink:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-4px);
+  box-shadow: 0 0 0 1px var(--gold-33), 0 14px 32px -16px rgba(0, 0, 0, 0.6);
+}
+
+/* Corner ticks via four spans */
+.cardCorners > span {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  z-index: 2;
+}
+.cardCorners > span::before,
+.cardCorners > span::after {
+  content: "";
+  position: absolute;
+  background: var(--accent-gold);
+  opacity: 0.7;
+}
+.cardCorners > span::before { width: 10px; height: 1px; }
+.cardCorners > span::after  { width: 1px;  height: 10px; }
+.cardCorners > span:nth-child(1) { top: 4px; left: 4px; }
+.cardCorners > span:nth-child(2) { top: 4px; right: 4px; }
+.cardCorners > span:nth-child(2)::before { right: 0; left: auto; }
+.cardCorners > span:nth-child(2)::after  { right: 0; left: auto; }
+.cardCorners > span:nth-child(3) { bottom: 4px; left: 4px; }
+.cardCorners > span:nth-child(3)::before { bottom: 0; top: auto; }
+.cardCorners > span:nth-child(4) { bottom: 4px; right: 4px; }
+.cardCorners > span:nth-child(4)::before { bottom: 0; top: auto; right: 0; left: auto; }
+.cardCorners > span:nth-child(4)::after  { right: 0; left: auto; bottom: 0; top: auto; }
+
+/* ===== Header (avatar + identity) ====================================== */
+.head2 {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  margin-bottom: var(--space-1);
+}
+
+.who { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--accent-cream);
+  line-height: 1.2;
+}
+.role {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+}
+.loc {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--cream-65);
+}
+
+/* ===== Avatar tile ===================================================== */
+.avatar {
+  position: relative;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--accent-gold);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    repeating-linear-gradient(
+      45deg, transparent 0 4px,
+      rgba(196, 165, 100, 0.08) 4px 5px
+    ),
+    var(--bg-deep);
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.avatarMono {
+  /* Initials version — no img */
+}
+.avatarInitials {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--accent-gold);
+}
+
+/* Tiny corner marks on the initials avatar */
+.avatarCorners > span {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  pointer-events: none;
+}
+.avatarCorners > span::before,
+.avatarCorners > span::after {
+  content: "";
+  position: absolute;
+  background: var(--accent-gold);
+  opacity: 0.6;
+}
+.avatarCorners > span::before { width: 6px; height: 1px; }
+.avatarCorners > span::after  { width: 1px;  height: 6px; }
+.avatarCorners > span:nth-child(1) { top: 3px; left: 3px; }
+.avatarCorners > span:nth-child(2) { top: 3px; right: 3px; }
+.avatarCorners > span:nth-child(2)::before { right: 0; left: auto; }
+.avatarCorners > span:nth-child(2)::after  { right: 0; left: auto; }
+.avatarCorners > span:nth-child(3) { bottom: 3px; left: 3px; }
+.avatarCorners > span:nth-child(3)::before { bottom: 0; top: auto; }
+.avatarCorners > span:nth-child(4) { bottom: 3px; right: 3px; }
+.avatarCorners > span:nth-child(4)::before { bottom: 0; top: auto; right: 0; left: auto; }
+.avatarCorners > span:nth-child(4)::after  { right: 0; left: auto; bottom: 0; top: auto; }
+
+/* ===== Bio ============================================================= */
+.bio {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--cream-80);
+}
+
+/* ===== Expertise tags ================================================= */
+.tags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 0.5px solid var(--gold-33);
+  border-radius: 2px;
+  color: var(--accent-gold);
+  background: rgba(13, 12, 8, 0.4);
+}
+
+/* ===== Foot ============================================================ */
+.foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--gold-20);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+}
+.arrow { transition: transform var(--t-fast) var(--ease-out); }
+.cardLink:hover .arrow { transform: translateX(3px); }

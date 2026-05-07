@@ -50,15 +50,15 @@ export default function Hero() {
       <div className={styles.meta}>
         <span className={styles.metaRow}>
           <span className={styles.metaK}>Active</span>
-          <span className={styles.metaV}>07</span>
+          {/* <span className={styles.metaV}></span> */}
         </span>
         <span className={styles.metaRow}>
           <span className={styles.metaK}>Markets</span>
           <span className={styles.metaV}>US · IN</span>
         </span>
         <span className={styles.metaRow}>
-          <span className={styles.metaK}>Disc.</span>
-          <span className={styles.metaV}>PRE-CON</span>
+          <span className={styles.metaK}>Field.</span>
+          <span className={styles.metaV}>PRE-CONSTRUCTION</span>
         </span>
       </div>
 
@@ -93,12 +93,9 @@ zone, talk to your field teams, and hit your bid deadlines
         </div>
 
         <div className={styles.dimRow}>
-          <span className={styles.dim}>
-            <span className={styles.dimTick} /> 0
-          </span>
           <span className={styles.dimLine} />
           <span className={styles.dim}>
-            32&apos;-0&quot; · OVERALL
+            
             <span className={styles.dimTick} />
           </span>
         </div>

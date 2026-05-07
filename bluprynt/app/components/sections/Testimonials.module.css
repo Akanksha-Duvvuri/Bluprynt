@@ -36,6 +36,12 @@
   animation: noteIn 600ms var(--ease-out) both;
   animation-delay: calc(var(--i, 0) * 90ms + 60ms);
   box-shadow: 0 12px 28px -20px rgba(0, 0, 0, 0.7);
+  cursor: default;
+  /* Hover transition */
+  transition:
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 320ms ease-out,
+    border-color 240ms ease-out;
 }
 @keyframes noteIn {
   from { opacity: 0; transform: rotate(0deg) translateY(20px); }
@@ -45,6 +51,18 @@
   .note { animation: none; transform: none; }
 }
 
+/* Hover: un-rotate, lift, deepen shadow, brighten border */
+.note:hover {
+  transform: rotate(0deg) translateY(-6px) scale(1.01);
+  box-shadow: 0 22px 44px -18px rgba(0, 0, 0, 0.85);
+  border-color: var(--gold-33);
+  border-left-color: var(--accent-gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .note:hover { transform: none; }
+}
+
 /* Alternate alignment so they feel pinned across the page */
 .note:nth-child(even) {
   margin-left: auto;
@@ -52,6 +70,10 @@
   border-right: 1px solid var(--gold-66);
   padding-left: var(--space-4);
   padding-right: var(--space-5);
+}
+.note:nth-child(even):hover {
+  border-right-color: var(--accent-gold);
+  border-left-color: var(--gold-33);
 }
 
 /* ===== Pin (top-left tack + line) ======================================= */
@@ -63,12 +85,17 @@
   flex-direction: column;
   align-items: center;
   pointer-events: none;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .note:nth-child(even) .pin {
   left: auto;
   right: -8px;
   align-items: center;
 }
+.note:hover .pin {
+  transform: translateY(-2px) scale(1.1);
+}
+
 .pinDot {
   width: 10px;
   height: 10px;
@@ -76,6 +103,10 @@
   background: var(--accent-gold);
   border: 2px solid var(--bg-soft);
   box-shadow: 0 0 0 1px var(--accent-gold);
+  transition: box-shadow 240ms ease-out;
+}
+.note:hover .pinDot {
+  box-shadow: 0 0 0 1px var(--accent-gold), 0 0 12px var(--accent-gold);
 }
 .pinLine {
   width: 1px;
