@@ -24,8 +24,14 @@ export default function FoundersPreview() {
 
       <ul className={styles.grid}>
         {founders.map((f, i) => (
-          <li key={f.id} className={styles.card} style={{ ['--i' as string]: i }}>
-            <Link href={`/founders/${f.slug}`} className={styles.cardLink}>
+          <li
+            key={f.slug}
+            className={styles.card}
+            style={{ ['--i' as string]: i }}
+          >
+            {/* All founder cards link to the same destination — the founders
+                section on the about page. We removed per-founder pages. */}
+            <Link href="/about#founders" className={styles.cardLink}>
               <div className={styles.cardCorners} aria-hidden="true">
                 <span /><span /><span /><span />
               </div>
@@ -52,7 +58,7 @@ export default function FoundersPreview() {
               )}
 
               <div className={styles.foot}>
-                <span className={styles.read}>Read full bio</span>
+                <span className={styles.read}>Meet the team</span>
                 <span className={styles.arrow}>→</span>
               </div>
             </Link>
@@ -65,11 +71,14 @@ export default function FoundersPreview() {
 
 /* ---------- Avatar: photo if provided, otherwise initials tile ---------- */
 
-function Avatar({ founder }: { founder: { initials?: string; name: string; photoUrl?: string } }) {
+function Avatar({
+  founder,
+}: {
+  founder: { initials?: string; name: string; photoUrl?: string };
+}) {
   if (founder.photoUrl) {
     return (
       <div className={styles.avatar}>
-        {/* Use plain <img> here so this doesn't require Next.js Image config */}
         <img src={founder.photoUrl} alt="" aria-hidden="true" />
       </div>
     );

@@ -23,6 +23,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "../1.forlater/Sheet.tsx", "../1.forlater/Founders.tsx"  ],
   "exclude": ["node_modules"]
 }

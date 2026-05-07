@@ -4,12 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./Footer.module.css";
 
+// /founders removed (no per-founder pages, no founders index — they live on /about)
+// /contact → /#contact (no separate contact page)
 const NAV_LINKS = [
   { href: "/work", label: "Work" },
   { href: "/services", label: "Services" },
   { href: "/about", label: "About" },
-  { href: "/founders", label: "Founders" },
-  { href: "/contact", label: "Contact" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export function Footer() {
