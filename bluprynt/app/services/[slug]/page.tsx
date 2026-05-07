@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { PageShell } from "@/components/cad/PageShell";
+import { PageShell } from "../../components/Pageshell";
 import {
   getServiceBySlug,
   allServiceSlugs,
   SERVICES,
 } from "@/lib/services";
-import styles from "./service-detail.module.css";
+import styles from "./page.module.css";
 
 type Params = { slug: string };
 
@@ -98,7 +98,7 @@ export default async function ServiceDetailPage({
           </header>
           <ul className={styles.othersList}>
             {others.map((o) => (
-              <li key={o.id}>
+              <li key={o.slug}>
                 <Link href={`/services/${o.slug}`} className={styles.otherLink}>
                   <span className={styles.otherN}>{o.num}</span>
                   <span className={styles.otherTitle}>{o.title}</span>
@@ -118,7 +118,7 @@ export default async function ServiceDetailPage({
           Tell us about the project. We'll come back within two business days
           with a scoped engagement plan.
         </h3>
-        <Link href="/contact" className={styles.ctaBtn}>
+        <Link href="/#contact" className={styles.ctaBtn}>
           <span>Start a conversation</span>
           <span className={styles.ctaArrow}>→</span>
         </Link>

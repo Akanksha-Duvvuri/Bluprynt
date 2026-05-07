@@ -33,7 +33,8 @@ export default function ContactPreview() {
   }
 
   return (
-    <SectionShell
+    <div id="contact">
+      <SectionShell
       code="A-006"
       label="Title block"
       tone="deep"
@@ -208,6 +209,7 @@ export default function ContactPreview() {
         </div>
       </div>
     </SectionShell>
+    </div>
   );
 }
 

@@ -51,7 +51,8 @@ export default function Testimonials({ testimonials }: Props) {
       : PLACEHOLDER;
 
   return (
-    <SectionShell
+    <div id="testimonials">
+        <SectionShell
       code="A-004"
       label="Envelope"
       tone="soft"
@@ -109,5 +110,6 @@ export default function Testimonials({ testimonials }: Props) {
         ))}
       </ul>
     </SectionShell>
+    </div>
   );
 }
