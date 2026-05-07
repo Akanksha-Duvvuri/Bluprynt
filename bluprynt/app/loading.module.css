@@ -1,0 +1,71 @@
+.wrap {
+  min-height: calc(100vh - var(--navbar-h, 48px) - var(--statusbar-h, 28px));
+  background: var(--bg-deep, #0D0C08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3, 24px);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3, 24px);
+}
+
+/* ===== Logo ============================================================== */
+.logo {
+  width: 120px;
+  height: auto;
+  display: block;
+  animation: pulse 1.6s ease-in-out infinite;
+  filter: brightness(0.95);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.96); }
+  50%      { opacity: 1;   transform: scale(1); }
+}
+
+/* ===== "PLOTTING..." text =============================================== */
+.text {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--accent-gold, #C4A564);
+  font-weight: 700;
+}
+
+.dot {
+  display: inline-block;
+  opacity: 0;
+  animation: dotIn 1.4s ease-in-out infinite;
+}
+.dot:nth-of-type(1) { animation-delay: 0ms; }
+.dot:nth-of-type(2) { animation-delay: 200ms; }
+.dot:nth-of-type(3) { animation-delay: 400ms; }
+
+@keyframes dotIn {
+  0%, 60%   { opacity: 0; }
+  70%, 90%  { opacity: 1; }
+  100%      { opacity: 0; }
+}
+
+/* ===== Subtitle ========================================================= */
+.sub {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--cream-65, rgba(255, 238, 198, 0.65));
+  text-transform: uppercase;
+}
+
+/* ===== Reduced motion =================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .logo, .dot {
+    animation: none;
+  }
+  .logo { opacity: 1; }
+  .dot  { opacity: 1; }
+}
