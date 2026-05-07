@@ -1,143 +1,128 @@
-import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import Sheet from "@/app/components/Sheet";
-import { TitleBlock, SheetMeta } from "@/app/components/TitleBlock";
-import { SERVICES, getServiceBySlug } from "@/lib/services";
-import styles from "./page.module.css";
+import Link from "next/link";
+import { PageShell } from "@/components/cad/PageShell";
+import {
+  getServiceBySlug,
+  allServiceSlugs,
+  SERVICES,
+} from "@/lib/services";
+import styles from "./service-detail.module.css";
 
-interface PageParams {
-  slug: string;
+type Params = { slug: string };
+
+export async function generateStaticParams() {
+  return allServiceSlugs();
 }
 
-interface PageProps {
-  params: Promise<PageParams>;
-}
-
-/** Pre-generate one static page per service at build time. */
-export function generateStaticParams(): PageParams[] {
-  return SERVICES.map((s) => ({ slug: s.slug }));
-}
-
-/** Per-service metadata — unique <title> and description per page. */
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  const service = getServiceBySlug(slug);
-  if (!service) return { title: "Service not found" };
-
+  const s = getServiceBySlug(slug);
+  if (!s) return { title: "Service not found · Bluprynt" };
   return {
-    title: `${service.name.trim()} ${service.nameEm}`,
-    description: service.shortDesc,
+    title: `${s.title} · Bluprynt`,
+    description: s.line,
   };
 }
 
-export default async function ServiceDetailPage({ params }: PageProps) {
+export default async function ServiceDetailPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
   const { slug } = await params;
   const service = getServiceBySlug(slug);
-
   if (!service) notFound();
 
+  // Other services to suggest at the bottom
+  const others = SERVICES.filter((s) => s.slug !== service.slug).slice(0, 3);
+
   return (
-    <Sheet id="services" variant="dark">
-      <SheetMeta
-        sheetCode={`A-003 / ${service.num}`}
-        lines={[
-          `Layer · SERVICES / Detail`,
-          `Engagement · ${service.engagement}`,
-          `Timeline · ${service.timeline}`,
-        ]}
-      />
-      <TitleBlock
-        title={`Bluprynt / ${service.name.trim()} ${service.nameEm}`}
-        rows={[
-          { k: "Drwg No.", v: "BCG-003" },
-          { k: "Item", v: service.num },
-          { k: "Type", v: service.engagement.toUpperCase() },
-        ]}
-      />
-
-      <div className="sheet-body">
-        {/* Breadcrumb back to the overview */}
-        <div className={styles.breadcrumb}>
-          <Link href="/services" className={styles.crumb}>
-            ← All services
-          </Link>
-        </div>
-
-        <div className="section-head">
-          <div className="section-head-left">
-            <div className="label">▸ {service.num}</div>
-            <h1 className="title">
-              {service.name}
-              <span className="em">{service.nameEm}</span>
-            </h1>
-          </div>
-          <div className="section-head-right">
-            <p>{service.shortDesc}</p>
-          </div>
-        </div>
-
-        {/* Long-form description */}
-        <section className={styles.longSection}>
-          <div className={styles.longLabel}>▸ What it is</div>
-          <p className={styles.longBody}>{service.longDesc}</p>
+    <PageShell
+      code={`A-2${service.num.padStart(2, "0")}`}
+      label={`SERVICE · ${service.num}`}
+      eyebrow={service.region}
+      title={service.title}
+      lede={service.line}
+      maxWidth={1100}
+    >
+      {/* ===== Description ================================================ */}
+      {service.description && (
+        <section className={styles.intro} style={{ ['--i' as string]: 0 }}>
+          <p className={styles.introBody}>{service.description}</p>
         </section>
+      )}
 
-        {/* Spec sheet */}
-        <div className={styles.specSheet}>
-          <div className={styles.specRow}>
-            <span className={styles.specK}>Deliverables</span>
-            <span className={styles.specV}>
-              {service.deliverables.map((d) => (
-                <span key={d} className={styles.deliv}>
-                  {d}
-                </span>
+      {/* ===== Two-column: Deliverables + When to engage ================== */}
+      <div className={styles.cols}>
+        {service.deliverables && service.deliverables.length > 0 && (
+          <section className={styles.col} style={{ ['--i' as string]: 1 }}>
+            <header className={styles.colHead}>
+              <span className={styles.colNum}>01</span>
+              <h2 className={styles.colTitle}>Deliverables</h2>
+            </header>
+            <ol className={styles.list}>
+              {service.deliverables.map((d, i) => (
+                <li key={d} className={styles.listItem}>
+                  <span className={styles.listN}>{String(i + 1).padStart(2, "0")}</span>
+                  <span className={styles.listText}>{d}</span>
+                </li>
               ))}
-            </span>
-          </div>
-          <div className={styles.specRow}>
-            <span className={styles.specK}>Engagement</span>
-            <span className={styles.specVProse}>{service.engagement}</span>
-          </div>
-          <div className={styles.specRow}>
-            <span className={styles.specK}>Timeline</span>
-            <span className={styles.specVProse}>{service.timeline}</span>
-          </div>
-          <div className={styles.specRow}>
-            <span className={styles.specK}>Who it&apos;s for</span>
-            <span className={styles.specVProse}>{service.whoItsFor}</span>
-          </div>
-        </div>
+            </ol>
+          </section>
+        )}
 
-        {/* Bottom CTA */}
-        <div className={styles.cta}>
-          <div className={styles.ctaLeft}>
-            <div className={styles.ctaLabel}>▸ Start</div>
-            <h2 className={styles.ctaTitle}>
-              Right service<br />
-              for your <span className={styles.em}>project?</span>
-            </h2>
-            <p className={styles.ctaCopy}>
-              Tell us about it and we&apos;ll confirm whether {service.name.trim()}{" "}
-              {service.nameEm} is the right engagement, or recommend something
-              that fits better.
-            </p>
-          </div>
-          <div className={styles.ctaRight}>
-            <Link href="/contact" className="btn-primary">
-              Start a project →
-            </Link>
-          </div>
-        </div>
-
-        <div className="section-foot">
-          <Link href="/services" className="text-link">
-            ← All services
-          </Link>
-        </div>
+        {service.whenToEngage && service.whenToEngage.length > 0 && (
+          <section className={styles.col} style={{ ['--i' as string]: 2 }}>
+            <header className={styles.colHead}>
+              <span className={styles.colNum}>02</span>
+              <h2 className={styles.colTitle}>When to engage us</h2>
+            </header>
+            <ul className={styles.triggers}>
+              {service.whenToEngage.map((trigger) => (
+                <li key={trigger} className={styles.trigger}>
+                  <span className={styles.triggerMark} aria-hidden="true">→</span>
+                  <span>{trigger}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
-    </Sheet>
+
+      {/* ===== Other services ============================================ */}
+      {others.length > 0 && (
+        <section className={styles.others} style={{ ['--i' as string]: 3 }}>
+          <header className={styles.othersHead}>
+            <span className={styles.colNum}>03</span>
+            <h2 className={styles.colTitle}>Other services</h2>
+          </header>
+          <ul className={styles.othersList}>
+            {others.map((o) => (
+              <li key={o.id}>
+                <Link href={`/services/${o.slug}`} className={styles.otherLink}>
+                  <span className={styles.otherN}>{o.num}</span>
+                  <span className={styles.otherTitle}>{o.title}</span>
+                  <span className={styles.otherLine}>{o.line}</span>
+                  <span className={styles.otherArrow}>→</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* ===== CTA ======================================================== */}
+      <section className={styles.cta} style={{ ['--i' as string]: 4 }}>
+        <span className={styles.ctaEyebrow}>READY TO START?</span>
+        <h3 className={styles.ctaHead}>
+          Tell us about the project. We'll come back within two business days
+          with a scoped engagement plan.
+        </h3>
+        <Link href="/contact" className={styles.ctaBtn}>
+          <span>Start a conversation</span>
+          <span className={styles.ctaArrow}>→</span>
+        </Link>
+      </section>
+    </PageShell>
   );
 }

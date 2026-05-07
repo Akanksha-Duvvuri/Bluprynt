@@ -1,17 +1,15 @@
 /* ===== Section head ===================================================== */
-.head { margin-bottom: var(--space-5); max-width: 60ch; }
-
+.head { margin-bottom: var(--space-5, 40px); max-width: 60ch; }
 .heading {
-  margin: 0 0 var(--space-2);
+  margin: 0 0 var(--space-2, 16px);
   font-family: var(--font-display);
-  font-size: var(--fs-section);
+  font-size: var(--fs-section, clamp(1.75rem, 3.5vw, 2.5rem));
   font-weight: 300;
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--accent-cream);
 }
 .gold { color: var(--accent-gold); font-weight: 400; }
-
 .lede {
   margin: 0;
   color: var(--cream-65);
@@ -22,58 +20,58 @@
 /* ===== Grid ============================================================= */
 .grid {
   list-style: none;
-  margin: 0 0 var(--space-6);
+  margin: 0 0 var(--space-4, 32px);
   padding: 0;
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-3, 24px);
   grid-template-columns: 1fr;
 }
-
-@media (min-width: 720px) and (max-width: 960px) {
+@media (min-width: 720px) and (max-width: 1180px) {
   .grid { grid-template-columns: repeat(2, 1fr); }
 }
-@media (min-width: 961px) {
-  .grid { grid-template-columns: repeat(2, 1fr); }
-  /* On wider canvases, fit 3 in a row only when content area is roomy */
-}
-@media (min-width: 1280px) {
+@media (min-width: 1181px) {
   .grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 .card {
-  /* Stagger entry */
-  animation: cardIn 600ms var(--ease-out) both;
-  animation-delay: calc(var(--i, 0) * 80ms + 100ms);
+  animation: cardIn 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 80ms + 80ms);
 }
 @keyframes cardIn {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-@media (prefers-reduced-motion: reduce) {
-  .card { animation: none; }
-}
+@media (prefers-reduced-motion: reduce) { .card { animation: none; } }
 
-/* ===== Card ============================================================= */
 .cardLink {
   position: relative;
   display: flex;
   flex-direction: column;
-  background: var(--bg-soft);
-  border: 0.5px solid var(--gold-33);
+  gap: var(--space-1, 8px);
+  height: 100%;
+  padding: var(--space-3, 24px);
+  border: 0.5px solid var(--gold-33, rgba(196,165,100,0.33));
   border-radius: 2px;
+  background: var(--bg-soft, #1C1A14);
+  text-decoration: none;
+  color: inherit;
   overflow: hidden;
   transition:
-    border-color 200ms var(--ease-out),
-    transform 200ms var(--ease-out),
-    box-shadow 200ms var(--ease-out);
+    border-color 220ms ease-out,
+    background 220ms ease-out,
+    transform 220ms ease-out,
+    box-shadow 220ms ease-out;
 }
 .cardLink:hover {
   border-color: var(--accent-gold);
-  transform: translateY(-3px);
-  box-shadow: 0 0 0 1px var(--gold-33), 0 12px 32px -16px rgba(0, 0, 0, 0.6);
+  background: linear-gradient(180deg, var(--bg-soft) 0%, rgba(196,165,100,0.05) 100%);
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 0 1px var(--gold-33),
+    0 14px 32px -16px rgba(0, 0, 0, 0.6);
 }
 
-/* Corner ticks via four spans */
+/* ===== Corner ticks ===================================================== */
 .cardCorners > span {
   position: absolute;
   width: 10px;
@@ -100,185 +98,135 @@
 .cardCorners > span:nth-child(4)::before { bottom: 0; top: auto; right: 0; left: auto; }
 .cardCorners > span:nth-child(4)::after  { right: 0; left: auto; bottom: 0; top: auto; }
 
-/* ===== Thumb / glyph ==================================================== */
-.thumb {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  background: var(--bg-deep);
-  border-bottom: 0.5px solid var(--gold-20);
-}
-.glyph {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-.glyphPath {
-  stroke-dasharray: 600;
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset 700ms var(--ease-out);
-}
-.cardLink:hover .glyphPath {
-  stroke-dashoffset: 0;
-  animation: trace 800ms var(--ease-out);
-}
-@keyframes trace {
-  from { stroke-dashoffset: 600; }
-  to   { stroke-dashoffset: 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cardLink:hover .glyphPath { animation: none; }
-}
-
-.glyphLine {}
-
-/* ===== Card body ======================================================== */
-.cardBody {
-  padding: var(--space-2) var(--space-3) var(--space-3);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
-}
-
-.cardMeta {
+/* ===== Card head ======================================================== */
+.cardHead {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-family: var(--font-mono);
   font-size: 9px;
-  letter-spacing: 0.18em;
-  color: var(--cream-50);
-  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 4px;
 }
-.cardCat { color: var(--accent-gold); }
+.cardN {
+  color: var(--accent-gold);
+  font-weight: 700;
+  font-size: 10px;
+}
+.cardStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+.cardStatus[data-tone="mint"]  { color: var(--accent-mint, #CAFFD1); }
+.cardStatus[data-tone="gold"]  { color: var(--accent-gold, #C4A564); }
+.cardStatus[data-tone="red"]   { color: var(--accent-red, #C16565); }
+.cardStatus[data-tone="cream"] { color: var(--cream-80); }
 
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* ===== Card body ======================================================== */
 .cardTitle {
-  margin: 4px 0 0;
+  margin: 0;
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 500;
   letter-spacing: -0.005em;
   color: var(--accent-cream);
-  line-height: 1.25;
+  line-height: 1.3;
 }
 
-.cardClient,
-.cardScope {
+.cardMeta {
   margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: var(--cream-65);
-}
-.cardScope {
   font-family: var(--font-mono);
   font-size: 10px;
-  letter-spacing: 0.05em;
-  color: var(--accent-gold);
-  opacity: 0.8;
-  margin-top: 4px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cream-65);
 }
 
+.cardScope {
+  margin: 4px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--cream-80);
+  /* Clamp to 3 lines so cards stay roughly the same height */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ===== Card foot ======================================================== */
 .cardFoot {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: auto;
-  padding-top: var(--space-2);
-  border-top: 1px dashed var(--gold-20);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  color: var(--accent-gold);
-  text-transform: uppercase;
+  padding-top: var(--space-2, 16px);
+  border-top: 1px dashed var(--gold-20, rgba(196,165,100,0.2));
 }
-.cardArrow { transition: transform var(--t-fast) var(--ease-out); }
-.cardLink:hover .cardArrow { transform: translateX(3px); }
-
-/* ===== Status badge ===================================================== */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  padding: 3px 8px;
-  border-radius: 999px;
-  border: 0.5px solid currentColor;
-  background: rgba(0, 0, 0, 0.3);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-}
-.badgeDot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: currentColor;
-}
-.badgeActive  { color: var(--accent-mint); }
-.badgeReview  { color: var(--accent-gold); }
-.badgePending { color: var(--accent-red); }
-
-/* ===== Pull-quote ======================================================= */
-.pull {
-  position: relative;
-  margin: 0 0 var(--space-5);
-  padding: var(--space-4) var(--space-4) var(--space-3) var(--space-5);
-  border-left: 1px solid var(--gold-33);
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 300;
-  font-size: clamp(1.125rem, 2vw, 1.5rem);
-  line-height: 1.5;
-  color: var(--accent-cream);
-  max-width: 60ch;
-}
-.pull p { margin: 0 0 var(--space-2); }
-.pullMark {
-  position: absolute;
-  left: var(--space-2);
-  top: var(--space-2);
-  font-size: 2.5rem;
-  font-style: normal;
-  color: var(--accent-gold);
-  opacity: 0.7;
-  line-height: 1;
-}
-.pullCite {
-  font-style: normal;
-  font-size: 0.8125rem;
-  font-family: var(--font-mono);
-  letter-spacing: 0.1em;
-  color: var(--cream-65);
-  text-transform: uppercase;
-}
-.pullDash { color: var(--accent-gold); margin-right: 0.4em; }
-
-/* ===== Foot bar ========================================================= */
-.foot {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: var(--space-3);
-  border-top: 1px dashed var(--gold-20);
-}
-
-.foreLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  font-family: var(--font-mono);
-  font-size: var(--fs-mono-sm);
-  letter-spacing: 0.15em;
-  color: var(--accent-gold);
-  text-transform: uppercase;
-  transition: color var(--t-fast);
-}
-.foreLink:hover { color: var(--accent-cream); }
-.foreArrow { transition: transform var(--t-fast); }
-.foreLink:hover .foreArrow { transform: translateX(4px); }
-
-.dimSm {
+.cardCategory {
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 0.18em;
-  color: var(--cream-50);
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  padding: 3px 8px;
+  border: 0.5px solid var(--gold-33, rgba(196,165,100,0.33));
+  border-radius: 2px;
 }
+.cardArrow {
+  font-family: var(--font-mono);
+  color: var(--accent-gold);
+  font-size: 14px;
+  transition: transform 220ms ease-out;
+}
+.cardLink:hover .cardArrow { transform: translateX(4px); }
+
+/* ===== Empty state ====================================================== */
+.empty {
+  padding: var(--space-5, 40px);
+  text-align: center;
+  color: var(--cream-65);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  border: 0.5px dashed var(--gold-33);
+  border-radius: 2px;
+  margin-bottom: var(--space-4, 32px);
+}
+
+/* ===== Foot link ======================================================== */
+.foot {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--space-2, 16px);
+  border-top: 1px dashed var(--gold-20);
+}
+
+.viewAll {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 200ms ease-out;
+}
+.viewAll:hover { border-bottom-color: var(--accent-gold); }
+.viewArrow { transition: transform 200ms ease-out; }
+.viewAll:hover .viewArrow { transform: translateX(4px); }

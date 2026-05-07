@@ -24,7 +24,7 @@ export default function ServicesPreview() {
       <ul className={styles.grid}>
         {SERVICES.map((s, i) => (
           <li
-            key={s.n}
+            key={s.slug}
             className={styles.tile}
             style={{ ['--i' as string]: i }}
           >
@@ -33,13 +33,13 @@ export default function ServicesPreview() {
               <span className={styles.leaderLine} />
             </div>
             <div className={styles.tileHead}>
-              <span className={styles.tileN}>{s.n}</span>
+              <span className={styles.tileN}>{s.slug}</span>
               <span className={styles.tileRegion}>{s.region}</span>
             </div>
             <h3 className={styles.tileTitle}>{s.title}</h3>
             <p className={styles.tileLine}>{s.line}</p>
             <div className={styles.tileFoot}>
-              <span className={styles.tileTag}>SHEET A-003.{s.n}</span>
+              <span className={styles.tileTag}>SHEET A-003.{s.slug}</span>
             </div>
           </li>
         ))}

@@ -1,10 +1,6 @@
 import Link from "next/link";
-import { PageShell } from "@/components/cad/PageShell";
-// If your lib/projects.ts uses different export names, adapt these imports.
-// Expected shape:
-//   export const PROJECTS: Project[]   (or similar)
-//   export type Project = { id, slug, title, client?, location?, scope?, status, category? }
-import { PROJECTS } from "@/lib/projects";
+import { PageShell } from "../components/Pageshell";
+import { getAllProjects } from "@/lib/projects";
 import styles from "./work.module.css";
 
 export const metadata = {
@@ -14,14 +10,14 @@ export const metadata = {
 };
 
 const STATUS_TONE: Record<string, string> = {
-  active: "mint",
+  live: "mint",
+  ongoing: "mint",
   review: "gold",
-  pending: "red",
-  completed: "cream",
+  complete: "cream",
 };
 
-export default function WorkIndexPage() {
-  const projects = PROJECTS;
+export default async function WorkIndexPage() {
+  const projects = await getAllProjects();
 
   return (
     <PageShell
@@ -43,37 +39,33 @@ export default function WorkIndexPage() {
             STATUS_TONE[String(p.status ?? "").toLowerCase()] ?? "cream";
           return (
             <li
-              key={p.id}
+              key={p.slug}
               className={styles.row}
               style={{ ['--i' as string]: i }}
             >
               <Link href={`/work/${p.slug}`} className={styles.rowLink}>
-                <span className={styles.rowN}>
-                  {String(i + 1).padStart(3, "0")}
-                </span>
+                <span className={styles.rowN}>{p.num}</span>
 
                 <div className={styles.rowMain}>
-                  <h3 className={styles.rowTitle}>{p.title}</h3>
+                  <h3 className={styles.rowTitle}>{p.name}</h3>
                   {(p.client || p.location) && (
                     <p className={styles.rowMeta}>
                       {p.client}
                       {p.client && p.location ? " · " : ""}
                       {p.location}
+                      {p.year ? ` · ${p.year}` : ""}
                     </p>
                   )}
                 </div>
 
-                {p.category && (
-                  <span className={styles.rowCategory}>{p.category}</span>
+                {p.sector && (
+                  <span className={styles.rowCategory}>{p.sector}</span>
                 )}
 
                 {p.status && (
-                  <span
-                    className={styles.rowStatus}
-                    data-tone={tone}
-                  >
+                  <span className={styles.rowStatus} data-tone={tone}>
                     <span className={styles.statusDot} />
-                    {String(p.status).toUpperCase()}
+                    {p.status.toUpperCase()}
                   </span>
                 )}
 
@@ -90,7 +82,6 @@ export default function WorkIndexPage() {
         </div>
       )}
 
-      {/* Bottom CTA */}
       <section className={styles.cta}>
         <span className={styles.ctaEyebrow}>HAVE A PROJECT?</span>
         <h3 className={styles.ctaHead}>

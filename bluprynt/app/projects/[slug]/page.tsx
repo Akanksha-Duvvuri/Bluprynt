@@ -1,197 +1,141 @@
-import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import Sheet from "@/app/components/Sheet";
-import { TitleBlock, SheetMeta } from "@/app/components/TitleBlock";
+import Link from "next/link";
+import { PageShell } from "@/components/cad/PageShell";
 import {
   getProjectBySlug,
-  getAllProjectSlugs,
+  allProjectSlugs,
+  PROJECTS,
 } from "@/lib/projects";
-import styles from "./page.module.css";
+import styles from "./project-detail.module.css";
 
-interface PageParams {
-  slug: string;
+type Params = { slug: string };
+
+export async function generateStaticParams() {
+  return allProjectSlugs();
 }
 
-interface PageProps {
-  params: Promise<PageParams>;
-}
-
-/** Pre-generate a static page at build time for every project. */
-export async function generateStaticParams(): Promise<PageParams[]> {
-  const slugs = await getAllProjectSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
-
-/** Per-project metadata — unique <title> and description per case study. */
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  const project = await getProjectBySlug(slug);
-  if (!project) return { title: "Project not found" };
-
+  const p = getProjectBySlug(slug);
+  if (!p) return { title: "Project not found · Bluprynt" };
   return {
-    title: `${project.name.trim()} ${project.nameEm}`,
-    description: project.challenge.slice(0, 160),
+    title: `${p.title} · Bluprynt`,
+    description: p.scope ?? undefined,
   };
 }
 
-export default async function ProjectCaseStudy({ params }: PageProps) {
-  const { slug } = await params;
-  const project = await getProjectBySlug(slug);
+const STATUS_TONE: Record<string, string> = {
+  active: "mint",
+  review: "gold",
+  pending: "red",
+  completed: "cream",
+};
 
+export default async function ProjectDetailPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
   if (!project) notFound();
 
+  const tone = STATUS_TONE[String(project.status ?? "").toLowerCase()] ?? "cream";
+  const others = PROJECTS.filter((p) => p.slug !== project.slug).slice(0, 3);
+
   return (
-    <Sheet id="work" variant="cream">
-      <SheetMeta
-        sheetCode={`A-002 / ${project.num.split(" ")[0]}`}
-        lines={[
-          `Layer · WORK / Case Study`,
-          `Year · ${project.year}`,
-          `Sector · ${project.sector}`,
-        ]}
-      />
-      <TitleBlock
-        title={`Bluprynt / ${project.name.trim()} ${project.nameEm}`}
-        rows={[
-          { k: "Drwg No.", v: project.num.split(" ")[0] },
-          { k: "Year", v: String(project.year) },
-          { k: "Status", v: (project.status ?? "complete").toUpperCase() },
-        ]}
-      />
-
-      <div className="sheet-body">
-        {/* Breadcrumb back to gallery */}
-        <div className={styles.breadcrumb}>
-          <Link href="/projects" className={styles.crumb}>
-            ← All projects
-          </Link>
+    <PageShell
+      code="A-101"
+      label={`PROJECT · ${project.category ?? "RECORD"}`}
+      eyebrow={
+        <>
+          {project.client && <span>{project.client}</span>}
+          {project.client && project.location && <span> · </span>}
+          {project.location && <span>{project.location}</span>}
+        </>
+      }
+      title={project.title}
+      lede={project.scope}
+      maxWidth={1100}
+    >
+      {/* ===== Meta strip ================================================== */}
+      <section className={styles.meta} style={{ ['--i' as string]: 0 }}>
+        <div className={styles.metaCell}>
+          <span className={styles.metaK}>STATUS</span>
+          <span className={styles.metaV} data-tone={tone}>
+            <span className={styles.statusDot} />
+            {String(project.status ?? "—").toUpperCase()}
+          </span>
         </div>
 
-        <div className="section-head">
-          <div className="section-head-left">
-            <div className="label">▸ {project.num}</div>
-            <h1 className="title">
-              {project.name}
-              <span className="em">{project.nameEm}</span>
-            </h1>
+        {project.category && (
+          <div className={styles.metaCell}>
+            <span className={styles.metaK}>CATEGORY</span>
+            <span className={styles.metaVPlain}>{project.category}</span>
           </div>
-          <div className="section-head-right">
-            <p>
-              <strong>{project.sector}</strong>
-              {project.location && <> · {project.location}</>}
-              {project.client && <> · {project.client}</>}
-            </p>
+        )}
+
+        {project.client && (
+          <div className={styles.metaCell}>
+            <span className={styles.metaK}>CLIENT</span>
+            <span className={styles.metaVPlain}>{project.client}</span>
           </div>
-        </div>
+        )}
 
-        {/* Hero illustration — placeholder until real images */}
-        <div className={styles.hero}>
-          <svg viewBox="0 0 800 360" preserveAspectRatio="xMidYMid meet">
-            <rect
-              x="40"
-              y="40"
-              width="720"
-              height="280"
-              fill="none"
-              stroke="#15130D"
-              strokeWidth="1.5"
-            />
-            <line
-              x1="40"
-              y1="180"
-              x2="760"
-              y2="180"
-              stroke="rgba(21,19,13,0.4)"
-              strokeWidth="1"
-            />
-            <line
-              x1="400"
-              y1="40"
-              x2="400"
-              y2="320"
-              stroke="rgba(21,19,13,0.4)"
-              strokeWidth="1"
-            />
-            <text
-              x="60"
-              y="60"
-              fontFamily="Space Mono"
-              fontSize="11"
-              fill="rgba(143,118,64,0.7)"
-              letterSpacing="2"
-            >
-              {project.num.toUpperCase()} · {project.scope.toUpperCase()}
-            </text>
-            <text
-              x="60"
-              y="312"
-              fontFamily="Space Mono"
-              fontSize="9"
-              fill="rgba(21,19,13,0.4)"
-              letterSpacing="1.5"
-            >
-              SCALE — INDICATIVE
-            </text>
-          </svg>
-        </div>
-
-        {/* Spec sheet */}
-        <div className={styles.specSheet}>
-          <div className={styles.specRow}>
-            <span className={styles.specK}>Scope</span>
-            <span className={styles.specV}>{project.scope}</span>
+        {project.location && (
+          <div className={styles.metaCell}>
+            <span className={styles.metaK}>LOCATION</span>
+            <span className={styles.metaVPlain}>{project.location}</span>
           </div>
-          {project.client && (
-            <div className={styles.specRow}>
-              <span className={styles.specK}>Client</span>
-              <span className={styles.specV}>{project.client}</span>
-            </div>
-          )}
-          {project.location && (
-            <div className={styles.specRow}>
-              <span className={styles.specK}>Location</span>
-              <span className={styles.specV}>{project.location}</span>
-            </div>
-          )}
-          <div className={styles.specRow}>
-            <span className={styles.specK}>Year</span>
-            <span className={styles.specV}>{project.year}</span>
+        )}
+      </section>
+
+      {/* ===== Scope ====================================================== */}
+      {project.scope && (
+        <section className={styles.scopeBlock} style={{ ['--i' as string]: 1 }}>
+          <header className={styles.blockHead}>
+            <span className={styles.blockNum}>01</span>
+            <h2 className={styles.blockTitle}>Scope of engagement</h2>
+          </header>
+          <div className={styles.blockBody}>
+            <p>{project.scope}</p>
           </div>
-          {project.tools && project.tools.length > 0 && (
-            <div className={styles.specRow}>
-              <span className={styles.specK}>Tools</span>
-              <span className={styles.specV}>{project.tools.join(" · ")}</span>
-            </div>
-          )}
-        </div>
+        </section>
+      )}
 
-        {/* Challenge / Approach / Outcome */}
-        <div className={styles.story}>
-          <section className={styles.storySection}>
-            <div className={styles.storyLabel}>▸ Challenge</div>
-            <p className={styles.storyBody}>{project.challenge}</p>
-          </section>
+      {/* ===== Other projects ============================================ */}
+      {others.length > 0 && (
+        <section className={styles.others} style={{ ['--i' as string]: 2 }}>
+          <header className={styles.blockHead}>
+            <span className={styles.blockNum}>02</span>
+            <h2 className={styles.blockTitle}>Other projects</h2>
+          </header>
+          <ul className={styles.othersList}>
+            {others.map((o) => (
+              <li key={o.id}>
+                <Link href={`/work/${o.slug}`} className={styles.otherLink}>
+                  <span className={styles.otherTitle}>{o.title}</span>
+                  {(o.client || o.location) && (
+                    <span className={styles.otherMeta}>
+                      {o.client}
+                      {o.client && o.location ? " · " : ""}
+                      {o.location}
+                    </span>
+                  )}
+                  <span className={styles.otherArrow}>→</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
-          <section className={styles.storySection}>
-            <div className={styles.storyLabel}>▸ Approach</div>
-            <p className={styles.storyBody}>{project.approach}</p>
-          </section>
-
-          <section className={styles.storySection}>
-            <div className={styles.storyLabel}>▸ Outcome</div>
-            <p className={styles.storyBody}>{project.outcome}</p>
-          </section>
-        </div>
-
-        <div className="section-foot">
-          <Link href="/projects" className="text-link">
-            ← All projects
-          </Link>
-        </div>
+      {/* ===== Back to work index ======================================== */}
+      <div className={styles.back} style={{ ['--i' as string]: 3 }}>
+        <Link href="/work" className={styles.backLink}>
+          ← Back to all work
+        </Link>
       </div>
-    </Sheet>
+    </PageShell>
   );
 }

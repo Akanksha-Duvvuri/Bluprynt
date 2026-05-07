@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { PageShell } from "../components/Pageshell";
+import { PageShell } from "@/components/cad/PageShell";
 import {
   getFounderBySlug,
   allFounderSlugs,
   FOUNDERS,
-} from "@/lib/Founders";
-import styles from "./Founderdetail.module.css";
+} from "@/lib/founders";
+import styles from "./founder-detail.module.css";
 
 type Params = { slug: string };
 

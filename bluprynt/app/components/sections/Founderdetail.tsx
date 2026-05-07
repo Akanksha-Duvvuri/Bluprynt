@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { PageShell } from "../components/Pageshell";
+import { PageShell } from "../Pageshell";
 import {
   getFounderBySlug,
   allFounderSlugs,
