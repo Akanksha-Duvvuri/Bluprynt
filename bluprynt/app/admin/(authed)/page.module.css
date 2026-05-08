@@ -1,11 +1,15 @@
 /* ═══════════════════════════════════════════════════════════════
-   /admin — dashboard
+   /admin — dashboard, CAD-styled
    ═══════════════════════════════════════════════════════════════ */
 
+/* ===== Header ============================================================ */
 .header {
   margin-bottom: 56px;
   padding-bottom: 36px;
-  border-bottom: 1px solid rgba(196, 165, 100, 0.12);
+  border-bottom: 1px dashed rgba(196, 165, 100, 0.25);
+  position: relative;
+  opacity: 0;
+  animation: fadeUp 700ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both;
 }
 
 .label {
@@ -14,18 +18,25 @@
   color: var(--gold);
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  border: 1px solid rgba(196, 165, 100, 0.3);
+  background: rgba(196, 165, 100, 0.04);
+  border-radius: 2px;
 }
 
 .title {
   font-family: var(--primary);
-  font-size: 56px;
+  font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 300;
   letter-spacing: -0.04em;
   line-height: 0.95;
-  margin-bottom: 18px;
+  margin: 0 0 18px 0;
 }
-
 .em {
   color: var(--gold);
   font-weight: 500;
@@ -37,51 +48,83 @@
   color: rgba(255, 238, 198, 0.68);
   line-height: 1.65;
   max-width: 520px;
+  margin: 0;
 }
 
+/* ===== Stat grid ======================================================== */
 .statGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 1px;                                     /* tight grid, sheet feel */
+  background: rgba(196, 165, 100, 0.18);        /* shows through the gap */
+  border: 1px solid rgba(196, 165, 100, 0.18);
+  border-radius: 2px;
   margin-bottom: 64px;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeUp 700ms cubic-bezier(0.22, 1, 0.36, 1) 250ms both;
 }
 
 .stat {
-  border: 1px solid rgba(196, 165, 100, 0.15);
-  background: rgba(196, 165, 100, 0.03);
-  padding: 24px;
+  background: var(--ink-soft);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  transition: background 200ms ease-out;
+}
+.stat:hover {
+  background: rgba(196, 165, 100, 0.04);
+}
+
+/* Tiny corner tick top-left of each stat card */
+.stat::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid var(--gold);
+  border-left: 1px solid var(--gold);
+  opacity: 0.5;
 }
 
 .statLabel {
   font-family: var(--mono);
   font-size: 9px;
   color: var(--gold);
-  letter-spacing: 0.25em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
-  margin-bottom: 14px;
+  font-weight: 700;
 }
 
 .statNum {
   font-family: var(--primary);
-  font-size: 48px;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
   font-weight: 300;
   letter-spacing: -0.04em;
   color: var(--cream);
   line-height: 1;
-  margin-bottom: 12px;
+  font-variant-numeric: tabular-nums;
 }
 
 .statSub {
   font-family: var(--mono);
   font-size: 10px;
   color: rgba(255, 238, 198, 0.55);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   padding-top: 12px;
-  border-top: 1px dashed rgba(196, 165, 100, 0.12);
+  border-top: 1px dashed rgba(196, 165, 100, 0.18);
+  text-transform: uppercase;
 }
 
+/* ===== Next-up section ================================================ */
 .next {
   margin-bottom: 48px;
+  opacity: 0;
+  animation: fadeUp 700ms cubic-bezier(0.22, 1, 0.36, 1) 400ms both;
 }
 
 .nextLabel {
@@ -90,20 +133,41 @@
   color: var(--gold);
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.nextLabel::after {
+  content: "";
+  display: inline-block;
+  flex: 1;
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, rgba(196, 165, 100, 0.4), transparent);
 }
 
 .nextList {
-  border-top: 1px dashed rgba(196, 165, 100, 0.15);
+  border-top: 1px dashed rgba(196, 165, 100, 0.2);
+  border-bottom: 1px dashed rgba(196, 165, 100, 0.2);
 }
 
 .nextItem {
   display: grid;
   grid-template-columns: 56px 1fr;
   gap: 24px;
-  padding: 18px 0;
+  padding: 20px 0;
   border-bottom: 1px dashed rgba(196, 165, 100, 0.15);
   align-items: start;
+  transition: background 180ms ease-out, padding-left 180ms ease-out;
+}
+.nextItem:last-child {
+  border-bottom: none;
+}
+.nextItem:hover {
+  background: rgba(196, 165, 100, 0.03);
+  padding-left: 8px;
 }
 
 .nextItemNum {
@@ -112,7 +176,7 @@
   color: var(--gold);
   letter-spacing: 0.18em;
   font-weight: 700;
-  padding-top: 2px;
+  padding-top: 4px;
 }
 
 .nextItemTitle {
@@ -130,38 +194,74 @@
   line-height: 1.55;
 }
 
+/* ===== Temp link (Drizzle Studio callout) ============================= */
 .tempLink {
   margin-top: 32px;
-  padding: 14px 18px;
+  padding: 16px 20px;
   background: rgba(196, 165, 100, 0.04);
-  border-left: 2px solid var(--gold);
+  border: 1px dashed rgba(196, 165, 100, 0.3);
+  border-radius: 2px;
   display: flex;
   align-items: center;
   gap: 14px;
   flex-wrap: wrap;
+  position: relative;
+  opacity: 0;
+  animation: fadeUp 700ms cubic-bezier(0.22, 1, 0.36, 1) 550ms both;
+}
+.tempLink::before {
+  content: "TEMP";
+  position: absolute;
+  top: -8px;
+  left: 16px;
+  background: var(--ink);
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  padding: 0 8px;
 }
 
 .tempLinkLabel {
   font-family: var(--secondary);
   font-size: 13px;
-  color: rgba(255, 238, 198, 0.7);
+  color: rgba(255, 238, 198, 0.75);
+  flex: 1;
 }
 
 .tempLinkCode {
   font-family: var(--mono);
   font-size: 11px;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.4);
   color: var(--gold);
-  padding: 4px 10px;
-  border: 1px solid rgba(196, 165, 100, 0.2);
+  padding: 6px 12px;
+  border: 1px solid rgba(196, 165, 100, 0.25);
+  border-radius: 2px;
   letter-spacing: 0.05em;
+  font-weight: 700;
 }
 
+/* ===== Animation keyframes =========================================== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header, .statGrid, .next, .tempLink {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ===== Responsive ===================================================== */
 @media (max-width: 1100px) {
   .statGrid {
     grid-template-columns: 1fr;
   }
   .title {
-    font-size: 40px;
+    font-size: 2.5rem;
   }
 }

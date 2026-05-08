@@ -37,9 +37,9 @@ export default async function AdminLayout({
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
         <Link href="/admin" className={styles.brand}>
-          <span className={styles.brandMark}>B</span>
+          <span className={styles.brandMark}></span>
           <span className={styles.brandName}>
-            Bluprynt <span>Admin</span>
+             <span>Admin</span>
           </span>
         </Link>
 
