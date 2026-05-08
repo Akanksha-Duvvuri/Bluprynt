@@ -1,6 +1,6 @@
 # Bluprynt Consulting Group — Website Project
 
-> Pre-consulting firm website. Cream + gold on warm charcoal.
+> Pre-construction consulting firm website. Cream + gold on warm charcoal.
 > _Engineering Accuracy. Consulting Excellence — from blueprint to brilliance._
 
 ---
@@ -10,10 +10,11 @@
 | Phase                     | Status         | Notes                                                              |
 |---------------------------|----------------|--------------------------------------------------------------------|
 | Design                    | ✅ Locked       | CAD-hosted homepage, crosshair-spotlight reveal, alternating sheets |
-| Homepage                  | ✅ Built        | Next.js + TypeScript, all 5 sections live                          |
-| Inner pages               | ✅ Built        | `/about`, `/projects`, `/projects/[slug]`, `/services`, `/contact` |
+| Homepage                  | ✅ Built        | Next.js + TypeScript, all sections live (A-001 through A-007)      |
+| Inner pages               | ✅ Built        | `/about`, `/work`, `/work/[slug]`, `/services`, `/services/[slug]` |
+| 404 + loading states      | ✅ Built        | `app/not-found.tsx`, `app/loading.tsx` with brand styling          |
+| **Database (Phase 1)**    | ✅ Live         | Drizzle + Neon Postgres, `projects` table backing `lib/projects.ts` |
 | Email                     | 🟡 Stubbed     | API route + templates written; needs Resend account + verified domain |
-| **Database (Phase 1)**    | 🟡 In progress | Drizzle + Neon Postgres; replacing static `lib/*.ts` content stores |
 | **Auth (Phase 2)**        | 🔲 Not started | NextAuth Credentials provider, admin login page, route protection  |
 | **Admin Panel (Phase 3)** | 🔲 Not started | Hand-built admin UI for projects + testimonials                    |
 
@@ -23,15 +24,15 @@
 
 ### Colors (locked)
 
-| Role        | Hex        | RGB              | Use                                          |
-|-------------|------------|------------------|----------------------------------------------|
-| Gold        | `#C4A564`  | 196, 165, 100    | Primary accent — type, lines, CTAs           |
-| Cream       | `#FFEEC6`  | 255, 238, 198    | Light bg / readable text on dark             |
-| Red         | `#C16565`  | 193, 101, 101    | Status — flagged, errors, "review pending"   |
-| Mint        | `#CAFFD1`  | 202, 255, 209    | Status — live, success, command-line accent  |
-| Ink         | `#15130D`  | 21, 19, 13       | Warm charcoal — primary dark surface         |
-| Ink Soft    | `#1C1A14`  | —                | Elevated dark surfaces (footer, ribbon)      |
-| Ink Deep    | `#0D0C08`  | —                | Page base / lowest layer                     |
+| Role        | Hex        | Use                                          |
+|-------------|------------|----------------------------------------------|
+| Gold        | `#C4A564`  | Primary accent — type, lines, CTAs           |
+| Cream       | `#FFEEC6`  | Light bg / readable text on dark             |
+| Red         | `#C16565`  | Status — flagged, errors, "review pending"   |
+| Mint        | `#CAFFD1`  | Status — live, success, command-line accent  |
+| Ink         | `#15130D`  | Warm charcoal — primary dark surface         |
+| Ink Soft    | `#1C1A14`  | Elevated dark surfaces (footer, ribbon)      |
+| Ink Deep    | `#0D0C08`  | Page base / lowest layer                     |
 
 ### Typography (locked)
 
@@ -43,18 +44,30 @@
 
 ### Cursor (locked)
 
-- AutoCAD-style gold crosshair, **~30px wide**, slightly larger than default cursor
+- AutoCAD-style gold crosshair, ~30px wide
 - Site-wide on desktop; default cursor on touch devices
 - Live X / Y / Sheet code readout follows the cursor (mono, 9px)
 - Acts as a **spotlight** — reveals a brighter drafting layer (grid + warm wash) inside its radius
-- Default grid is barely visible (2.5% opacity); fully revealed only inside the spotlight
+- Default grid is barely visible; fully revealed only inside the spotlight
 
 ### Layout (locked)
 
-- Sections **alternate cream and dark** down the homepage
-- Persistent CAD chrome: ribbon-style top bar + bottom status bar across both
-- Each section is a "sheet" with its own ID code (A-001 through A-005)
-- Per-section title block (top-right) and sheet metadata (top-left) using drafting conventions
+- **Homepage** — sections alternate cream and dark; each is a "sheet" with its own ID code (A-001 through A-007)
+- **Sub-pages** — wrapped in `PageShell` with consistent sheet stamp + title + dashed divider + body
+- **Site-wide chrome** — fixed navbar (ribbon), fixed status bar (bottom), site-wide footer in flow
+- **3D building animation** — `BuildingDraft` on the homepage, scroll-driven CSS 3D transforms, fades out before footer
+
+### Section sheet codes (homepage)
+
+| Code  | Section          | Notes                                          |
+|-------|------------------|------------------------------------------------|
+| A-001 | Hero             | "SITE"                                         |
+| A-002 | WorkPreview      | "FOUNDATION" — pulls top 3 from `lib/projects` |
+| A-003 | ServicesPreview  | "FRAME"                                        |
+| A-004 | Testimonials     | "ENVELOPE"                                     |
+| A-005 | AboutPreview     | "ANNOTATION" — cost-of-change chart            |
+| A-006 | FoundersPreview  | "PERSONNEL" — links to `/about#founders`       |
+| A-007 | ContactPreview   | "TITLE BLOCK" — anchor target `id="contact"`   |
 
 ---
 
@@ -63,54 +76,44 @@
 | Layer         | Choice                  | Notes                                                       |
 |---------------|-------------------------|-------------------------------------------------------------|
 | Frontend      | Next.js 15 (App Router) | TypeScript, React 19, CSS Modules                           |
-| Hosting       | Vercel                  | Native Next.js support, free tier covers MVP                |
-| **Database**  | **Neon Postgres 17**    | Serverless Postgres, Singapore region (`ap-southeast-1`)    |
-| **ORM**       | **Drizzle**             | TypeScript-first, schema in TS, migrations in SQL           |
-| **Auth**      | **NextAuth (Auth.js)**  | Credentials provider — admin email + password               |
+| Hosting       | Vercel                  | Native Next.js support                                      |
+| Database      | Neon Postgres 17        | Serverless Postgres, Singapore region (`ap-southeast-1`)    |
+| ORM           | Drizzle                 | TypeScript-first, schema in TS, migrations in SQL           |
+| Auth          | NextAuth (Auth.js)      | Credentials provider — admin email + password (Phase 2)     |
 | Email         | Resend                  | Confirmation + alert + keyword-routed FAQ replies           |
 | Forms         | Native API route        | `app/api/contact/route.ts` calls Resend                     |
 | Analytics     | Vercel Analytics        | Defer until launch                                          |
-
-### Why Drizzle over Prisma
-
-- API maps directly to SQL — easier to learn what's actually happening at the database level
-- No code-generation step, no separate runtime client
-- Schema lives in TypeScript; migrations are readable SQL files in `/drizzle`
-
-### Why NextAuth over Neon Auth / Stack Auth
-
-- Two admin users ever (the founders); a hosted auth platform is overkill
-- Owned user table = no vendor lock-in; can swap database hosts without re-doing auth
-- More documentation / community than newer Stack Auth
-
-### Why no CMS (Sanity / Contentful / etc.)
-
-- Considered and rejected: building auth + admin panel ourselves teaches more about real backend work
-- Sanity remains a viable later option if maintenance becomes painful
 
 ---
 
 ## Pages
 
-### MVP — built
+### Public — built
 
-- [x] `/` — Homepage (CAD-hosted, crosshair spotlight, alternating sections)
-- [x] `/about` — Founders, philosophy, credentials
-- [x] `/projects` — Project gallery (database-driven after Phase 1)
-- [x] `/projects/[slug]` — Individual case study (database-driven after Phase 1)
-- [x] `/services` — Services overview (still static; rare changes)
-- [x] `/contact` — Contact form (full page; preview lives on homepage)
+- [x] `/` — Homepage (CAD-hosted, crosshair spotlight, 7 sections, scroll-driven 3D building animation)
+- [x] `/about` — Firm thesis, methodology, founders embedded (`#founders` anchor), offices, CTA
+- [x] `/work` — Project index (database-backed list)
+- [x] `/work/[slug]` — Individual project case study (database-backed)
+- [x] `/services` — Services index (5 services, grouped by category)
+- [x] `/services/[slug]` — Individual service detail (deliverables, when-to-engage, others)
+- [x] **404 page** — `app/not-found.tsx`, black bg + mark + "NOT FOUND" + return button
+- [x] **Loading state** — `app/loading.tsx`, pulsing logo + "PLOTTING..." mono text
 
-### Phase 2 — admin auth
+### Consolidated (no longer separate routes)
+
+- **Contact** lives on the homepage as section A-007. Linked everywhere as `/#contact`. No `/contact` route exists.
+- **Founders** live on `/about` in the founders section. No per-founder detail pages. Linked from the homepage's `FoundersPreview` cards as `/about#founders`.
+
+### Phase 2 — admin auth (not started)
 
 - [ ] `/admin/login` — login form
 - [ ] `/admin` — dashboard with quick stats
 
-### Phase 3 — admin CRUD
+### Phase 3 — admin CRUD (not started)
 
 - [ ] `/admin/projects` — list, create, edit, delete projects
 - [ ] `/admin/testimonials` — list, create, edit, delete testimonials
-- [ ] Homepage testimonials section reading from the new database table
+- [ ] Homepage testimonials section reading from a new `testimonials` table
 
 ### Future
 
@@ -122,29 +125,45 @@
 
 ### Done
 
-- [x] AutoCAD crosshair cursor — ~30px, gold, with X/Y/Sheet readout (US-01)
-- [x] Cream + gold + warm-charcoal theme via CSS variables
+- [x] AutoCAD crosshair cursor — ~30px, gold, with X/Y/Sheet readout
+- [x] Cream + gold + warm-charcoal theme via CSS variables (`app/globals.css`)
 - [x] Crosshair-spotlight reveal of CAD/drafting layer (signature interaction)
+- [x] **Cursor-illuminated grid on sub-pages** — `CursorGrid` component, ~220px radial mask, fixed-position viewport overlay
+- [x] **3D BuildingDraft animation** on homepage — pure CSS 3D transforms, scroll-driven via `--p` custom property, scroll-rotates 360°, drops floors with overshoot, slams APPROVED stamp at 92% scroll, fades to 0 at 95–100% so the footer is unobscured
 - [x] Alternating cream / dark sections on homepage
-- [x] Section-level sheet codes (A-001 → A-005), live in cursor readout + status bar
-- [x] Scroll-tracked active nav (IntersectionObserver in TopBar)
-- [x] Responsive layout — touch devices fall back to default cursor + static visible grid (US-23)
-- [x] Contact form with client-side validation (US-15)
-- [x] API route that scans for keywords and routes to FAQ groups (US-18)
-- [x] All five inner pages live with consistent chrome
+- [x] Section-level sheet codes (A-001 → A-007), live in cursor readout + status bar
+- [x] **Active-section underline** in navbar — reads from `SheetProvider` context, draws underline via scaleX keyframe on the link matching the current sheet
+- [x] **Smooth scroll** to homepage anchors (`/#contact`, `/#founders`) via `html { scroll-behavior: smooth }` + `[id] { scroll-margin-top }` rule for the fixed navbar
+- [x] **Site-wide footer** — `Footer` component in `app/layout.tsx`, reserves right padding only on homepage (where BuildingDraft lives)
+- [x] **`PageShell` wrapper** — consistent sheet stamp + dashed divider + body for all sub-pages, staggered fade-up entrance
+- [x] **`SectionShell` wrapper** — same role for homepage sections
+- [x] Responsive layout — touch devices fall back to default cursor + static visible grid
+- [x] Contact form with client-side validation (lives in homepage `ContactPreview` section)
+- [x] API route that scans for keywords and routes to FAQ groups
 - [x] Per-page metadata (titles, descriptions)
+- [x] Cost-of-change SVG chart on AboutPreview + about page (centerpiece of the firm thesis)
+- [x] Margin-note testimonials with hover lift / un-rotate
+- [x] Hover lift on Work, Services, Founder cards (-4px + box-shadow)
+- [x] **404 page** styled to match brand (black bg, mark center, "NOT FOUND" headline, gold corner ticks, return button)
+- [x] **Loading state** with pulsing logo + animated dots
+- [x] Mobile hamburger drawer styled as CAD layer panel
 
-### Phase 1 — database (in progress)
+### Phase 1 — database (done)
 
-- [ ] Drizzle ORM installed, configured, schema in TypeScript
-- [ ] Neon Postgres provisioned, connection string in `.env.local`
-- [ ] Schema for `projects`, `testimonials`, `users` tables
-- [ ] Initial migration generated + applied
-- [ ] Seed script populates starter content
-- [ ] `lib/projects.ts` rewritten to fetch from database
-- [ ] Pages updated to await async data
+- [x] Drizzle ORM installed, configured, schema in TypeScript
+- [x] Neon Postgres provisioned, connection string in `.env.local`
+- [x] Schema for `projects` table
+- [x] Initial migration generated + applied
+- [x] `lib/projects.ts` rewritten to fetch from database via async helpers
+- [x] Pages updated to be `async` server components, awaiting data
 
-### Phase 2 — auth
+### Phase 1 — still pending
+
+- [ ] `testimonials` table + schema (deferred to Phase 3 setup)
+- [ ] `users` table for admin auth (Phase 2)
+- [ ] Seed script for starter content (current data is hand-entered via Drizzle Studio)
+
+### Phase 2 — auth (not started)
 
 - [ ] NextAuth installed and configured
 - [ ] Credentials provider with bcrypt password hashing
@@ -153,7 +172,7 @@
 - [ ] Middleware protecting all `/admin/*` routes
 - [ ] Script to create the first admin user from the command line
 
-### Phase 3 — admin panel
+### Phase 3 — admin panel (not started)
 
 - [ ] Admin layout with sidebar navigation
 - [ ] Projects: list, create, edit, delete
@@ -165,100 +184,118 @@
 
 ### Email (still pending)
 
-- [ ] Resend integration tested end-to-end — needs API key + verified domain (US-16, US-17)
+- [ ] Resend integration tested end-to-end — needs API key + verified domain
 
 ### Site-wide (still pending)
 
-- [ ] Favicon set (16/32/180/192/512 + manifest — US-22)
+- [ ] Favicon set (16/32/180/192/512 + manifest) — currently using `app/icon.png`
 - [ ] Privacy policy
 - [ ] Open Graph image (1200×630)
-- [ ] 404 page styled to match brand
+- [ ] Real domain purchased + pointed
+- [ ] Resend domain verified (SPF, DKIM, DMARC)
 
 ---
 
 ## Project Structure
 
-After Phase 1:
+Current state:
 
 ```
 /
 ├── app/
-│   ├── layout.tsx                  # global chrome + fonts
-│   ├── page.tsx                    # homepage
-│   ├── globals.css                 # brand variables + base styles
+│   ├── layout.tsx                  # global chrome — navbar, statusbar, crosshair, sheet provider, footer
+│   ├── page.tsx                    # homepage (BuildingDraft + 7 sections)
+│   ├── globals.css                 # design tokens, scroll-behavior, base styles
 │   ├── favicon.ico
-│   ├── about/page.tsx
-│   ├── services/page.tsx
-│   ├── projects/
-│   │   ├── page.tsx                # gallery (DB-driven after Phase 1)
+│   ├── icon.png                    # Next.js auto-detects for favicons
+│   ├── not-found.tsx               # 404 page
+│   ├── not-found.module.css
+│   ├── loading.tsx                 # loading state for async route segments
+│   ├── loading.module.css
+│   │
+│   ├── components/                 # ALL CAD chrome lives here (no nested cad/ subfolder)
+│   │   ├── BuildingDraft.tsx + .module.css
+│   │   ├── CADCrosshair.tsx + .module.css
+│   │   ├── CADNavbar.tsx + .module.css
+│   │   ├── CADStatusBar.tsx + .module.css
+│   │   ├── CursorGrid.tsx + .module.css
+│   │   ├── Divider.tsx + .module.css
+│   │   ├── Footer.tsx + .module.css
+│   │   ├── PageShell.tsx + .module.css
+│   │   ├── SectionShell.tsx + .module.css
+│   │   │
+│   │   └── sections/               # homepage sections only
+│   │       ├── Hero.tsx + .module.css
+│   │       ├── WorkPreview.tsx + .module.css
+│   │       ├── ServicesPreview.tsx + .module.css
+│   │       ├── Testimonials.tsx + .module.css
+│   │       ├── AboutPreview.tsx + .module.css
+│   │       ├── FoundersPreview.tsx + .module.css
+│   │       └── ContactPreview.tsx + .module.css
+│   │
+│   ├── about/
+│   │   ├── page.tsx                # firm + founders embedded (id="founders")
+│   │   └── about.module.css
+│   │
+│   ├── work/
+│   │   ├── page.tsx                # work index
+│   │   ├── work.module.css
 │   │   └── [slug]/
-│   │       ├── page.tsx            # case study (DB-driven after Phase 1)
-│   │       └── not-found.tsx
-│   ├── contact/page.tsx
-│   ├── components/                 # see existing structure
-│   └── api/
-│       └── contact/route.ts
-│
-├── db/                             # NEW IN PHASE 1
-│   ├── schema.ts                   # table definitions
-│   └── index.ts                    # Drizzle client singleton
-│
-├── drizzle/                        # NEW IN PHASE 1 — auto-generated migrations
-│   └── 0000_<name>.sql
-│
-├── scripts/                        # NEW IN PHASE 1
-│   └── seed.ts                     # one-time data ingest
+│   │       ├── page.tsx            # project detail (DB-backed)
+│   │       └── page.module.css
+│   │
+│   ├── services/
+│   │   ├── page.tsx                # services index
+│   │   ├── page.module.css
+│   │   └── [slug]/
+│   │       ├── page.tsx            # service detail
+│   │       └── page.module.css
+│   │
+│   ├── api/
+│   │   └── contact/route.ts        # form submission handler
+│   │
+│   └── admin/                      # admin routes (Phase 2/3)
 │
 ├── lib/
-│   ├── projects.ts                 # REWRITTEN IN PHASE 1 — DB-backed
-│   ├── services.ts                 # still static
-│   ├── founders.ts                 # still static
-│   ├── faq.ts                      # keyword groups + FAQ copy (US-18)
-│   └── email.ts                    # Resend client + email templates
+│   ├── cad/
+│   │   ├── SheetProvider.tsx       # current-sheet context
+│   │   ├── useSheetObserver.ts     # observe section visibility, push to context
+│   │   ├── useScrollProgress.ts    # drives BuildingDraft
+│   │   ├── useSpotlight.ts         # drives section-level cursor grids
+│   │   ├── useTypewriter.ts        # Hero animation
+│   │   └── useReducedMotion.ts
+│   ├── services.ts                 # static SERVICES + accessors
+│   ├── projects.ts                 # DB-backed (Drizzle) project queries
+│   └── founders.ts                 # static FOUNDERS + accessors
+│
+├── db/                             # Drizzle setup
+│   ├── schema.ts
+│   └── index.ts
+│
+├── drizzle/                        # auto-generated migrations
 │
 ├── public/
-├── drizzle.config.ts               # NEW IN PHASE 1
+│   └── Logo.png                    # site logo (used in navbar + 404)
+│
+├── tsconfig.json                   # has @/components/cad/* → ./app/components/* alias
 ├── package.json
-├── tsconfig.json
 ├── next.config.ts
+├── drizzle.config.ts
 ├── .env.example
 ├── .env.local                      # never committed
-├── .gitignore
 └── README.md
 ```
 
-After Phase 2 (auth) adds:
+### Key tsconfig path alias
 
-```
-app/
-├── admin/
-│   ├── login/page.tsx
-│   └── layout.tsx                  # protected wrapper
-├── api/
-│   └── auth/[...nextauth]/route.ts
-├── auth.ts                         # NextAuth configuration
-└── middleware.ts                   # route protection
+```json
+"paths": {
+  "@/components/cad/*": ["./app/components/*"],
+  "@/*": ["./*"]
+}
 ```
 
-After Phase 3 (CRUD) adds:
-
-```
-app/
-├── admin/
-│   ├── page.tsx                    # dashboard
-│   ├── projects/
-│   │   ├── page.tsx                # list
-│   │   ├── new/page.tsx            # create
-│   │   └── [id]/edit/page.tsx      # update
-│   └── testimonials/
-│       ├── page.tsx
-│       ├── new/page.tsx
-│       └── [id]/edit/page.tsx
-└── api/
-    └── admin/
-        ├── projects/route.ts
-        └── testimonials/route.ts
-```
+This keeps imports clean — every page can write `import { PageShell } from "@/components/cad/PageShell"` regardless of how deeply nested the file is.
 
 ---
 
@@ -267,15 +304,14 @@ app/
 `.env.local` (never committed):
 
 ```env
-# ── Database (Phase 1) ──
+# ── Database ──
 DATABASE_URL=postgresql://user:password@host.aws.neon.tech/neondb?sslmode=require
 
-# ── Auth (Phase 2) ──
-# Generate with: openssl rand -base64 32
+# ── Auth (Phase 2, when started) ──
 NEXTAUTH_SECRET=
-NEXTAUTH_URL=http://localhost:3000     # production: https://bluprynt.com
+NEXTAUTH_URL=http://localhost:3000
 
-# ── Resend (transactional email) ──
+# ── Resend (still pending) ──
 RESEND_API_KEY=re_xxxxxxxxxxxxxxxxx
 [email protected]
 [email protected]
@@ -284,177 +320,68 @@ RESEND_API_KEY=re_xxxxxxxxxxxxxxxxx
 NEXT_PUBLIC_SITE_URL=https://bluprynt.com
 ```
 
-The site renders without `RESEND_API_KEY` — only the contact form fails on submit.
-The site **does not** render without `DATABASE_URL` after Phase 1.
-
 ---
 
-## Database — Phase 1 Reference
+## Database Schema (current)
 
-### Tables
+### `projects`
 
-**`projects`** — case studies. Replaces the static `PROJECTS` array.
+| Column        | Type           | Notes                                          |
+|---------------|----------------|------------------------------------------------|
+| `id`          | serial PK      |                                                |
+| `slug`        | varchar(100)   | Unique, used in URLs                           |
+| `num`         | varchar(50)    | "P-024 / 2025"                                 |
+| `name`        | varchar(200)   | Project name                                   |
+| `name_em`     | varchar(200)   | Gold-highlighted portion                       |
+| `sector`      | varchar(100)   | "Structural · Feasibility"                     |
+| `year`        | integer        |                                                |
+| `scope`       | varchar(200)   |                                                |
+| `status`      | enum           | live, review, complete, ongoing                |
+| `client`      | varchar(200)   | Nullable                                       |
+| `location`    | varchar(200)   | Nullable                                       |
+| `tools`       | text           | JSON-encoded `string[]`                        |
+| `challenge`   | text           | Long-form                                      |
+| `approach`    | text           | Long-form                                      |
+| `outcome`     | text           | Long-form                                      |
+| `featured`    | boolean        | Show on homepage                               |
+| `created_at`  | timestamp      |                                                |
+| `updated_at`  | timestamp      |                                                |
 
-| Column                  | Type           | Notes                                          |
-|-------------------------|----------------|------------------------------------------------|
-| `id`                    | serial PK      | Auto-increment                                 |
-| `slug`                  | varchar(100)   | Unique, used in URLs                           |
-| `num`                   | varchar(50)    | "P-024 / 2025"                                 |
-| `name`                  | varchar(200)   | Plain portion, e.g. "Eastwood "                |
-| `name_em`               | varchar(200)   | Gold-highlighted portion, e.g. "Viaduct"       |
-| `sector`                | varchar(100)   | "Structural · Feasibility"                     |
-| `year`                  | integer        |                                                |
-| `scope`                 | varchar(200)   | "3-span · 240m"                                |
-| `status`                | enum           | live, review, complete, ongoing                |
-| `client`                | varchar(200)   | Nullable                                       |
-| `location`              | varchar(200)   | Nullable                                       |
-| `tools`                 | text           | JSON-encoded `string[]`                        |
-| `challenge`             | text           | Long-form                                      |
-| `approach`              | text           | Long-form                                      |
-| `outcome`               | text           | Long-form                                      |
-| `featured`              | boolean        | Show on homepage                               |
-| `created_at`            | timestamp      | Default now                                    |
-| `updated_at`            | timestamp      | Default now                                    |
-
-**`testimonials`** — quotes from clients. New in Phase 1.
+### `testimonials` (planned for Phase 3)
 
 | Column                  | Type         | Notes                              |
 |-------------------------|--------------|------------------------------------|
 | `id`                    | serial PK    |                                    |
-| `quote`                 | text         | Required                           |
+| `quote`                 | text         |                                    |
 | `author_name`           | varchar(200) |                                    |
-| `author_title`          | varchar(200) | "CTO" / "Project Director"         |
+| `author_title`          | varchar(200) |                                    |
 | `author_company`        | varchar(200) |                                    |
-| `related_project_slug`  | varchar(100) | Optional link to a project         |
-| `featured`              | boolean      | Show on homepage                   |
-| `published`             | boolean      | Soft-publish toggle                |
-| `sort_order`            | integer      | Lower = shown first                |
+| `related_project_slug`  | varchar(100) |                                    |
+| `featured`              | boolean      |                                    |
+| `published`             | boolean      |                                    |
+| `sort_order`            | integer      |                                    |
 | `created_at`            | timestamp    |                                    |
 | `updated_at`            | timestamp    |                                    |
 
-**`users`** — admin accounts. Created in Phase 1, used in Phase 2.
+### `users` (planned for Phase 2)
 
 | Column           | Type         | Notes                          |
 |------------------|--------------|--------------------------------|
 | `id`             | serial PK    |                                |
 | `email`          | varchar(255) | Unique                         |
-| `password_hash`  | text         | bcrypt; never plain text       |
+| `password_hash`  | text         | bcrypt                         |
 | `name`           | varchar(200) |                                |
 | `created_at`     | timestamp    |                                |
 | `updated_at`     | timestamp    |                                |
 
-### npm scripts (added in Phase 1)
+### npm scripts
 
 ```bash
 npm run db:generate   # write a SQL migration based on schema changes
-npm run db:migrate    # apply pending migrations to the database
-npm run db:push       # bypass migrations and sync schema directly (dev only)
-npm run db:studio     # open Drizzle Studio (web UI for the database)
-npm run db:seed       # populate starter content (idempotent: safe to re-run)
+npm run db:migrate    # apply pending migrations
+npm run db:push       # bypass migrations and sync directly (dev only)
+npm run db:studio     # open Drizzle Studio (web UI)
 ```
-
-Workflow when changing the schema:
-
-1. Edit `db/schema.ts`
-2. `npm run db:generate` — produces a new file in `/drizzle`
-3. Inspect the SQL — make sure it does what you expect
-4. `npm run db:migrate` — applies it
-
-### Seed data
-
-The seed script populates the database with:
-
-- 4 starter projects (3 featured, 1 archive only)
-- 2 starter testimonials (both featured)
-
-After Phase 3, the firm owner will rarely run the seed — they'll add new content through the admin UI.
-
----
-
-## Auth — Phase 2 Reference
-
-### Stack
-
-- **NextAuth (Auth.js)** v5 with the **Credentials** provider
-- **bcryptjs** for password hashing
-- **Drizzle adapter** to connect NextAuth to the existing `users` table
-- **Session strategy: JWT** (no separate session table needed)
-- **Middleware** in `middleware.ts` protecting `/admin/*` routes
-
-### Flow
-
-1. Owner visits `/admin/login`, enters email + password
-2. NextAuth verifies the credentials against the `users` table (bcrypt compare)
-3. On success, sets a JWT session cookie
-4. Middleware checks the cookie on every `/admin/*` request
-5. Failed checks redirect to `/admin/login`
-
-### Bootstrapping the first admin
-
-A separate CLI script (`scripts/create-admin.ts`) reads email + password from the terminal, hashes the password, inserts the row. Run once after Phase 2 deployment.
-
----
-
-## Admin Panel — Phase 3 Reference
-
-### Routes
-
-- `/admin` — dashboard (project count, testimonial count, last login)
-- `/admin/projects` — list with edit/delete buttons
-- `/admin/projects/new` — create form
-- `/admin/projects/[id]/edit` — edit form
-- `/admin/testimonials` — same pattern
-
-### Conventions
-
-- Forms validated with **Zod**, error messages inline
-- Submit handlers POST to `/api/admin/<resource>` routes
-- API routes verify the session before any DB write
-- All admin pages use the same `Sheet` and `TitleBlock` primitives as the public site, so the admin UI matches the brand
-
-### Image uploads
-
-- **Phase 3a** — text-only fields. Project images stay as the SVG placeholders we already have.
-- **Phase 3b (later)** — UploadThing integration for hero images and project galleries.
-
----
-
-## Design Decisions Log
-
-| Date       | Decision                                                                                    | Reason                                                                  |
-|------------|---------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
-| 2026-04-26 | Drop pure black; use warm charcoal `#15130D`                                                | Cream `#FFEEC6` reads warm against it, harsh against pure black         |
-| 2026-04-26 | No serif fonts — primary is Scto Grotesk A (grotesk)                                        | Brand book specifies grotesk; serifs would conflict                     |
-| 2026-04-26 | Red and mint are functional, not decorative                                                 | Status only (live, flagged, success) — earns its place                  |
-| 2026-04-26 | CAD hosts the homepage; drafting elements are overlays                                      | Interactive workstation feel over static drawing                        |
-| 2026-04-26 | Crosshair is small (~30px), not edge-to-edge                                                | Less visually overwhelming, behaves more like a real cursor             |
-| 2026-04-26 | CAD grid hidden by default; revealed only inside the crosshair spotlight                    | Default state should feel calm; the reveal is the moment of delight     |
-| 2026-04-26 | Sections alternate cream and dark down the homepage                                         | Breaks the dark monotony                                                |
-| 2026-04-26 | Crosshair persists site-wide on desktop; mobile falls back to default cursor                | US-01 + US-23                                                           |
-| 2026-04-26 | Next.js 15 + React 19 + App Router + CSS Modules                                            | Server components by default, explicit `"use client"` for interactivity |
-| 2026-04-28 | Coordinate readout uses refs + `requestAnimationFrame`, not React state                     | 60fps DOM writes; React state would re-render the component every frame |
-| 2026-04-28 | Favicon placed at `app/favicon.ico` for auto-detection                                      | No metadata config needed                                               |
-| 2026-04-29 | SitePlanStrip removed                                                                       | Owner preference — to be revisited if added back                        |
-| 2026-04-29 | Inner pages built — about, services, projects gallery + dynamic [slug], contact             | Each page is one Sheet, focused, no homepage-style alternation          |
-| 2026-04-29 | Project / service / founder data extracted into `lib/*.ts` data stores                      | Single source of truth, type-checked, easy to swap to a database later  |
-| 2026-04-29 | TopBar nav uses real page links instead of hash anchors                                     | Pathname-aware nav fixes broken hash links on inner pages               |
-| 2026-04-30 | Database = Neon Postgres 17, Singapore region                                               | Lowest latency from India when Mumbai unavailable                       |
-| 2026-04-30 | ORM = Drizzle (not Prisma)                                                                  | Closer to SQL, easier to learn what's actually happening                |
-| 2026-04-30 | Auth = NextAuth Credentials (not Neon Auth / Stack Auth)                                    | Two admin users; hosted auth is overkill                                |
-| 2026-04-30 | Custom-built admin (not a CMS like Sanity)                                                  | Owner explicitly wants to learn real backend                            |
-| 2026-04-30 | Only `projects` and `testimonials` move to the DB initially                                 | Services + founders rarely change; static files are fine                |
-
----
-
-## Known issues / lessons learned
-
-- **CSS not loading on first run** — likely cause: `app/layout.tsx` and `app/globals.css` are still the `create-next-app` defaults. Both must be replaced before the site renders correctly.
-- **Markdown formatting in code blocks** — pasting `process.env.X` from chat sometimes turns it into a markdown link. Always copy from bundle files, not the chat.
-- **Favicon in metadata** — don't reference `/favicon.ico` in the `metadata.icons` config. Place it at `app/favicon.ico` and let Next.js auto-detect.
-- **`themeColor` warning in Next.js 15** — moved from `metadata` to a separate `viewport` export. Non-fatal warning.
-- **`getFeaturedProjects is not a function`** — caused by a partial paste of `lib/projects.ts` missing the helper functions at the bottom. Fixed by appending the three exports.
-- **React Compiler config error** — needs `babel-plugin-react-compiler` installed if `experimental.reactCompiler` is enabled. Easier to leave it off.
-- **Database region** — Mumbai (`ap-south-1`) was unavailable in the Neon free tier; chose Singapore (`ap-southeast-1`) instead. Latency from India is acceptable.
 
 ---
 
@@ -467,34 +394,37 @@ A separate CLI script (`scripts/create-admin.ts`) reads email + password from th
 - [x] Firm name confirmed — Bluprynt Consulting Group
 - [x] Tagline — _Engineering accuracy. Consulting excellence._
 - [x] Brand colors confirmed
-- [x] Fonts chosen (Scto Grotesk A + Airbnb Cereal W BD)
-- [ ] Logo / wordmark SVG (final)
+- [x] Fonts chosen (Scto Grotesk A + Airbnb Cereal W BD; standing in with Inter Tight + Nunito)
+- [x] Logo file in `public/Logo.png` (used in navbar + 404)
 - [ ] Web font licenses confirmed (Scto + Cereal are paid)
-- [ ] Favicon set generated
+- [ ] Favicon set generated (currently `app/icon.png` for auto-detect)
 
 ### Homepage (using placeholder copy)
 
-- [ ] Hero headline + subheading — final
+- [ ] Hero headline + subheading — final copy
 - [ ] Intro paragraph
 - [ ] Key stats (projects, sectors, founded)
-- [ ] 2–3 featured projects selected (currently placeholders)
+- [ ] 2–3 featured projects flagged in the database
 - [ ] Services teaser copy — final
 - [ ] 1–2 testimonial quotes for homepage (Phase 3)
 
 ### About / founders
 
-- [ ] Firm origin story
-- [ ] Founder 1 — photo, name, role, bio, LinkedIn, degrees, licences, software certs
-- [ ] Founder 2 — same as above
+- [ ] Firm origin story — final copy
+- [ ] Founder 1 — name, role, bio (long), expertise, location, LinkedIn, photo or initials
+- [ ] Founder 2 — same
+- [ ] Real numbers for the "By the numbers" block (years, offices, engagements, disciplines)
+- [ ] Office addresses + hours
 
-### Projects
+### Work / projects
 
-- [ ] Project list finalised (minimum 2 for launch)
-- [ ] Per project — name, summary, sector, location, thumbnail, full description (challenge/approach/outcome), images/drawings, client (or anonymised), year, tools
+- [ ] Real project list entered into the database (minimum 2 for launch)
+- [ ] Per project — name, slug, sector, year, scope, status, client, location, tools, challenge, approach, outcome, featured
 
 ### Services
 
-- [ ] Per service — name, description, deliverables, engagement type, timeline, who it's for
+- [ ] Per service — name, region, description, deliverables, when-to-engage triggers
+- [ ] Currently 5 services with placeholder content; replace with real
 
 ### Testimonials (Phase 3)
 
@@ -503,19 +433,20 @@ A separate CLI script (`scripts/create-admin.ts`) reads email + password from th
 
 ### Contact
 
-- [x] Contact form fields finalised (name, email, company, message)
+- [x] Contact form fields finalised (name, email, organization, project type, message)
 - [ ] Firm email address confirmed
 - [ ] Phone number — include or not
-- [ ] Response time expectation
+- [ ] Response time expectation (currently shown as "two business days")
 - [ ] FAQ replies — 3–5 Q&A per service area
 
 ### Site-wide / technical
 
 - [x] Per-page SEO meta title + description
+- [x] Custom 404 page
+- [x] Loading state component
 - [ ] Analytics platform set up (Vercel Analytics planned)
 - [ ] Privacy policy published
 - [ ] Open Graph image (1200×630)
-- [ ] Custom 404 page
 - [ ] Domain purchased + pointed
 - [ ] Resend domain verified (SPF, DKIM, DMARC)
 
@@ -536,11 +467,10 @@ npm install
 npm run dev
 # → http://localhost:3000
 
-# database (after Phase 1)
+# database
 npm run db:generate    # generate migration from schema changes
 npm run db:migrate     # apply pending migrations
 npm run db:studio      # open the database UI
-npm run db:seed        # populate starter content
 
 # checks
 npm run lint
