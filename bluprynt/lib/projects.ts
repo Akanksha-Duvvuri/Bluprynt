@@ -60,12 +60,32 @@ function hydrate(row: DbProject): Project {
     status: row.status ?? undefined,
     client: row.client ?? undefined,
     location: row.location ?? undefined,
-    tools: row.tools ? (JSON.parse(row.tools) as string[]) : undefined,
+    tools: parseTools(row.tools),
     challenge: row.challenge,
     approach: row.approach,
     outcome: row.outcome,
     featured: row.featured,
   };
+}
+
+function parseTools(raw: string | null): string[] | undefined {
+  if (!raw) return undefined;
+
+  // Try JSON-encoded array first (the canonical format):
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      return parsed.map(String);
+    }
+  } catch {
+    // Not JSON — fall through to comma-split.
+  }
+
+  // Fallback: treat as plain comma-separated string.
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
 }
 
 /* ── PUBLIC API ─────────────────────────────────────────────── */

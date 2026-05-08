@@ -48,19 +48,9 @@
   gap: 0.5em;
   flex-wrap: wrap;
 }
-.brandName {
-  font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  color: var(--accent-gold, #C4A564);
-}
-.brandSub {
-  font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  color: var(--cream-65, rgba(255, 238, 198, 0.65));
+
+.logo{
+  width: 8rem;
 }
 
 .navList {

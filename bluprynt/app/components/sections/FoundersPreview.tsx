@@ -49,13 +49,13 @@ export default function FoundersPreview() {
 
               <p className={styles.bio}>{f.bio}</p>
 
-              {f.expertise && f.expertise.length > 0 && (
+              {/* {f.expertise && f.expertise.length > 0 && (
                 <ul className={styles.tags}>
                   {f.expertise.map((tag) => (
                     <li key={tag} className={styles.tag}>{tag}</li>
                   ))}
                 </ul>
-              )}
+              )} */}
 
               <div className={styles.foot}>
                 <span className={styles.read}>Meet the team</span>

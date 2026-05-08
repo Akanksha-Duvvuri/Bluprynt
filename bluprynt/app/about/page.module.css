@@ -38,7 +38,7 @@
 }
 .blockNum {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 25px;
   letter-spacing: 0.2em;
   color: var(--accent-gold);
   font-weight: 700;
@@ -46,7 +46,7 @@
 .blockTitle {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  font-size: clamp(1.5rem, 2.2vw, rem);
   font-weight: 400;
   letter-spacing: -0.015em;
   color: var(--accent-cream);
@@ -121,12 +121,12 @@
   overflow: hidden;
 }
 @media (min-width: 720px) { .numberGrid { grid-template-columns: repeat(4, 1fr); } }
-.stat { display: flex; flex-direction: column; gap: 4px; padding: var(--space-3, 24px) var(--space-2, 16px); background: var(--bg-soft); align-items: flex-start; }
-.statK { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--cream-65); text-transform: uppercase; }
+.stat { display: flex; flex-direction: column; gap: 4px; padding: var(--space-3, 24px) var(--space-2, 16px); background: var(--bg-soft); align-items: center; }
+.statK { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; color: var(--cream-65); text-transform: uppercase;  }
 .statV { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 300; color: var(--accent-cream); letter-spacing: -0.03em; line-height: 1; }
 .statSub { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--accent-gold); }
 
-/* ===== Methodology ===================================================== */
+/* ===== Methodology ===================================================== */ 
 .methodList {
   list-style: none; margin: 0; padding: 0;
   display: flex; flex-direction: column; gap: 1px;
@@ -217,7 +217,7 @@
 .fRole {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 10px; letter-spacing: 0.15em;
+  font-size: 17px; letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--accent-gold);
 }
@@ -252,9 +252,9 @@
   margin-top: auto;
 }
 .fLink {
-  font-family: var(--font-mono);
-  font-size: 10px; letter-spacing: 0.15em;
-  text-transform: uppercase;
+  /* font-family: var(--font-mono); */
+  font-size: 15px; letter-spacing: 0.15em;
+  /* text-transform: uppercase; */
   color: var(--accent-gold);
   text-decoration: none;
   padding-bottom: 2px;
@@ -297,7 +297,7 @@
   display: flex; flex-direction: column; align-items: center;
   gap: var(--space-2, 16px);
 }
-.ctaEyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.25em; color: var(--accent-gold); }
+.ctaEyebrow { font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.25em; color: var(--accent-gold); }
 .ctaHead { margin: 0; font-family: var(--font-display); font-size: clamp(1.25rem, 2.4vw, 1.625rem); font-weight: 400; letter-spacing: -0.015em; color: var(--accent-cream); line-height: 1.4; max-width: 56ch; }
 .ctaBtn {
   margin-top: var(--space-2, 16px);
@@ -313,3 +313,119 @@
 .ctaBtn:hover { background: var(--accent-gold); color: var(--bg-deep); }
 .ctaArrow { transition: transform 200ms ease-out; }
 .ctaBtn:hover .ctaArrow { transform: translateX(4px); }
+
+/* ═══════════════════════════════════════════════════════════════
+   Why Bluprynt — append to your existing about CSS module
+   ═══════════════════════════════════════════════════════════════ */
+
+.whySection {
+  margin: 80px 0;
+  position: relative;
+}
+
+.whyHeader {
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px dashed rgba(196, 165, 100, 0.25);
+}
+
+.whyEyebrow {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.whyHeading {
+  margin: 0;
+  font-family: var(--primary);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--cream);
+}
+
+.whyEm {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+/* ── Grid: 2x2 desktop, single column on narrow screens ── */
+.whyGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;                                    /* tight grid, sheet feel */
+  background: rgba(196, 165, 100, 0.18);       /* shows through gap */
+  border: 1px solid rgba(196, 165, 100, 0.18);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+@media (max-width: 720px) {
+  .whyGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Individual card ── */
+.whyCard {
+  position: relative;
+  padding: 32px 28px;
+  background: var(--ink-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: background 220ms ease-out;
+}
+
+.whyCard:hover {
+  background: rgba(196, 165, 100, 0.04);
+}
+
+/* Corner tick top-left for that drafting-card feel */
+.whyCard::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid var(--gold);
+  border-left: 1px solid var(--gold);
+  opacity: 0.5;
+}
+
+/* ── Number prefix (01 / 02 / 03 / 04) ── */
+.whyNum {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: rgba(196, 165, 100, 0.65);
+  font-weight: 700;
+  padding-left: 24px;            /* clears the corner tick */
+}
+
+/* ── Heading (gold) ── */
+.whyTitle {
+  margin: 0;
+  font-family: var(--primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--gold);
+  line-height: 1.25;
+}
+
+/* ── Body (cream) ── */
+.whyBody {
+  margin: 0;
+  font-family: var(--secondary);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--cream);
+}

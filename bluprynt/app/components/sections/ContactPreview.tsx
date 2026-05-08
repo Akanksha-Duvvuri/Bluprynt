@@ -36,7 +36,7 @@ export default function ContactPreview() {
     <div id="contact">
       <SectionShell
       code="A-006"
-      label="Title block"
+      label="--LETS TALK"
       tone="deep"
       eyebrow="Tell us about your project"
     >
@@ -44,26 +44,33 @@ export default function ContactPreview() {
         {/* ── Left: pitch ────────────────────────────────────────────── */}
         <div className={styles.col}>
           <h2 className={styles.heading}>
-            Tell us about your{" "}
-            <span className={styles.gold}>project</span>.
+            Ready to cut preconstruction costs 
+            without giving up control?{" "}
           </h2>
           <p className={styles.lede}>
-            Most engagements start with a 30-minute call. We'll tell you whether
-            we're the right fit before we send a proposal.
+            We'd rather earn your trust with one 
+            deliverable than a pitch deck. 
+            Start with the sample. Decide from there.
           </p>
 
           <ul className={styles.bullets}>
             <li>
               <span className={styles.bMark}>▸</span>
-              <span>Brief us in one form, get a routing within two business days.</span>
+              <span>Send us your next bid package 
+                or shop drawing scope. 
+                  </span>
             </li>
             <li>
               <span className={styles.bMark}>▸</span>
-              <span>If we're not the right firm, we'll say so — and tell you who is.</span>
+              <span>We'll send back a sample 
+                  in 48 hours. Samples on us.
+                  </span>
             </li>
             <li>
               <span className={styles.bMark}>▸</span>
-              <span>Confidential by default. NDAs available on request.</span>
+              <span>
+                  We'll reply within two business days. You'll recieve an automated email soon. 
+                </span>
             </li>
           </ul>
         </div>
@@ -152,15 +159,12 @@ export default function ContactPreview() {
                   name="message"
                   required
                   rows={5}
-                  placeholder="Project stage, scope, what you need from us…"
+                  placeholder="Project stage, scope, what you need from us… or any questions"
                   className={`${styles.input} ${styles.textarea}`}
                 />
               </Field>
 
               <div className={styles.formFoot}>
-                <span className={styles.formNote}>
-                  We'll reply within two business days.
-                </span>
                 <button
                   type="submit"
                   className={styles.submit}
@@ -175,7 +179,7 @@ export default function ContactPreview() {
         </div>
       </div>
 
-      {/* ── Title block at the bottom ────────────────────────────────── */}
+      {/* ── Title block at the bottom ──────────────────────────────────
       <div className={styles.titleBlock}>
         <div className={styles.tbMain}>
           <span className={styles.tbBrand}>BLUPRYNT</span>
@@ -207,7 +211,7 @@ export default function ContactPreview() {
             <span className={styles.tbSm}>REV 01 · ISSUED FOR REVIEW</span>
           </div>
         </div>
-      </div>
+      </div> */}
     </SectionShell>
     </div>
   );

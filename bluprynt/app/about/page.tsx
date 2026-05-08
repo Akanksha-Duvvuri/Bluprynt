@@ -13,21 +13,67 @@ export default function AboutPage() {
   return (
     <PageShell
       code="A-400"
-      label="ABOUT · THE FIRM"
-      eyebrow="The firm, the methodology, the people"
+      label="ABOUT THE FIRM"
+      // eyebrow="Why Choose Us"
       title={
         <>
-          We work the seam between <em>design intent</em> and <em>what gets built</em>.
+        Why US Construction Companies Choose Bluprynt
         </>
       }
-      lede="Bluprynt is a pre-construction consulting practice. Two offices, one team, end-to-end engagements scoped to the question. Below: how we work and who you'll work with."
+      lede="We work the seam between design intent and what gets built."
       maxWidth={1100}
     >
       {/* ===== The cost-of-change centerpiece ============================== */}
+      <section className={styles.whySection}>
+   <header className={styles.blockHead}>
+          <span className={styles.blockNum}>01</span>
+          <h2 className={styles.blockTitle}>What Makes Us Different</h2>
+        </header>
+
+  <div className={styles.whyGrid}>
+    <article className={styles.whyCard}>
+      <span className={styles.whyNum}>01</span>
+      <h3 className={styles.whyTitle}>US-Trained Leadership</h3>
+      <p className={styles.whyBody}>
+        Our CEO holds an MEng in Construction Management from NYU. Every
+        deliverable is reviewed against US standards before it ships.
+      </p>
+    </article>
+
+    <article className={styles.whyCard}>
+      <span className={styles.whyNum}>02</span>
+      <h3 className={styles.whyTitle}>Your Business Hours</h3>
+      <p className={styles.whyBody}>
+        We work your time zone, not ours. Real-time on WhatsApp, email,
+        and calls — no 12-hour email lag.
+      </p>
+    </article>
+
+    <article className={styles.whyCard}>
+      <span className={styles.whyNum}>03</span>
+      <h3 className={styles.whyTitle}>40&ndash;60% Cost Advantage</h3>
+      <p className={styles.whyBody}>
+        Offshore delivery economics, US-grade quality. No hidden fees.
+        No fixed headcount.
+      </p>
+    </article>
+
+    <article className={styles.whyCard}>
+      <span className={styles.whyNum}>04</span>
+      <h3 className={styles.whyTitle}>One Partner, Five Services</h3>
+      <p className={styles.whyBody}>
+        Estimating, rebar shop drawings, slab edge, SOE takeoffs, and
+        submittal coordination &mdash; one partner, one point of contact,
+        one invoice.
+      </p>
+    </article>
+  </div>
+</section>
+
       <section className={styles.thesis} style={{ ['--i' as string]: 0 }}>
         <header className={styles.blockHead}>
-          <span className={styles.blockNum}>01</span>
-          <h2 className={styles.blockTitle}>The thesis</h2>
+          <span className={styles.blockNum}>02</span>
+          <h2 className={styles.blockTitle}>Learn More About Us</h2>
         </header>
 
         <div className={styles.thesisGrid}>
@@ -48,40 +94,28 @@ export default function AboutPage() {
               that catch the next thing before it costs you a quarter.
             </p>
           </div>
-
-          <figure className={styles.chartFig}>
-            <figcaption className={styles.chartCap}>
-              <span className={styles.chartK}>FIG · 005.1</span>
-              <span className={styles.chartT}>Relative cost of change</span>
-            </figcaption>
-            <CostChart />
-            <div className={styles.chartLegend}>
-              <span><i style={{ background: 'var(--accent-mint)' }} />Concept</span>
-              <span><i style={{ background: 'var(--accent-gold)' }} />Design</span>
-              <span><i style={{ background: 'var(--accent-red)' }} />Build</span>
-            </div>
-          </figure>
         </div>
       </section>
 
       {/* ===== Numbers ===================================================== */}
+      
       <section className={styles.numbers} style={{ ['--i' as string]: 1 }}>
         <header className={styles.blockHead}>
-          <span className={styles.blockNum}>02</span>
+          <span className={styles.blockNum}>0</span>
           <h2 className={styles.blockTitle}>By the numbers</h2>
         </header>
         <div className={styles.numberGrid}>
-          <Stat k="Years of practice" v="18+" />
+          <Stat k="Years of practice" v="12.5+" />
           <Stat k="Offices" v="2" sub="HYD · US" />
-          <Stat k="Active engagements" v="12" />
-          <Stat k="Disciplines covered" v="8" />
+          <Stat k="Active engagements" v="x" />
+          <Stat k="Disciplines covered" v="Y" />
         </div>
       </section>
 
       {/* ===== Methodology ================================================= */}
       <section className={styles.method} style={{ ['--i' as string]: 2 }}>
         <header className={styles.blockHead}>
-          <span className={styles.blockNum}>03</span>
+          <span className={styles.blockNum}>04</span>
           <h2 className={styles.blockTitle}>How we work</h2>
         </header>
         <ol className={styles.methodList}>
@@ -121,8 +155,7 @@ export default function AboutPage() {
           <h2 className={styles.blockTitle}>The founders</h2>
         </header>
         <p className={styles.foundersIntro}>
-          Two principals. Both senior. Both client-facing. The people who scope
-          your project are the same people stamping the deliverables.
+          Meet the C - Suite
         </p>
 
         <ul className={styles.foundersList}>
@@ -150,14 +183,14 @@ export default function AboutPage() {
                     {/* Show the longer bio here since this is the destination */}
                     <p className={styles.fBio}>{f.longBio ?? f.bio}</p>
 
-                    {/* Optional expertise tags */}
+                    {/* Optional expertise tags
                     {f.expertise && f.expertise.length > 0 && (
                       <ul className={styles.fTags}>
                         {f.expertise.map((t) => (
                           <li key={t} className={styles.fTag}>{t}</li>
                         ))}
                       </ul>
-                    )}
+                    )} */}
 
                     {/* Optional contact links */}
                     {f.links && (f.links.email || f.links.linkedin) && (
@@ -216,7 +249,9 @@ export default function AboutPage() {
       <section className={styles.cta} style={{ ['--i' as string]: 5 }}>
         <span className={styles.ctaEyebrow}>READY TO TALK?</span>
         <h3 className={styles.ctaHead}>
-          We pick our engagements. The shortlist starts with a conversation.
+          We'd rather earn your trust with one 
+deliverable than a pitch deck. 
+Start with the sample. Decide from there
         </h3>
         <Link href="/#contact" className={styles.ctaBtn}>
           <span>Start a conversation</span>

@@ -39,7 +39,7 @@ export default async function AdminProjectsList() {
             homepage.
           </p>
         </div>
-        <Link href="/admin/projects/new" className={styles.newBtn}>
+        <Link href="/admin/work/new" className={styles.newBtn}>
           + New project
         </Link>
       </header>
@@ -51,7 +51,7 @@ export default async function AdminProjectsList() {
             No projects yet. Add your first one to populate the homepage and
             archive.
           </p>
-          <Link href="/admin/projects/new" className={styles.newBtn}>
+          <Link href="/admin/work/new" className={styles.newBtn}>
             + Add a project
           </Link>
         </div>
@@ -73,7 +73,7 @@ export default async function AdminProjectsList() {
 
               <span className={styles.cellName}>
                 <Link
-                  href={`/projects/${p.slug}`}
+                  href={`/work/${p.slug}`}
                   className={styles.nameLink}
                   target="_blank"
                   rel="noopener"
@@ -83,7 +83,7 @@ export default async function AdminProjectsList() {
                   <span className={styles.em}>{p.nameEm}</span>
                   <span className={styles.extLink}> ↗</span>
                 </Link>
-                <span className={styles.slug}>/projects/{p.slug}</span>
+                <span className={styles.slug}>/work/{p.slug}</span>
               </span>
 
               <span className={styles.cellMeta}>{p.sector}</span>

@@ -16,7 +16,7 @@ export type Founder = {
   /** Longer bio for the detail page; falls back to `bio` if absent */
   longBio?: string;
   /** Disciplines / focus areas */
-  expertise?: readonly string[];
+  // education?: readonly string[];
   /** "Hyderabad, IN" / "United States" */
   location?: string;
   /** Two-letter monogram for the avatar tile when no photo exists */
@@ -32,27 +32,33 @@ export type Founder = {
 export const FOUNDERS: readonly Founder[] = [
   {
     id: "f1",
-    slug: "founder-one",
-    name: "Founder One",
-    role: "Co-founder · Principal Engineer",
+    slug: "vivek-bundankayala",
+    name: "Vivek Budankayala",
+    role: "Co-founder & CEO",
     initials: "F1",
-    bio: "Civil engineer with eighteen years across infrastructure design and pre-construction strategy in the US and India.",
+    bio: "Master of Engineering (Construction Management), New York University",
     longBio:
-      "Civil engineer with eighteen years across infrastructure design and pre-construction strategy in the US and India. Previously led cost certainty programs for a major transit authority before founding Bluprynt to bring rigorous pre-construction practice to mid-market civil projects.",
-    expertise: ["Cost estimation", "Constructability", "Transit infrastructure"],
+      "Leads Bluprynt's US client work and pre-construction practice. He holds a B.Tech in Civil Engineering and a Master's in Construction Management from NYU, and spent over two years on US job sites, including time with a New York concrete subcontractor, before founding Bluprynt. His work bridges the gap between US construction standards and offshore production, so clients get drawings and estimates that meet the format, code, and turnaround expectations of US projects.",
+    // expertise: [""],
     location: "Hyderabad, IN",
+    links: {
+      email: "vivek@blupryntconsulting.com"
+    }
   },
   {
     id: "f2",
-    slug: "founder-two",
-    name: "Founder Two",
-    role: "Co-founder · Director of Practice",
+    slug: "bharghav-m",
+    name: "Bharghav M",
+    role: "Co-founder & CFO",
     initials: "F2",
-    bio: "Former design coordination lead at a top-five EPC firm. Built the methodology behind Bluprynt's clash-and-clear constructability reviews.",
+    bio: "Post Graduate Programme in Management (MBA) - Indian School of Business",
     longBio:
-      "Former design coordination lead at a top-five EPC firm, where he built the methodology behind Bluprynt's clash-and-clear constructability reviews. Specializes in the messy seam between architectural intent and what actually gets built on site.",
-    expertise: ["Design coordination", "MEP/structural", "Risk register"],
-    location: "United States",
+      "Bharghav leads Bluprynt's finance, operations, and growth strategy. He holds a B.Tech in Computer Science and an MBA from the Indian School of Business (ISB). His background in technology and business strategy drives Bluprynt's systems, pricing discipline, and the operational backbone that lets the company deliver consistent quality at a competitive cost.",
+    // expertise: [""],
+    location: "Hyderabad, IN",
+    links: {
+      email: "bharghav@blupryntconsulting.com"
+    }
   },
 ];
 

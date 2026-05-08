@@ -24,8 +24,7 @@ export function Footer() {
       <div className={styles.inner}>
         <div className={styles.top}>
           <div className={styles.brand}>
-            <span className={styles.brandName}>BLUPRYNT</span>
-            <span className={styles.brandSub}>· CONSULTING GROUP</span>
+            <span className={styles.logo}><img src="/Logo.png"></img></span>
           </div>
 
           <nav aria-label="Footer">
