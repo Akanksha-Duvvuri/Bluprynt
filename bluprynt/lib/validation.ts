@@ -31,7 +31,7 @@ export const projectFormSchema = z.object({
   sector: z.string().min(1, "Sector is required").max(100),
 
   year: z
-    .number({ invalid_type_error: "Year must be a number" })
+    .number({ error: "Year must be a number" })
     .int("Year must be a whole number")
     .min(1900, "Year too early")
     .max(2100, "Year too far in the future"),
