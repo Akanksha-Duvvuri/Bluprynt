@@ -1,63 +1,37 @@
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 import { auth } from "@/auth";
 import { db, projects } from "@/db";
 import { projectFormSchema } from "@/lib/validation";
 
-interface Ctx {
-  params: Promise<{ id: string }>;
-}
-
 /**
- * Helper — parse + validate the id param. Returns numeric id or a 400 response.
+ * GET /api/admin/projects
+ * List all projects (sorted newest first by year then id).
  */
-async function getId(ctx: Ctx): Promise<number | NextResponse> {
-  const { id: idStr } = await ctx.params;
-  const id = parseInt(idStr, 10);
-  if (Number.isNaN(id)) {
-    return NextResponse.json({ error: "Invalid id" }, { status: 400 });
-  }
-  return id;
-}
-
-/**
- * GET /api/admin/projects/[id]
- * Fetch one project by id.
- */
-export async function GET(_req: Request, ctx: Ctx) {
+export async function GET() {
   const session = await auth();
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const id = await getId(ctx);
-  if (id instanceof NextResponse) return id;
-
-  const rows = await db
+  const all = await db
     .select()
     .from(projects)
-    .where(eq(projects.id, id))
-    .limit(1);
+    .orderBy(desc(projects.year), desc(projects.id));
 
-  if (!rows[0]) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
-  }
-
-  return NextResponse.json(rows[0]);
+  return NextResponse.json(all);
 }
 
 /**
- * PATCH /api/admin/projects/[id]
- * Update one project. Body should match projectFormSchema.
+ * POST /api/admin/projects
+ * Create a new project. Body must match projectFormSchema.
+ * Returns the inserted row.
  */
-export async function PATCH(req: Request, ctx: Ctx) {
+export async function POST(req: Request) {
   const session = await auth();
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
-  const id = await getId(ctx);
-  if (id instanceof NextResponse) return id;
 
   let body: unknown;
   try {
@@ -85,9 +59,9 @@ export async function PATCH(req: Request, ctx: Ctx) {
         ? data.tools
         : [];
 
-  await db
-    .update(projects)
-    .set({
+  const inserted = await db
+    .insert(projects)
+    .values({
       slug: data.slug,
       num: data.num,
       name: data.name,
@@ -103,27 +77,8 @@ export async function PATCH(req: Request, ctx: Ctx) {
       approach: data.approach,
       outcome: data.outcome,
       featured: data.featured ?? false,
-      updatedAt: new Date(),
     })
-    .where(eq(projects.id, id));
+    .returning();
 
-  return NextResponse.json({ success: true });
-}
-
-/**
- * DELETE /api/admin/projects/[id]
- * Remove one project.
- */
-export async function DELETE(_req: Request, ctx: Ctx) {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const id = await getId(ctx);
-  if (id instanceof NextResponse) return id;
-
-  await db.delete(projects).where(eq(projects.id, id));
-
-  return NextResponse.json({ success: true });
+  return NextResponse.json(inserted[0], { status: 201 });
 }

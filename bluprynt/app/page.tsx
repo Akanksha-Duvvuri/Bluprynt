@@ -8,8 +8,11 @@ import AboutPreview from "@/app/components/sections/AboutPreview";
 import FoundersPreview from "./components/sections/FoundersPreview";
 import ContactPreview from "@/app/components/sections/ContactPreview";
 import { Footer } from "./components/sections/Footer";
+import { getFeaturedTestimonials } from "@/lib/testimonials";
 
-export default function HomePage() {
+export default async function HomePage() {
+
+    const testimonialsData = await getFeaturedTestimonials();
   return (
     <>
       <BuildingDraft />
@@ -23,7 +26,8 @@ export default function HomePage() {
       <ServicesPreview />
       <Divider />
 
-      <Testimonials />
+      {/* <Testimonials /> */}
+      <Testimonials testimonials={testimonialsData} />
       <Divider />
 
       <AboutPreview />

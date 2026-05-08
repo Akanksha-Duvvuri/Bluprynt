@@ -32,6 +32,10 @@ export const metadata: Metadata = {
   title: "Bluprynt · Pre-Construction Consulting",
   description:
     "The firm you call before you build. Pre-construction consulting for civil and infrastructure projects across the US and India.",
+
+     icons: {
+    icon: "/Favicon-04.png",  
+  },
 };
 
 export const viewport: Viewport = {
