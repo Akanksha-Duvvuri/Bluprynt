@@ -7,7 +7,7 @@ import Testimonials from "@/app/components/sections/Testimonials";
 import AboutPreview from "@/app/components/sections/AboutPreview";
 import FoundersPreview from "./components/sections/FoundersPreview";
 import ContactPreview from "@/app/components/sections/ContactPreview";
-import { Footer } from "./components/sections/Footer";
+import Footer  from "./components/sections/Footer";
 import { getFeaturedTestimonials } from "@/lib/testimonials";
 
 export default async function HomePage() {

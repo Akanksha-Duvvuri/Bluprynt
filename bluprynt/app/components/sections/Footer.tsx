@@ -4,55 +4,116 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./Footer.module.css";
 
-// /founders removed (no per-founder pages, no founders index — they live on /about)
-// /contact → /#contact (no separate contact page)
-const NAV_LINKS = [
+/* Internal navigation links */
+const QUICK_LINKS = [
   { href: "/work", label: "Work" },
   { href: "/services", label: "Services" },
+  { href: "/#testimonials", label: "Testimonials" },
   { href: "/about", label: "About" },
   { href: "/#contact", label: "Contact" },
 ];
 
-export function Footer() {
+/* External / social links — REPLACE the URLs with your actual handles */
+const SOCIAL_LINKS = [
+  {
+    href: "https://www.linkedin.com/company/bluprynt",
+    label: "LinkedIn",
+    external: true,
+  },
+  {
+    href: "https://www.instagram.com/bluprynt",
+    label: "Instagram",
+    external: true,
+  },
+  {
+    href: "mailto:[email protected]",
+    label: "[email protected]",
+    external: false,
+  },
+];
+
+export default function Footer() {
   const pathname = usePathname();
-  const isHomepage = pathname === "/";
+  const isHome = pathname === "/";
 
   return (
     <footer
-      className={`${styles.footer} ${isHomepage ? styles.onHome : ""}`}
+      className={`${styles.footer} ${isHome ? styles.footerHome : ""}`}
     >
       <div className={styles.inner}>
-        <div className={styles.top}>
-          <div className={styles.brand}>
-            <span className={styles.logo}><img src="/Logo.png"></img></span>
-          </div>
-
-          <nav aria-label="Footer">
-            <ul className={styles.navList}>
-              {NAV_LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className={styles.navLink}>
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+        {/* ── Brand column ── */}
+        <div className={styles.brandCol}>
+          <Link href="/" className={styles.brandLink}>
+            <img
+              src="/Logo.png"
+              alt="Bluprynt"
+              className={styles.brandLogo}
+            />
+          </Link>
+          <p className={styles.tagline}>
+            Engineering accuracy.
+            <br />
+            Consulting excellence.
+          </p>
+          <p className={styles.subTagline}>
+            Pre-construction consulting from blueprint to brilliance.
+          </p>
         </div>
 
-        <div className={styles.bottom}>
-          <span className={styles.copy}>
-            © {new Date().getFullYear()} Bluprynt Consulting Group.
-            All rights reserved.
-          </span>
-          <span className={styles.stamp}>
-            <span className={styles.stampK}>SHEET</span>
-            <span className={styles.stampV}>A-099 / FOOTER</span>
-            <span className={styles.stampSep}>·</span>
-            <span className={styles.stampK}>REV</span>
-            <span className={styles.stampV}>01</span>
-          </span>
+        {/* ── Quick Links column ── */}
+        <div className={styles.col}>
+          <span className={styles.colLabel}>▸ Quick Links</span>
+          <ul className={styles.list}>
+            {QUICK_LINKS.map((link) => (
+              <li key={link.href} className={styles.listItem}>
+                <Link href={link.href} className={styles.link}>
+                  <span className={styles.linkDot} aria-hidden>
+                    ·
+                  </span>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
+
+        {/* ── Reach Out column ── */}
+        <div className={styles.col}>
+          <span className={styles.colLabel}>▸ Reach Out</span>
+          <ul className={styles.list}>
+            {SOCIAL_LINKS.map((link) => (
+              <li key={link.href} className={styles.listItem}>
+                <a
+                  href={link.href}
+                  className={styles.link}
+                  target={link.external ? "_blank" : undefined}
+                  rel={link.external ? "noopener noreferrer" : undefined}
+                >
+                  <span className={styles.linkDot} aria-hidden>
+                    ·
+                  </span>
+                  {link.label}
+                  {link.external && (
+                    <span className={styles.linkArrow} aria-hidden>
+                      ↗
+                    </span>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* ── Bottom strip ── */}
+      <div className={styles.bottom}>
+        <span className={styles.bottomItem}>
+          © {new Date().getFullYear()} Bluprynt Consulting Group
+        </span>
+        <span className={styles.bottomSep}>·</span>
+        <span className={styles.bottomItem}>SHEET A-007</span>
+        <span className={styles.bottomSep}>·</span>
+        <span className={styles.bottomItem}>REV 01</span>
       </div>
     </footer>
   );

@@ -179,7 +179,7 @@ export default function ContactPreview() {
         </div>
       </div>
 
-      {/* ── Title block at the bottom ──────────────────────────────────
+      {/* ── Title block at the bottom ────────────────────────────────── */}
       <div className={styles.titleBlock}>
         <div className={styles.tbMain}>
           <span className={styles.tbBrand}>BLUPRYNT</span>
@@ -211,7 +211,7 @@ export default function ContactPreview() {
             <span className={styles.tbSm}>REV 01 · ISSUED FOR REVIEW</span>
           </div>
         </div>
-      </div> */}
+      </div>
     </SectionShell>
     </div>
   );
