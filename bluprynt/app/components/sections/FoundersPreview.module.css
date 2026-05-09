@@ -110,16 +110,16 @@
 }
 .role {
   margin: 0;
-  font-family: var(--font-mono);
-  font-size: 10px;
+  /* font-family: var(--font-mono); */
+  font-size: 15px;
   letter-spacing: 0.15em;
   color: var(--accent-gold);
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
 }
 .loc {
   margin: 0;
-  font-family: var(--font-mono);
-  font-size: 9px;
+  /* font-family: var(--font-mono); */
+  font-size: 12px;
   letter-spacing: 0.15em;
   color: var(--cream-65);
 }
@@ -224,10 +224,10 @@
   padding-top: var(--space-2);
   border-top: 1px dashed var(--gold-20);
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.15em;
   color: var(--accent-gold);
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
 }
 .arrow { transition: transform var(--t-fast) var(--ease-out); }
 .cardLink:hover .arrow { transform: translateX(3px); }

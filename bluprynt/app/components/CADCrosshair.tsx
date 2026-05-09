@@ -34,6 +34,8 @@ useEffect(() => {
     return;
   }
 
+  document.body.setAttribute("data-crosshair", "active");
+
   let mouseX = window.innerWidth / 2;
   let mouseY = window.innerHeight / 2;
   let pendingFrame = false;
@@ -106,6 +108,7 @@ if (readYRef.current) {
     window.removeEventListener("scroll", requestUpdate);
     document.removeEventListener("mouseleave", onLeave);
     document.removeEventListener("mouseenter", onEnter);
+     document.body.removeAttribute("data-crosshair"); 
   };
 }, []);
 

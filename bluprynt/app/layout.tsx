@@ -59,13 +59,13 @@ export default async function RootLayout({
       className={`${interTight.variable} ${nunito.variable} ${spaceMono.variable}`}
     >
       <body>
-        <SheetProvider>
-          <CADCrosshair />
-          <CADNavbar />
-          {children}
-          <CADStatusBar />
-        </SheetProvider>
-      </body>
+  <SheetProvider>
+    {!isAdminRoute && <CADCrosshair />}
+    {!isAdminRoute && <CADNavbar />}
+    {children}
+    {!isAdminRoute && <CADStatusBar />}
+  </SheetProvider>
+</body>
     </html>
   );
 }

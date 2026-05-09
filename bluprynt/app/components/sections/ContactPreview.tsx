@@ -84,7 +84,8 @@ export default function ContactPreview() {
               <p className={styles.successBody}>
                 We'll review and route to the right team within two business
                 days. If your project is time-sensitive, mark{" "}
-                <em>Urgent</em> in the subject of any follow-up email.
+                <em>Urgent</em> in the subject of any follow-up email. 
+                You will be recieving an automated email until then.
               </p>
             </div>
           ) : (

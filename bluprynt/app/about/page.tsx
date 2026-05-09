@@ -70,7 +70,7 @@ export default function AboutPage() {
   </div>
 </section>
 
-      <section className={styles.thesis} style={{ ['--i' as string]: 0 }}>
+      {/* <section className={styles.thesis} style={{ ['--i' as string]: 0 }}>
         <header className={styles.blockHead}>
           <span className={styles.blockNum}>02</span>
           <h2 className={styles.blockTitle}>Learn More About Us</h2>
@@ -95,13 +95,13 @@ export default function AboutPage() {
             </p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ===== Numbers ===================================================== */}
       
       <section className={styles.numbers} style={{ ['--i' as string]: 1 }}>
         <header className={styles.blockHead}>
-          <span className={styles.blockNum}>0</span>
+          <span className={styles.blockNum}>02</span>
           <h2 className={styles.blockTitle}>By the numbers</h2>
         </header>
         <div className={styles.numberGrid}>
@@ -115,7 +115,7 @@ export default function AboutPage() {
       {/* ===== Methodology ================================================= */}
       <section className={styles.method} style={{ ['--i' as string]: 2 }}>
         <header className={styles.blockHead}>
-          <span className={styles.blockNum}>04</span>
+          <span className={styles.blockNum}>03</span>
           <h2 className={styles.blockTitle}>How we work</h2>
         </header>
         <ol className={styles.methodList}>

@@ -64,29 +64,8 @@
   border-bottom: 1px solid rgba(196, 165, 100, 0.15);
 }
 
-.brandMark {
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  background: var(--gold);
-  color: var(--ink);
-  font-family: var(--primary);
-  font-weight: 700;
-  font-size: 18px;
-  border-radius: 2px;
-}
-
-.brandText {
-  font-family: var(--primary);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-}
-
-.brandText span {
-  color: var(--gold);
-  font-weight: 400;
+.logo{
+  width: 120px;
 }
 
 .headLabel {

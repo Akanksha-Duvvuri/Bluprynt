@@ -48,13 +48,12 @@ function LoginForm() {
 
       <div className={styles.card}>
         <div className={styles.brandBlock}>
-          <div className={styles.brandMark}>B</div>
-          <div className={styles.brandText}>
-            Bluprynt <span>Admin</span>
+          <div className={styles.logo}>
+            <img src="/Logo.png"></img>
           </div>
         </div>
 
-        <div className={styles.headLabel}>▸ A-LOGIN · Restricted access</div>
+        <div className={styles.headLabel}>▸ Admin-LOGIN · Restricted access</div>
         <h1 className={styles.heading}>
           Sign in to
           <br />
