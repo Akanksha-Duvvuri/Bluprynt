@@ -26,8 +26,7 @@ export const projectFormSchema = z.object({
   num: z.string().min(1, "Project number is required").max(50),
 
   name: z.string().min(1, "Name is required").max(200),
-  nameEm: z.string().min(1, "Highlighted suffix is required").max(200),
-
+  nameEm: z.string().min(0),
   sector: z.string().min(1, "Sector is required").max(100),
 
   year: z

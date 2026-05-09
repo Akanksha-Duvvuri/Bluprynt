@@ -36,7 +36,7 @@ export default function ProjectForm({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // Form state — single object, easier to manage than 14 useState calls
+  // Form state
   const [values, setValues] = useState<Partial<ProjectFormInput>>({
     slug: "",
     num: "",
@@ -61,7 +61,6 @@ export default function ProjectForm({
     value: ProjectFormInput[K]
   ) {
     setValues((v) => ({ ...v, [key]: value }));
-    // Clear the error for this field as soon as the user changes it
     if (errors[key]) {
       setErrors((e) => {
         const copy = { ...e };
@@ -71,7 +70,19 @@ export default function ProjectForm({
     }
   }
 
-  // Auto-generate slug from name when creating (only if slug is still empty)
+  // Robust year handler — never lets NaN into state.
+  function updateYear(raw: string) {
+    if (raw === "") {
+      update("year", undefined as unknown as ProjectFormInput["year"]);
+      return;
+    }
+    const n = Number(raw);
+    if (Number.isFinite(n)) {
+      update("year", n as ProjectFormInput["year"]);
+    }
+  }
+
+  // Auto-generate slug from name when creating
   function onNameBlur() {
     if (mode === "create" && !values.slug && values.name) {
       const auto = `${values.name} ${values.nameEm ?? ""}`
@@ -90,8 +101,12 @@ export default function ProjectForm({
     setSubmitError(null);
     setErrors({});
 
-    // Client-side Zod validation
+    console.log("VALUES BEFORE VALIDATION:", values);
+
     const parsed = projectFormSchema.safeParse(values);
+
+    console.log("VALIDATION RESULT:", parsed);
+
     if (!parsed.success) {
       const fieldErrors: Record<string, string> = {};
       parsed.error.issues.forEach((iss) => {
@@ -99,6 +114,15 @@ export default function ProjectForm({
         if (path && !fieldErrors[path]) fieldErrors[path] = iss.message;
       });
       setErrors(fieldErrors);
+
+      // Surface a banner so the user can never silently fail save.
+      // Also lists exactly which fields are blocking.
+      const failedFields = Object.keys(fieldErrors).join(", ");
+      setSubmitError(
+        failedFields
+          ? `Save blocked by validation. Check these fields: ${failedFields}`
+          : "Validation failed."
+      );
       return;
     }
 
@@ -122,7 +146,7 @@ export default function ProjectForm({
         throw new Error(body.error || `Request failed: ${res.status}`);
       }
 
-      // Success — go back to the list and refresh server data
+      // Success — go back to the list and refresh
       startTransition(() => {
         router.push("/admin/projects");
         router.refresh();
@@ -156,16 +180,12 @@ export default function ProjectForm({
             />
           </Field>
 
-          <Field
-            label="Year"
-            error={errors.year}
-            id="year"
-          >
+          <Field label="Year" error={errors.year} id="year">
             <input
               id="year"
               type="number"
               value={values.year ?? ""}
-              onChange={(e) => update("year", parseInt(e.target.value, 10))}
+              onChange={(e) => updateYear(e.target.value)}
               className={styles.input}
             />
           </Field>
@@ -191,7 +211,7 @@ export default function ProjectForm({
 
           <Field
             label="Name (highlighted)"
-            hint="The gold-coloured ending"
+            hint="The gold-coloured ending — leave blank if none"
             error={errors.nameEm}
             id="nameEm"
           >
@@ -208,7 +228,7 @@ export default function ProjectForm({
 
         <Field
           label="URL slug"
-          hint="Lowercase, hyphenated. Becomes /projects/[slug]. Auto-generated from name on create."
+          hint="Lowercase, hyphenated. Becomes /work/[slug]. Auto-generated from name on create."
           error={errors.slug}
           id="slug"
         >
@@ -264,11 +284,7 @@ export default function ProjectForm({
           </Field>
         </div>
 
-        <Field
-          label="Status"
-          error={errors.status}
-          id="status"
-        >
+        <Field label="Status" error={errors.status} id="status">
           <select
             id="status"
             value={values.status ?? "complete"}
@@ -411,7 +427,7 @@ export default function ProjectForm({
   );
 }
 
-/* Small Field wrapper — keeps each row consistent */
+/* Small Field wrapper */
 function Field({
   label,
   hint,
