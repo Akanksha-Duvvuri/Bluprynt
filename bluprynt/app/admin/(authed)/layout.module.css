@@ -1,12 +1,58 @@
 /* ═══════════════════════════════════════════════════════════════
    /admin layout — CAD-styled sidebar + main content
+   Responsive: sidebar drawer pattern on mobile (≤900px)
    ═══════════════════════════════════════════════════════════════ */
+
 .shell {
   display: grid;
-  grid-template-columns: 260px 1fr;
+  grid-template-columns: 280px 1fr;
   min-height: 100vh;
   background: var(--ink);
   color: var(--cream);
+  position: relative;
+}
+
+/* ===== Mobile top bar (hidden on desktop) ============================== */
+.mobileBar {
+  display: none;
+}
+
+.mobileBrand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+}
+
+.mobileBrand img {
+  width: 6rem;
+  height: auto;
+}
+
+.hamburger {
+  appearance: none;
+  background: transparent;
+  border: 1px solid rgba(196, 165, 100, 0.4);
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 180ms ease-out;
+}
+
+.hamburger:hover {
+  background: rgba(196, 165, 100, 0.08);
+}
+
+/* ===== Backdrop (only shown when drawer is open on mobile) ============= */
+.backdrop {
+  display: none;
 }
 
 /* ===== Sidebar ========================================================== */
@@ -20,8 +66,6 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-
-  /* Tiny entrance */
   animation: slideIn 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @keyframes slideIn {
@@ -42,18 +86,9 @@
 }
 .brand:hover { opacity: 0.85; }
 
-.brandMark {
-  width: 32px;
-  height: 32px;
-  display: grid;
-  place-items: center;
-  background: var(--gold);
-  color: var(--ink);
-  font-family: var(--mono);
-  font-weight: 700;
-  font-size: 16px;
-  border-radius: 2px;
-  flex-shrink: 0;
+.brand img {
+  width: 10rem;
+  height: auto;
 }
 
 .brandName {
@@ -72,17 +107,6 @@
   letter-spacing: 0.32em;
   text-transform: uppercase;
   margin-top: 3px;
-}
-
-/* Sheet stamp under brand */
-.brand::after {
-  content: "REV 01";
-  position: absolute;
-  font-family: var(--mono);
-  font-size: 8px;
-  letter-spacing: 0.3em;
-  color: rgba(255, 238, 198, 0.4);
-  pointer-events: none;
 }
 
 /* ===== Nav ============================================================= */
@@ -114,9 +138,13 @@
   padding: 10px 14px;
   margin-bottom: 2px;
   border-left: 2px solid transparent;
-  margin-left: -22px;        /* extends to sidebar edge for the active bar */
+  margin-left: -22px;
   padding-left: 28px;
-  transition: border-color 180ms ease-out, background 180ms ease-out, color 180ms ease-out, padding-left 180ms ease-out;
+  transition:
+    border-color 180ms ease-out,
+    background 180ms ease-out,
+    color 180ms ease-out,
+    padding-left 180ms ease-out;
 }
 
 .navLink::before {
@@ -138,7 +166,6 @@
   color: var(--gold);
 }
 
-/* Active state — set aria-current="page" on the active Link */
 .navLink[aria-current="page"] {
   color: var(--gold);
   background: rgba(196, 165, 100, 0.08);
@@ -159,7 +186,6 @@
   position: relative;
 }
 
-/* Tiny corner ticks on the signed-as card */
 .signedAs::before,
 .signedAs::after {
   content: "";
@@ -203,7 +229,7 @@
   word-break: break-all;
 }
 
-/* ===== Sign out button (destructive accent) =========================== */
+/* ===== Sign out button ================================================ */
 .signoutBtn {
   appearance: none;
   background: transparent;
@@ -254,7 +280,6 @@
   position: relative;
 }
 
-/* Subtle corner ticks at the main content area corners (sheet feel) */
 .main::before,
 .main::after {
   content: "";
@@ -277,18 +302,97 @@
   border-right: 1px solid var(--gold);
 }
 
-/* ===== Responsive ===================================================== */
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE — drawer pattern at ≤900px
+   ═══════════════════════════════════════════════════════════════ */
+
 @media (max-width: 900px) {
   .shell {
     grid-template-columns: 1fr;
   }
-  .sidebar {
-    position: static;
-    height: auto;
-    border-right: none;
+
+  /* Mobile top bar with hamburger */
+  .mobileBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    padding: 0 16px;
+    background: var(--ink-soft);
     border-bottom: 1px solid rgba(196, 165, 100, 0.18);
+    position: sticky;
+    top: 0;
+    z-index: 20;
   }
+
+  /* Backdrop behind the drawer */
+  .backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 30;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 250ms ease-out;
+  }
+  .backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Sidebar becomes a drawer that slides in from left */
+  /* Drawer drops down from the top */
+.sidebar {
+  position: fixed;
+  top: 56px;              /* sits below the mobile bar */
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: auto;
+  max-height: calc(100vh - 56px);
+  z-index: 40;
+  background: var(--ink-soft);
+  /* Solid color — no translucent overlap */
+  border-right: none;
+  border-bottom: 1px solid rgba(196, 165, 100, 0.25);
+  transform: translateY(-100%);
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  animation: none;
+  overflow-y: auto;
+}
+.sidebar.open {
+  transform: translateY(0);
+}
+  /* Hide the brand at the top of the drawer — mobile bar shows it instead */
+  .sidebar .brand {
+    display: none;
+  }
+  .sidebar .nav {
+    margin-top: 28px;
+  }
+
+  /* Main content adjusts for the mobile top bar */
   .main {
-    padding: 40px 24px;
+    padding: 32px 20px;
+  }
+  .main::before,
+  .main::after {
+    display: none;
+  }
+}
+
+/* Small phone tweaks */
+/* Small phone tweaks */
+@media (max-width: 480px) {
+  .main {
+    padding: 24px 16px;
+  }
+  .sidebar {
+    width: 100%;
+    max-width: none;        /* full-width drop-down on phones */
   }
 }

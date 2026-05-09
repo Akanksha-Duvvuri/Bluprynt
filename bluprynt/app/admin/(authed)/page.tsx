@@ -35,8 +35,7 @@ export default async function AdminDashboard() {
           <span className={styles.em}>{user.name?.split(" ")[0] ?? "Admin"}</span>.
         </h1>
         <p className={styles.subtitle}>
-          The admin panel is live. CRUD interfaces for projects and testimonials
-          land in Phase 3 — for now, this page just confirms auth is working.
+          The admin panel is live, this page just confirms auth is working.
         </p>
       </header>
 
