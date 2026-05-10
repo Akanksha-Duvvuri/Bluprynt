@@ -9,12 +9,14 @@ import FoundersPreview from "./components/sections/FoundersPreview";
 import ContactPreview from "@/app/components/sections/ContactPreview";
 import Footer  from "./components/sections/Footer";
 import { getFeaturedTestimonials } from "@/lib/testimonials";
+import { ScrollOnHashLoad } from "./components/ScrollOnHashLoad";
 
 export default async function HomePage() {
 
     const testimonialsData = await getFeaturedTestimonials();
   return (
     <>
+     <ScrollOnHashLoad />
       <BuildingDraft />
 
       <Hero />
