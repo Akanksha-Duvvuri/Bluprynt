@@ -1,0 +1,243 @@
+/* ═══════════════════════════════════════════════════════════════
+   /admin/services — list view, CAD-styled
+   ═══════════════════════════════════════════════════════════════ */
+
+.header {
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px dashed rgba(196, 165, 100, 0.25);
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  border: 1px solid rgba(196, 165, 100, 0.3);
+  background: rgba(196, 165, 100, 0.04);
+  border-radius: 2px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.title {
+  font-family: var(--primary);
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 0;
+}
+.em {
+  color: var(--gold);
+  font-weight: 400;
+  font-size: 0.7em;
+  margin-left: 6px;
+}
+
+.newBtn {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--gold);
+  padding: 12px 20px;
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  text-decoration: none;
+  transition: filter 180ms ease-out, transform 180ms ease-out;
+  font-weight: 700;
+}
+.newBtn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.subtitle {
+  font-family: var(--secondary);
+  font-size: 14px;
+  color: rgba(255, 238, 198, 0.65);
+  line-height: 1.6;
+  max-width: 620px;
+  margin: 0;
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.empty {
+  padding: 48px 24px;
+  text-align: center;
+  border: 1px dashed rgba(196, 165, 100, 0.25);
+  border-radius: 2px;
+  color: rgba(255, 238, 198, 0.55);
+  font-family: var(--secondary);
+  font-size: 14px;
+}
+.empty p {
+  margin: 0 0 14px;
+}
+.emptyCta {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px dashed var(--gold);
+  padding-bottom: 1px;
+}
+
+/* ── Grid of service cards ───────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: rgba(196, 165, 100, 0.15);
+  border: 1px solid rgba(196, 165, 100, 0.18);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.card {
+  background: var(--ink-soft);
+  padding: 26px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: background 200ms ease-out;
+  position: relative;
+}
+.card:hover {
+  background: rgba(196, 165, 100, 0.03);
+}
+
+/* Tiny tick on each card's top-left */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid var(--gold);
+  border-left: 1px solid var(--gold);
+  opacity: 0.5;
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cardNum {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.28em;
+  font-weight: 700;
+}
+
+.featuredBadge {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  background: rgba(196, 165, 100, 0.12);
+  border: 1px solid rgba(196, 165, 100, 0.4);
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+
+.cardTitle {
+  font-family: var(--primary);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.cardLine {
+  font-family: var(--secondary);
+  font-size: 13px;
+  color: rgba(255, 238, 198, 0.7);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 18px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(196, 165, 100, 0.18);
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metaK {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--gold);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.metaV {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--cream);
+  letter-spacing: 0.04em;
+}
+
+.cardActions {
+  display: flex;
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(196, 165, 100, 0.18);
+  align-items: center;
+}
+
+.editLink {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-decoration: none;
+  padding: 8px 14px;
+  border: 1px solid rgba(196, 165, 100, 0.4);
+  border-radius: 2px;
+  transition: background 180ms ease-out;
+}
+.editLink:hover {
+  background: rgba(196, 165, 100, 0.08);
+}

@@ -72,6 +72,13 @@ export default function AdminLayoutClient({
             Projects
           </Link>
           <Link
+            href="/admin/services"
+            className={styles.navLink}
+            onClick={() => setDrawerOpen(false)}
+          >
+            Services
+          </Link>
+          <Link
             href="/admin/testimonials"
             className={styles.navLink}
             onClick={() => setDrawerOpen(false)}

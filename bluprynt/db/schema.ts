@@ -11,17 +11,14 @@ import {
 
 /**
  * ──────────────────────────────────────────────────────────────
- * SCHEMA — the source of truth for what's in your Postgres database.
+ * SCHEMA — source of truth for what's in your Postgres database.
  *
- * Each `pgTable` call defines a table. Columns are typed in TypeScript
- * AND in Postgres, so a typo here errors at build time and a wrong type
- * at query time also errors at build time.
+ * Adds the `services` table so the firm can manage services
+ * through the admin panel instead of editing lib/services.ts.
  *
- * Migrations: when you change this file, run
- *     npx drizzle-kit generate
- * which produces an SQL file in /drizzle. Then run
- *     npx drizzle-kit migrate
- * to apply it to the actual database.
+ * After editing this file:
+ *   npm run db:generate    (creates a new SQL migration in /drizzle)
+ *   npm run db:migrate     (applies it to the database)
  * ──────────────────────────────────────────────────────────────
  */
 
@@ -33,52 +30,40 @@ export const projectStatusEnum = pgEnum("project_status", [
   "ongoing",
 ]);
 
+export const emailStatusEnum = pgEnum("email_status", [
+  "pending",
+  "sent",
+  "delivered",
+  "bounced",
+  "failed",
+]);
+
+export const submissionStatusEnum = pgEnum("submission_status", [
+  "new",
+  "read",
+  "responded",
+  "archived",
+  "spam",
+]);
+
 /* ── PROJECTS ──────────────────────────────────────────────── */
 export const projects = pgTable("projects", {
-  // Auto-incrementing integer primary key.
-  // We could use UUIDs but for an admin-managed table integers are simpler.
   id: serial("id").primaryKey(),
-
-  // URL slug — must be unique. The "{ unique: true }" tells Postgres
-  // to enforce uniqueness, and the index speeds up "find by slug" lookups.
   slug: varchar("slug", { length: 100 }).notNull().unique(),
-
-  // Project number — e.g. "P-024 / 2025"
   num: varchar("num", { length: 50 }).notNull(),
-
-  // Display name split into "name" + "nameEm" so we can render the
-  // gold-highlighted suffix. e.g. name="Eastwood ", nameEm="Viaduct"
   name: varchar("name", { length: 200 }).notNull(),
   nameEm: varchar("name_em", { length: 200 }).notNull(),
-
-  // Sector / type tag — e.g. "Structural · Feasibility"
   sector: varchar("sector", { length: 100 }).notNull(),
-
-  // Year as a plain integer
   year: integer("year").notNull(),
-
-  // One-line scope summary — e.g. "3-span · 240m"
   scope: varchar("scope", { length: 200 }).notNull(),
-
-  // Live / review / complete / ongoing
   status: projectStatusEnum("status").default("complete"),
-
-  // Optional metadata
   client: varchar("client", { length: 200 }),
   location: varchar("location", { length: 200 }),
-  // Tools is a JSON array stored as TEXT — simpler than a separate table
-  // for now. We'll parse on read.
-  tools: text("tools"),  // JSON-encoded string
-
-  // Long-form case study content
+  tools: text("tools"),
   challenge: text("challenge").notNull(),
   approach: text("approach").notNull(),
   outcome: text("outcome").notNull(),
-
-  // Featured = appears on homepage
   featured: boolean("featured").default(false).notNull(),
-
-  // Auto-managed timestamps
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -86,51 +71,99 @@ export const projects = pgTable("projects", {
 /* ── TESTIMONIALS ──────────────────────────────────────────── */
 export const testimonials = pgTable("testimonials", {
   id: serial("id").primaryKey(),
-
-  // Quote — required, free-text
   quote: text("quote").notNull(),
-
-  // Attribution
   authorName: varchar("author_name", { length: 200 }).notNull(),
-  authorTitle: varchar("author_title", { length: 200 }),    // "CTO" / "Project Director"
+  authorTitle: varchar("author_title", { length: 200 }),
   authorCompany: varchar("author_company", { length: 200 }),
-
-  // Optional link back to a project — stored as the slug, not a foreign key
-  // for now (keeps things simple; we can upgrade to a relation later).
   relatedProjectSlug: varchar("related_project_slug", { length: 100 }),
-
-  // Show on homepage / hide
   featured: boolean("featured").default(false).notNull(),
-  // Soft-published: set to false to hide a testimonial without deleting it
   published: boolean("published").default(true).notNull(),
+  sortOrder: integer("sort_order").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
 
-  // Display order — lower numbers show first
+/* ── USERS (admin accounts) ─────────────────────────────────── */
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  name: varchar("name", { length: 200 }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+/* ── FORM SUBMISSIONS ──────────────────────────────────────── */
+export const formSubmissions = pgTable("form_submissions", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 200 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
+  company: varchar("company", { length: 200 }),
+  message: text("message").notNull(),
+  detectedTopic: varchar("detected_topic", { length: 50 }),
+  status: submissionStatusEnum("status").default("new").notNull(),
+  ipAddress: varchar("ip_address", { length: 45 }),
+  userAgent: text("user_agent"),
+  prospectEmailLogId: integer("prospect_email_log_id"),
+  ownerEmailLogId: integer("owner_email_log_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+/* ── EMAIL LOG ─────────────────────────────────────────────── */
+export const emailLog = pgTable("email_log", {
+  id: serial("id").primaryKey(),
+  type: varchar("type", { length: 50 }).notNull(),
+  submissionId: integer("submission_id"),
+  toAddress: varchar("to_address", { length: 255 }).notNull(),
+  fromAddress: varchar("from_address", { length: 255 }).notNull(),
+  replyTo: varchar("reply_to", { length: 255 }),
+  subject: varchar("subject", { length: 500 }).notNull(),
+  status: emailStatusEnum("status").default("pending").notNull(),
+  resendId: varchar("resend_id", { length: 100 }),
+  error: text("error"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+/* ── SERVICES (NEW) ────────────────────────────────────────── */
+/**
+ * What the firm offers. Editable from the admin panel.
+ *
+ * `deliverables` and `whenToEngage` store comma-or-newline joined
+ * strings as JSON-encoded arrays. Helpers in lib/validation.ts
+ * handle conversion to/from comma-separated form strings.
+ */
+export const services = pgTable("services", {
+  id: serial("id").primaryKey(),
+
+  // Identification
+  slug: varchar("slug", { length: 100 }).notNull().unique(),
+  num: varchar("num", { length: 10 }).notNull(),       // "01", "02" — display number
+
+  // Display
+  title: varchar("title", { length: 200 }).notNull(),
+  line: varchar("line", { length: 300 }).notNull(),    // one-line tagline
+  description: text("description").notNull(),          // long-form paragraph
+
+  // Metadata
+  region: varchar("region", { length: 50 }),           // "US · IN", "US only", etc.
+  tag: varchar("tag", { length: 200 }),                // "DELIVERABLE · FEASIBILITY DECK"
+  category: varchar("category", { length: 100 }),      // "Strategy", "Construction"
+
+  // List fields — JSON-encoded arrays of strings
+  deliverables: text("deliverables"),                  // ["item 1", "item 2", ...]
+  whenToEngage: text("when_to_engage"),                // ["scenario 1", "scenario 2", ...]
+
+  // Display control
+  featured: boolean("featured").default(false).notNull(),
   sortOrder: integer("sort_order").default(0).notNull(),
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-/* ── USERS (for Phase 2 auth — present but unused this phase) ─ */
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-
-  email: varchar("email", { length: 255 }).notNull().unique(),
-  // bcrypt hash; never store plaintext passwords
-  passwordHash: text("password_hash").notNull(),
-
-  // Display name shown in the admin UI
-  name: varchar("name", { length: 200 }),
-
-  // Future: roles, permissions. For now, anyone with an account is an admin.
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
-
 /* ── TYPE EXPORTS ──────────────────────────────────────────── */
-// Drizzle gives us TypeScript types inferred from the schema.
-// "Project" = a row read from the db. "NewProject" = the shape needed to insert.
-// You'll import these throughout the app to stay type-safe.
 export type Project = typeof projects.$inferSelect;
 export type NewProject = typeof projects.$inferInsert;
 
@@ -139,3 +172,12 @@ export type NewTestimonial = typeof testimonials.$inferInsert;
 
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
+
+export type FormSubmission = typeof formSubmissions.$inferSelect;
+export type NewFormSubmission = typeof formSubmissions.$inferInsert;
+
+export type EmailLog = typeof emailLog.$inferSelect;
+export type NewEmailLog = typeof emailLog.$inferInsert;
+
+export type Service = typeof services.$inferSelect;
+export type NewService = typeof services.$inferInsert;
