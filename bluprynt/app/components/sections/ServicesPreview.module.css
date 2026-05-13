@@ -163,3 +163,21 @@
   padding-top: var(--space-2);
   border-top: 1px dashed var(--gold-20);
 }
+
+.viewAll {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 200ms ease-out;
+}
+.viewAll:hover { border-bottom-color: var(--accent-gold); }
+.viewArrow { transition: transform 200ms ease-out; }
+.viewAll:hover .viewArrow { transform: translateX(4px); }

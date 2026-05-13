@@ -4,19 +4,23 @@ import { PageShell } from "../../components/Pageshell";
 import {
   getServiceBySlug,
   allServiceSlugs,
-  SERVICES,
+  getAllServices,
 } from "@/lib/services";
 import styles from "./page.module.css";
 
 type Params = { slug: string };
 
 export async function generateStaticParams() {
-  return allServiceSlugs();
+  return await allServiceSlugs();
 }
 
-export async function generateMetadata({ params }: { params: Promise<Params> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
   const { slug } = await params;
-  const s = getServiceBySlug(slug);
+  const s = await getServiceBySlug(slug);
   if (!s) return { title: "Service not found · Bluprynt" };
   return {
     title: `${s.title} · Bluprynt`,
@@ -30,11 +34,12 @@ export default async function ServiceDetailPage({
   params: Promise<Params>;
 }) {
   const { slug } = await params;
-  const service = getServiceBySlug(slug);
+  const service = await getServiceBySlug(slug);
   if (!service) notFound();
 
-  // Other services to suggest at the bottom
-  const others = SERVICES.filter((s) => s.slug !== service.slug).slice(0, 3);
+  // Other services to suggest at the bottom — fetch all, exclude current, take 3
+  const all = await getAllServices();
+  const others = all.filter((s) => s.slug !== service.slug).slice(0, 3);
 
   return (
     <PageShell
@@ -47,7 +52,7 @@ export default async function ServiceDetailPage({
     >
       {/* ===== Description ================================================ */}
       {service.description && (
-        <section className={styles.intro} style={{ ['--i' as string]: 0 }}>
+        <section className={styles.intro} style={{ ["--i" as string]: 0 }}>
           <p className={styles.introBody}>{service.description}</p>
         </section>
       )}
@@ -55,7 +60,7 @@ export default async function ServiceDetailPage({
       {/* ===== Two-column: Deliverables + When to engage ================== */}
       <div className={styles.cols}>
         {service.deliverables && service.deliverables.length > 0 && (
-          <section className={styles.col} style={{ ['--i' as string]: 1 }}>
+          <section className={styles.col} style={{ ["--i" as string]: 1 }}>
             <header className={styles.colHead}>
               <span className={styles.colNum}>01</span>
               <h2 className={styles.colTitle}>Deliverables</h2>
@@ -63,7 +68,9 @@ export default async function ServiceDetailPage({
             <ol className={styles.list}>
               {service.deliverables.map((d, i) => (
                 <li key={d} className={styles.listItem}>
-                  <span className={styles.listN}>{String(i + 1).padStart(2, "0")}</span>
+                  <span className={styles.listN}>
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
                   <span className={styles.listText}>{d}</span>
                 </li>
               ))}
@@ -72,7 +79,7 @@ export default async function ServiceDetailPage({
         )}
 
         {service.whenToEngage && service.whenToEngage.length > 0 && (
-          <section className={styles.col} style={{ ['--i' as string]: 2 }}>
+          <section className={styles.col} style={{ ["--i" as string]: 2 }}>
             <header className={styles.colHead}>
               <span className={styles.colNum}>02</span>
               <h2 className={styles.colTitle}>When to engage us</h2>
@@ -80,7 +87,9 @@ export default async function ServiceDetailPage({
             <ul className={styles.triggers}>
               {service.whenToEngage.map((trigger) => (
                 <li key={trigger} className={styles.trigger}>
-                  <span className={styles.triggerMark} aria-hidden="true">→</span>
+                  <span className={styles.triggerMark} aria-hidden="true">
+                    →
+                  </span>
                   <span>{trigger}</span>
                 </li>
               ))}
@@ -91,7 +100,7 @@ export default async function ServiceDetailPage({
 
       {/* ===== Other services ============================================ */}
       {others.length > 0 && (
-        <section className={styles.others} style={{ ['--i' as string]: 3 }}>
+        <section className={styles.others} style={{ ["--i" as string]: 3 }}>
           <header className={styles.othersHead}>
             <span className={styles.colNum}>03</span>
             <h2 className={styles.colTitle}>Other services</h2>
@@ -112,11 +121,11 @@ export default async function ServiceDetailPage({
       )}
 
       {/* ===== CTA ======================================================== */}
-      <section className={styles.cta} style={{ ['--i' as string]: 4 }}>
+      <section className={styles.cta} style={{ ["--i" as string]: 4 }}>
         <span className={styles.ctaEyebrow}>READY TO START?</span>
         <h3 className={styles.ctaHead}>
-          Tell us about the project. We'll come back within two business days
-          with a scoped engagement plan.
+          Tell us about the project. We&apos;ll come back within two business
+          days with a scoped engagement plan.
         </h3>
         <Link href="/#contact" className={styles.ctaBtn}>
           <span>Start a conversation</span>

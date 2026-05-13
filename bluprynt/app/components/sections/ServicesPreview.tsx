@@ -1,8 +1,10 @@
 import { SectionShell } from "@/app/components/SectionShell";
 import styles from "./ServicesPreview.module.css";
-import { SERVICES } from "@/lib/services";
+import  { getFeaturedServices } from "@/lib/services";
+import Link from "next/link";
 
-export default function ServicesPreview() {
+export default async function ServicesPreview() {
+   const services = await getFeaturedServices();
   return (
     <SectionShell
       code="A-003"
@@ -22,7 +24,7 @@ export default function ServicesPreview() {
       </header>
 
       <ul className={styles.grid}>
-        {SERVICES.map((s, i) => (
+        {services.map((s, i) => (
           <li
             key={s.slug}
             className={styles.tile}
@@ -49,6 +51,12 @@ export default function ServicesPreview() {
         ▸ Note: There is no minimum project pricing, we take on all scales of work. 
 Rates are transparent with no hidden fees
       </p>
+      <div className={styles.foot}>
+        <Link href="/services" className={styles.viewAll}>
+          <span>View all Services Provided</span>
+          <span className={styles.viewArrow}>→</span>
+        </Link>
+      </div>
     </SectionShell>
   );
 }

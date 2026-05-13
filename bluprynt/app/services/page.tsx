@@ -1,9 +1,6 @@
 import Link from "next/link";
 import { PageShell } from "../components/Pageshell";
-import {
-  SERVICES,
-  getServicesGroupedByCategory,
-} from "@/lib/services";
+import { getServicesGroupedByCategory } from "@/lib/services";
 import styles from "./page.module.css";
 
 export const metadata = {
@@ -12,8 +9,8 @@ export const metadata = {
     "End-to-end pre-construction consulting: feasibility, cost, constructability, project controls, and owner's representation.",
 };
 
-export default function ServicesPage() {
-  const groups = getServicesGroupedByCategory();
+export default async function ServicesPage() {
+  const groups = await getServicesGroupedByCategory();
   const categoryOrder = ["Strategy", "Cost", "Design", "Execution"];
   const orderedCategories = categoryOrder.filter((c) => groups[c]);
 
@@ -33,7 +30,7 @@ export default function ServicesPage() {
         <section
           key={category}
           className={styles.group}
-          style={{ ['--i' as string]: ci }}
+          style={{ ["--i" as string]: ci }}
         >
           <header className={styles.groupHead}>
             <span className={styles.groupNum}>
@@ -51,7 +48,7 @@ export default function ServicesPage() {
               <li
                 key={s.slug}
                 className={styles.tile}
-                style={{ ['--i' as string]: i }}
+                style={{ ["--i" as string]: i }}
               >
                 <Link href={`/services/${s.slug}`} className={styles.tileLink}>
                   <div className={styles.tileLeader} aria-hidden="true">
@@ -78,12 +75,16 @@ export default function ServicesPage() {
       {/* CTA strip at bottom */}
       <section className={styles.cta}>
         <div className={styles.ctaCorners} aria-hidden="true">
-          <span /><span /><span /><span />
+          <span />
+          <span />
+          <span />
+          <span />
         </div>
         <div className={styles.ctaBody}>
           <span className={styles.ctaEyebrow}>NOT SURE WHERE TO START?</span>
           <h3 className={styles.ctaHead}>
-            Tell us about the project — we'll point you to the right service.
+            Tell us about the project — we&apos;ll point you to the right
+            service.
           </h3>
           <Link href="/#contact" className={styles.ctaBtn}>
             <span>Start a conversation</span>
