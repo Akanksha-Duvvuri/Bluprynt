@@ -4,7 +4,6 @@ import { headers } from "next/headers";
 import { SheetProvider } from "@/lib/cad/SheetProvider";
 import CADCrosshair from "./components/CADCrosshair";
 import { CADNavbar } from "@/app/components/CADNavbar";
-import { CADStatusBar } from "@/app/components/CADStatusBar";
 import "./globals.css";
 
 const interTight = Inter_Tight({
@@ -63,7 +62,6 @@ export default async function RootLayout({
     {!isAdminRoute && <CADCrosshair />}
     {!isAdminRoute && <CADNavbar />}
     {children}
-    {!isAdminRoute && <CADStatusBar />}
   </SheetProvider>
 </body>
     </html>

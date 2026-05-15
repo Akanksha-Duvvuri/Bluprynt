@@ -4,17 +4,13 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useSheetObserver } from "@/lib/cad/useSheetObserver";
 import { useSpotlight } from "@/lib/cad/useSpotlight";
-import { useTypewriter } from "@/lib/cad/useTypewriter";
 import styles from "./Hero.module.css";
 
-const CMD =
-  "Cmd: _SELECT — move cursor to inspect · scroll to assemble drawing";
 
 export default function Hero() {
   const sheetRef = useSheetObserver<HTMLElement>("A-001");
   const spotlightRef = useSpotlight<HTMLElement>();
   const [mounted, setMounted] = useState(false);
-  const cmd = useTypewriter(CMD, { delay: 800, charMs: 22 });
 
   // Combine refs so the section element gets both observers.
   const setRef = useCallback(
@@ -41,54 +37,34 @@ export default function Hero() {
 
       <CornerTicks />
 
-      <div className={styles.stamp}>
-        <span className={styles.stampCode}>A-001 / 06</span>
-        <span className={styles.stampSep}>·</span>
-        <span className={styles.stampLabel}>SITE</span>
-      </div>
-
-      <div className={styles.meta}>
-        <span className={styles.metaRow}>
-          <span className={styles.metaK}>Active</span>
-          {/* <span className={styles.metaV}></span> */}
-        </span>
-        <span className={styles.metaRow}>
-          <span className={styles.metaK}>Markets</span>
-          <span className={styles.metaV}>US · IN</span>
-        </span>
-        <span className={styles.metaRow}>
-          <span className={styles.metaK}>Field.</span>
-          <span className={styles.metaV}>PRE-CONSTRUCTION</span>
-        </span>
-      </div>
-
       <div className={styles.inner}>
+        <div className={styles.stamp}>
+        <span className={styles.stampCode}>A-001</span>
+        <span className={styles.stampSep}>·</span>
+        <span className={styles.stampLabel}>HOMEPAGE</span>
+      </div>
         <p className={styles.eyebrow}>
-          <span className={styles.eyebrowDot} /> Your Trusted Preconstruction Partner
+          <span className={styles.eyebrowDot} /> PRECONSTRUCTION · US GCs · CONCRETE · REBAR
         </p>
 
         <h1 className={styles.headline}>
-          <span className={styles.h1Line}>Engineering Accuracy.</span>
+          <span className={styles.h1Line}>Your Trusted Preconstruction Partner.</span>
           <span className={styles.h1Line}>
-            <span className={styles.h1Gold}>Consulting Excellence.</span> 
+            <span className={styles.h1Gold}>Built for US Builders.</span> 
           </span>
           <span className={styles.h1Period}>.</span>
         </h1>
 
         <p className={styles.sub}>
-         Our delivery team is 
-based in India; our standards are American. We operate on your time 
-zone, talk to your field teams, and hit your bid deadlines
+         Bluprynt delivers preconstruction services to US general contractors, concrete subcontractors, and rebar fabrications. Our delivery team is in India: our standards are American - same time zone, same bid deadlines, 40-60% lower cost. 
         </p>
 
         <div className={styles.ctas}>
           <Link href="/#contact" className={styles.ctaPrimary}>
-            Start a project
+            Send us a bid package
             <span className={styles.ctaArrow}>→</span>
           </Link>
-          <Link href="/work" className={styles.ctaGhost}>
-            Browse our work
-          </Link>
+          <span className={styles.ctaGhost}> Get a free sample in 28 hours.</span>
         </div>
 
         <div className={styles.dimRow}>
@@ -98,16 +74,6 @@ zone, talk to your field teams, and hit your bid deadlines
             <span className={styles.dimTick} />
           </span>
         </div>
-      </div>
-
-      <div className={styles.cmdBar}>
-        <span className={styles.cmdPrompt}>›</span>
-        <span className={styles.cmdText}>
-          {cmd.text}
-          <span className={`${styles.caret} ${cmd.done ? styles.blink : ""}`}>
-            ▌
-          </span>
-        </span>
       </div>
     </section>
   );
