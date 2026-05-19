@@ -1,127 +1,108 @@
-import { db, services } from "@/db";
-import { eq, asc } from "drizzle-orm";
-
 /**
  * ──────────────────────────────────────────────────────────────
- * SERVICES — now DB-backed.
+ * lib/services.ts — DATABASE-BACKED VERSION
  *
- * All accessors preserve their original signatures from when this
- * file was a static array, so consumers (homepage preview, /services
- * index, /services/[slug] detail) keep working with no changes.
+ * Used to be a static array. After moving services to the DB,
+ * this fetches via Drizzle. Keeps the same public function signatures
+ * (mostly) so existing pages don't need to change — except they now
+ * need to be `async` to await these.
  *
- * The only change: every accessor is now async — call sites must
- * use `await`. The original homepage/services pages already do.
+ * NOTE: category grouping is removed. Services are now one flat list.
+ * If your services index page used getServicesGroupedByCategory,
+ * update it to use getAllServices instead.
  * ──────────────────────────────────────────────────────────────
  */
 
-export type Service = {
-  id: string | number;
+import { db, services } from "@/db";
+import { eq, asc } from "drizzle-orm";
+import type { Service as DbService } from "@/db";
+
+/** Shape the rest of the app expects. */
+export interface Service {
+  id: number;
   slug: string;
   num: string;
   title: string;
   line: string;
-  description?: string;
-  region: string;
-  tag: string;
+  description: string;
+  region?: string;        // ← `?:` belongs HERE (interface)
+  tag?: string;
   category?: string;
-  deliverables?: readonly string[];
-  whenToEngage?: readonly string[];
-  featured?: boolean;
-};
-
-/* ── Helpers ──────────────────────────────────────────────── */
-
-function parseJsonArray(value: unknown): readonly string[] {
-  if (typeof value !== "string" || !value) return [];
-  try {
-    const parsed = JSON.parse(value);
-    return Array.isArray(parsed) ? parsed.map(String) : [];
-  } catch {
-    return [];
-  }
+  deliverables?: string[];
+  whenToEngage?: string[];
+  featured: boolean;
+  sortOrder: number;
 }
 
-function rowToService(row: typeof services.$inferSelect): Service {
+/** Defensive JSON parser — falls back to comma-split if not valid JSON. */
+function parseList(raw: string | null): string[] | undefined {
+  if (!raw) return undefined;
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed.map(String);
+  } catch {
+    /* fall through */
+  }
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+/** Hydrate a raw DB row into the shape pages consume. */
+function hydrate(row: DbService): Service {
   return {
     id: row.id,
     slug: row.slug,
     num: row.num,
     title: row.title,
     line: row.line,
-    description: row.description ?? undefined,
-    region: row.region ?? "",
-    tag: row.tag ?? "",
+    description: row.description,
+    region: row.region ?? undefined,
+    tag: row.tag ?? undefined,
     category: row.category ?? undefined,
-    deliverables: parseJsonArray(row.deliverables),
-    whenToEngage: parseJsonArray(row.whenToEngage),
+    deliverables: parseList(row.deliverables),
+    whenToEngage: parseList(row.whenToEngage),
     featured: row.featured,
+    sortOrder: row.sortOrder,
   };
 }
 
-/* ── Accessors ────────────────────────────────────────────── */
+/* ── PUBLIC API ─────────────────────────────────────────────── */
 
-/**
- * Returns services flagged as `featured`, ordered by sortOrder.
- * Used by the homepage Services preview.
- */
-export async function getFeaturedServices(limit = 3): Promise<readonly Service[]> {
+/** All services, ordered by sortOrder asc then id asc. */
+export async function getAllServices(): Promise<Service[]> {
+  const rows = await db
+    .select()
+    .from(services)
+    .orderBy(asc(services.sortOrder), asc(services.id));
+  return rows.map(hydrate);
+}
+
+/** Featured services only — used by homepage ServicesPreview. */
+export async function getFeaturedServices(): Promise<Service[]> {
   const rows = await db
     .select()
     .from(services)
     .where(eq(services.featured, true))
-    .orderBy(asc(services.sortOrder));
-
-  return rows.slice(0, limit).map(rowToService);
+    .orderBy(asc(services.sortOrder), asc(services.id));
+  return rows.map(hydrate);
 }
 
-/**
- * Returns a service by URL slug, or null if not found.
- * Used by /services/[slug].
- */
-export async function getServiceBySlug(slug: string): Promise<Service | null> {
+/** Single service by slug — used by /services/[slug]. */
+export async function getServiceBySlug(
+  slug: string
+): Promise<Service | null> {
   const rows = await db
     .select()
     .from(services)
     .where(eq(services.slug, slug))
     .limit(1);
-
-  if (rows.length === 0) return null;
-  return rowToService(rows[0]);
+  return rows[0] ? hydrate(rows[0]) : null;
 }
 
-/**
- * Returns every service slug for generateStaticParams in /services/[slug].
- */
+/** All slugs — for generateStaticParams in /services/[slug]. */
 export async function allServiceSlugs(): Promise<{ slug: string }[]> {
   const rows = await db.select({ slug: services.slug }).from(services);
   return rows.map((r) => ({ slug: r.slug }));
-}
-
-/**
- * Returns every service, ordered by sortOrder.
- * Used by /services index.
- */
-export async function getAllServices(): Promise<readonly Service[]> {
-  const rows = await db
-    .select()
-    .from(services)
-    .orderBy(asc(services.sortOrder));
-  return rows.map(rowToService);
-}
-
-/**
- * Groups all services by their `category` field for section breaks
- * on the /services index page. Categories preserve insertion order.
- */
-export async function getServicesGroupedByCategory(): Promise<
-  Record<string, readonly Service[]>
-> {
-  const all = await getAllServices();
-  const groups: Record<string, Service[]> = {};
-  for (const s of all) {
-    const key = s.category ?? "Uncategorized";
-    if (!groups[key]) groups[key] = [];
-    groups[key].push(s);
-  }
-  return groups;
 }

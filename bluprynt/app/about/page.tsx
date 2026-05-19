@@ -35,8 +35,7 @@ export default function AboutPage() {
       <span className={styles.whyNum}>01</span>
       <h3 className={styles.whyTitle}>US-Trained Leadership</h3>
       <p className={styles.whyBody}>
-        Our CEO holds an MEng in Construction Management from NYU. Every
-        deliverable is reviewed against US standards before it ships.
+        Our CEO holds an MEng in Construction Management from NYU. Every deliverable is reviewed against US standards before it ships.
       </p>
     </article>
 
@@ -60,7 +59,7 @@ export default function AboutPage() {
 
     <article className={styles.whyCard}>
       <span className={styles.whyNum}>04</span>
-      <h3 className={styles.whyTitle}>One Partner, Five Services</h3>
+      <h3 className={styles.whyTitle}>One Partner, Many Services</h3>
       <p className={styles.whyBody}>
         Estimating, rebar shop drawings, slab edge, SOE takeoffs, and
         submittal coordination &mdash; one partner, one point of contact,
@@ -105,7 +104,7 @@ export default function AboutPage() {
           <h2 className={styles.blockTitle}>By the numbers</h2>
         </header>
         <div className={styles.numberGrid}>
-          <Stat k="Years of practice" v="12.5+" />
+          <Stat k="Years of practice" v="12.5" />
           <Stat k="Offices" v="2" sub="HYD · US" />
           <Stat k="Active engagements" v="x" />
           <Stat k="Disciplines covered" v="Y" />

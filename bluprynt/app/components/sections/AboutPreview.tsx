@@ -35,20 +35,6 @@ export default function AboutPreview() {
     estimator (loaded cost)</span>
               </dd>
             </div>
-            <div className={styles.stat}>
-              <dt className={styles.statK}>Engagement window</dt>
-              <dd className={styles.statV}>
-                <span className={styles.statBig}>Pre-Construction</span>
-                <span className={styles.statSm}> </span>
-              </dd>
-            </div>
-            <div className={styles.stat}>
-              <dt className={styles.statK}>Markets</dt>
-              <dd className={styles.statV}>
-                <span className={styles.statBig}>US · IN</span>
-                <span className={styles.statSm}> </span>
-              </dd>
-            </div>
           </dl>
 
           <Link href="/about" className={styles.more}>

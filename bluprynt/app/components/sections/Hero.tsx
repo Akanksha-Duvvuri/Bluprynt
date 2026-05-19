@@ -41,7 +41,7 @@ export default function Hero() {
         <div className={styles.stamp}>
         <span className={styles.stampCode}>A-001</span>
         <span className={styles.stampSep}>·</span>
-        <span className={styles.stampLabel}>HOMEPAGE</span>
+        <span className={styles.stampLabel}>Overview</span>
       </div>
         <p className={styles.eyebrow}>
           <span className={styles.eyebrowDot} /> PRECONSTRUCTION · US GCs · CONCRETE · REBAR
@@ -56,7 +56,7 @@ export default function Hero() {
         </h1>
 
         <p className={styles.sub}>
-         Bluprynt delivers preconstruction services to US general contractors, concrete subcontractors, and rebar fabrications. Our delivery team is in India: our standards are American - same time zone, same bid deadlines, 40-60% lower cost. 
+         Bluprynt delivers preconstruction services to US general contractors, concrete subcontractors, and rebar fabrications. Our delivery team is in India; our standards are American - same time zone, same bid deadlines, 40-60% lower cost. 
         </p>
 
         <div className={styles.ctas}>
@@ -64,7 +64,7 @@ export default function Hero() {
             Send us a bid package
             <span className={styles.ctaArrow}>→</span>
           </Link>
-          <span className={styles.ctaGhost}> Get a free sample in 28 hours.</span>
+          <span className={styles.ctaGhost}> Get a free sample in 48 hours.</span>
         </div>
 
         <div className={styles.dimRow}>

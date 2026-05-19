@@ -179,40 +179,6 @@ export default function ContactPreview() {
           )}
         </div>
       </div>
-
-      {/* ── Title block at the bottom ────────────────────────────────── */}
-      <div className={styles.titleBlock}>
-        <div className={styles.tbMain}>
-          <span className={styles.tbBrand}>BLUPRYNT</span>
-          <span className={styles.tbDot}>·</span>
-          <span className={styles.tbTagline}>
-            Engineering accuracy. Consulting excellence.
-          </span>
-        </div>
-
-        <div className={styles.tbGrid}>
-          <div className={styles.tbCell}>
-            <span className={styles.tbK}>OFFICE 01</span>
-            <span className={styles.tbV}>Hyderabad, IN</span>
-            <span className={styles.tbSm}>hello@bluprynt.example</span>
-          </div>
-          <div className={styles.tbCell}>
-            <span className={styles.tbK}>OFFICE 02</span>
-            <span className={styles.tbV}>United States</span>
-            <span className={styles.tbSm}>us@bluprynt.example</span>
-          </div>
-          <div className={styles.tbCell}>
-            <span className={styles.tbK}>DISCIPLINE</span>
-            <span className={styles.tbV}>Pre-construction</span>
-            <span className={styles.tbSm}>Civil · Infrastructure</span>
-          </div>
-          <div className={styles.tbCell}>
-            <span className={styles.tbK}>SHEET</span>
-            <span className={styles.tbV}>A-006 / 06</span>
-            <span className={styles.tbSm}>REV 01 · ISSUED FOR REVIEW</span>
-          </div>
-        </div>
-      </div>
     </SectionShell>
     </div>
   );

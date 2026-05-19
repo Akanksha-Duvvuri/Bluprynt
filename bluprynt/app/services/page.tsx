@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { PageShell } from "../components/Pageshell";
-import { getServicesGroupedByCategory } from "@/lib/services";
+import { getAllServices } from "@/lib/services";
 import styles from "./page.module.css";
 
 export const metadata = {
@@ -10,9 +10,7 @@ export const metadata = {
 };
 
 export default async function ServicesPage() {
-  const groups = await getServicesGroupedByCategory();
-  const categoryOrder = ["Strategy", "Cost", "Design", "Execution"];
-  const orderedCategories = categoryOrder.filter((c) => groups[c]);
+  const services = await getAllServices();
 
   return (
     <PageShell
@@ -24,53 +22,36 @@ export default async function ServicesPage() {
           Engineering judgment, on your <em>side of the table</em>.
         </>
       }
-      lede="Five practice areas, one team. Each engagement is sized to the question — a one-week feasibility check or a multi-year owner's-rep retainer."
+      lede="Each engagement is sized to the question — a one-week feasibility check or a multi-year owner's-rep retainer."
     >
-      {orderedCategories.map((category, ci) => (
-        <section
-          key={category}
-          className={styles.group}
-          style={{ ["--i" as string]: ci }}
-        >
-          <header className={styles.groupHead}>
-            <span className={styles.groupNum}>
-              {String(ci + 1).padStart(2, "0")}
-            </span>
-            <h2 className={styles.groupTitle}>{category}</h2>
-            <span className={styles.groupCount}>
-              {groups[category].length} service
-              {groups[category].length === 1 ? "" : "s"}
-            </span>
-          </header>
-
-          <ul className={styles.tiles}>
-            {groups[category].map((s, i) => (
-              <li
-                key={s.slug}
-                className={styles.tile}
-                style={{ ["--i" as string]: i }}
-              >
-                <Link href={`/services/${s.slug}`} className={styles.tileLink}>
-                  <div className={styles.tileLeader} aria-hidden="true">
-                    <span className={styles.leaderDot} />
-                    <span className={styles.leaderLine} />
-                  </div>
-                  <div className={styles.tileHead}>
-                    <span className={styles.tileN}>{s.num}</span>
-                    <span className={styles.tileRegion}>{s.region}</span>
-                  </div>
-                  <h3 className={styles.tileTitle}>{s.title}</h3>
-                  <p className={styles.tileLine}>{s.line}</p>
-                  <div className={styles.tileFoot}>
-                    <span className={styles.tileTag}>{s.tag}</span>
-                    <span className={styles.tileArrow}>→</span>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
+      <ul className={styles.tiles}>
+        {services.map((s, i) => (
+          <li
+            key={s.slug}
+            className={styles.tile}
+            style={{ ["--i" as string]: i }}
+          >
+            <Link href={`/services/${s.slug}`} className={styles.tileLink}>
+              <div className={styles.tileLeader} aria-hidden="true">
+                <span className={styles.leaderDot} />
+                <span className={styles.leaderLine} />
+              </div>
+              <div className={styles.tileHead}>
+                <span className={styles.tileN}>{s.num}</span>
+                {s.region && (
+                  <span className={styles.tileRegion}>{s.region}</span>
+                )}
+              </div>
+              <h3 className={styles.tileTitle}>{s.title}</h3>
+              <p className={styles.tileLine}>{s.line}</p>
+              <div className={styles.tileFoot}>
+                {s.tag && <span className={styles.tileTag}>{s.tag}</span>}
+                <span className={styles.tileArrow}>→</span>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
 
       {/* CTA strip at bottom */}
       <section className={styles.cta}>

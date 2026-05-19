@@ -13,22 +13,25 @@ const QUICK_LINKS = [
   { href: "/#contact", label: "Contact" },
 ];
 
-/* External / social links — REPLACE the URLs with your actual handles */
-const SOCIAL_LINKS = [
+/* External / contact links — REPLACE the values with your actual ones */
+const CONTACT_LINKS = [
+  {
+    href: "tel:+16465861213",
+    label: "+1 (646) 586 1213 (US line)",
+    external: false,
+    icon: "·",
+  },
+  {
+    href: "mailto:vivek@blupryntconsulting.com",
+    label: "vivek@blupryntconsulting.com",
+    external: false,
+    icon: "·",
+  },
   {
     href: "https://www.linkedin.com/company/bluprynt",
     label: "LinkedIn",
     external: true,
-  },
-  {
-    href: "https://www.instagram.com/bluprynt",
-    label: "Instagram",
-    external: true,
-  },
-  {
-    href: "mailto:[email protected]",
-    label: "[email protected]",
-    external: false,
+    icon: "·",
   },
 ];
 
@@ -37,9 +40,7 @@ export default function Footer() {
   const isHome = pathname === "/";
 
   return (
-    <footer
-      className={`${styles.footer} ${isHome ? styles.footerHome : ""}`}
-    >
+    <footer className={`${styles.footer} ${isHome ? styles.footerHome : ""}`}>
       <div className={styles.inner}>
         {/* ── Brand column ── */}
         <div className={styles.brandCol}>
@@ -81,7 +82,7 @@ export default function Footer() {
         <div className={styles.col}>
           <span className={styles.colLabel}>▸ Reach Out</span>
           <ul className={styles.list}>
-            {SOCIAL_LINKS.map((link) => (
+            {CONTACT_LINKS.map((link) => (
               <li key={link.href} className={styles.listItem}>
                 <a
                   href={link.href}
@@ -90,7 +91,7 @@ export default function Footer() {
                   rel={link.external ? "noopener noreferrer" : undefined}
                 >
                   <span className={styles.linkDot} aria-hidden>
-                    ·
+                    {link.icon}
                   </span>
                   {link.label}
                   {link.external && (
@@ -110,10 +111,6 @@ export default function Footer() {
         <span className={styles.bottomItem}>
           © {new Date().getFullYear()} Bluprynt Consulting Group
         </span>
-        <span className={styles.bottomSep}>·</span>
-        <span className={styles.bottomItem}>SHEET A-007</span>
-        <span className={styles.bottomSep}>·</span>
-        <span className={styles.bottomItem}>REV 01</span>
       </div>
     </footer>
   );
