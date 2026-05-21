@@ -28,7 +28,7 @@ const CONTACT_LINKS = [
     icon: "·",
   },
   {
-    href: "https://www.linkedin.com/company/bluprynt",
+    href: "https://www.linkedin.com/company/bluprynt-consulting-group/posts/?feedView=all",
     label: "LinkedIn",
     external: true,
     icon: "·",
