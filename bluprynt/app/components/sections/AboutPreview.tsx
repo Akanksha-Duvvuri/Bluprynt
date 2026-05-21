@@ -85,7 +85,7 @@ export default function AboutPreview() {
                   </li>
                 </ul>
 </div>
-          <Link href="/about" className={styles.more}>
+          <Link href="#contact" className={styles.more}>
             GET A FREE SAMPLE IN 48 HOURS
             <span className={styles.moreArrow}>→</span>
           </Link>

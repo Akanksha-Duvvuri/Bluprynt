@@ -11,12 +11,12 @@
 |---------------------------|----------------|--------------------------------------------------------------------|
 | Design                    | ✅ Locked       | CAD-hosted homepage, crosshair-spotlight reveal, alternating sheets |
 | Homepage                  | ✅ Built        | Next.js + TypeScript, all sections live (A-001 through A-007)      |
-| Inner pages               | ✅ Built        | `/about`, `/work`, `/work/[slug]`, `/services`, `/services/[slug]` |
+| Inner pages               | ✅ Built        | `/work`, `/work/[slug]`, `/services`, `/services/[slug]`           |
 | 404 + loading states      | ✅ Built        | `app/not-found.tsx`, `app/loading.tsx` with brand styling          |
-| **Database (Phase 1)**    | ✅ Live         | Drizzle + Neon Postgres, `projects` table backing `lib/projects.ts` |
+| **Database (Phase 1)**    | ✅ Live         | Drizzle + Neon, `projects` + `testimonials` + `services` + `users` |
+| **Auth (Phase 2)**        | ✅ Live         | NextAuth Credentials provider, admin login, middleware-protected   |
+| **Admin Panel (Phase 3)** | 🟡 Built        | Full CRUD on projects + testimonials + services — UI polishing     |
 | Email                     | 🟡 Stubbed     | API route + templates written; needs Resend account + verified domain |
-| **Auth (Phase 2)**        | 🔲 Not started | NextAuth Credentials provider, admin login page, route protection  |
-| **Admin Panel (Phase 3)** | 🔲 Not started | Hand-built admin UI for projects + testimonials                    |
 
 ---
 
@@ -55,7 +55,8 @@
 - **Homepage** — sections alternate cream and dark; each is a "sheet" with its own ID code (A-001 through A-007)
 - **Sub-pages** — wrapped in `PageShell` with consistent sheet stamp + title + dashed divider + body
 - **Site-wide chrome** — fixed navbar (ribbon), fixed status bar (bottom), site-wide footer in flow
-- **3D building animation** — `BuildingDraft` on the homepage, scroll-driven CSS 3D transforms, fades out before footer
+- **3D building animation** — `BuildingDraft` on the homepage, scroll-driven CSS 3D transforms; APPROVED stamp slams when ContactPreview enters viewport
+- **Admin** — sidebar layout with CAD chrome, separate route group `(authed)` for protected pages
 
 ### Section sheet codes (homepage)
 
@@ -63,11 +64,11 @@
 |-------|------------------|------------------------------------------------|
 | A-001 | Hero             | "SITE"                                         |
 | A-002 | WorkPreview      | "FOUNDATION" — pulls top 3 from `lib/projects` |
-| A-003 | ServicesPreview  | "FRAME"                                        |
-| A-004 | Testimonials     | "ENVELOPE"                                     |
-| A-005 | AboutPreview     | "ANNOTATION" — cost-of-change chart            |
-| A-006 | FoundersPreview  | "PERSONNEL" — links to `/about#founders`       |
-| A-007 | ContactPreview   | "TITLE BLOCK" — anchor target `id="contact"`   |
+| A-003 | ServicesPreview  | "FRAME" — pulls featured services from DB      |
+| A-004 | Testimonials     | "ENVELOPE" — pulls featured testimonials from DB |
+| A-005 | AboutPreview     | "ANNOTATION" — 4 differentiators (vertical list) + cost advantage panel |
+| A-006 | FoundersPreview  | "PERSONNEL" — Leadership row (2 cards) + Delivery Team row (3 cards) |
+| A-007 | ContactPreview   | "TITLE BLOCK" — form + direct contact directory, anchor `id="contact"` |
 
 ---
 
@@ -79,7 +80,7 @@
 | Hosting       | Vercel                  | Native Next.js support                                      |
 | Database      | Neon Postgres 17        | Serverless Postgres, Singapore region (`ap-southeast-1`)    |
 | ORM           | Drizzle                 | TypeScript-first, schema in TS, migrations in SQL           |
-| Auth          | NextAuth (Auth.js)      | Credentials provider — admin email + password (Phase 2)     |
+| Auth          | NextAuth (Auth.js) v5   | Credentials provider — bcrypt password hashing              |
 | Email         | Resend                  | Confirmation + alert + keyword-routed FAQ replies           |
 | Forms         | Native API route        | `app/api/contact/route.ts` calls Resend                     |
 | Analytics     | Vercel Analytics        | Defer until launch                                          |
@@ -90,34 +91,38 @@
 
 ### Public — built
 
-- [x] `/` — Homepage (CAD-hosted, crosshair spotlight, 7 sections, scroll-driven 3D building animation)
-- [x] `/about` — Firm thesis, methodology, founders embedded (`#founders` anchor), offices, CTA
+- [x] `/` — Homepage (CAD-hosted, crosshair spotlight, 7 sections, scroll-driven 3D building animation). All firm content (differentiators, team, contact, testimonials) lives here.
 - [x] `/work` — Project index (database-backed list)
 - [x] `/work/[slug]` — Individual project case study (database-backed)
-- [x] `/services` — Services index (5 services, grouped by category)
-- [x] `/services/[slug]` — Individual service detail (deliverables, when-to-engage, others)
+- [x] `/services` — Services index (database-backed, flat list — no category grouping)
+- [x] `/services/[slug]` — Individual service detail (deliverables, when-to-engage)
 - [x] **404 page** — `app/not-found.tsx`, black bg + mark + "NOT FOUND" + return button
 - [x] **Loading state** — `app/loading.tsx`, pulsing logo + "PLOTTING..." mono text
 
-### Consolidated (no longer separate routes)
+### Consolidated (single-source-of-truth on homepage)
 
-- **Contact** lives on the homepage as section A-007. Linked everywhere as `/#contact`. No `/contact` route exists.
-- **Founders** live on `/about` in the founders section. No per-founder detail pages. Linked from the homepage's `FoundersPreview` cards as `/about#founders`.
+- **About / firm thesis** — homepage section A-005 (`AboutPreview`). No separate `/about` route. The "Why Bluprynt" 4 differentiators live here.
+- **Team / founders** — homepage section A-006 (`FoundersPreview`). Two rows: Leadership (Vivek, BG) + Delivery Team (Raju, Shivakumar, Prasanth). No per-person pages.
+- **Contact** — homepage section A-007 (`ContactPreview`). No separate `/contact` route. Direct contact directory (WhatsApp, phone, email) lives next to the form. Linked everywhere as `/#contact`.
 
-### Phase 2 — admin auth (not started)
+### Admin — built
 
-- [ ] `/admin/login` — login form
-- [ ] `/admin` — dashboard with quick stats
-
-### Phase 3 — admin CRUD (not started)
-
-- [ ] `/admin/projects` — list, create, edit, delete projects
-- [ ] `/admin/testimonials` — list, create, edit, delete testimonials
-- [ ] Homepage testimonials section reading from a new `testimonials` table
+- [x] `/admin/login` — credentials login form
+- [x] `/admin` — dashboard with project/testimonial counts + auth status
+- [x] `/admin/projects` — list view with delete buttons
+- [x] `/admin/projects/new` — create project form (Zod-validated)
+- [x] `/admin/projects/[id]/edit` — edit project form
+- [x] `/admin/testimonials` — list view with delete buttons
+- [x] `/admin/testimonials/new` — create testimonial
+- [x] `/admin/testimonials/[id]/edit` — edit testimonial
+- [x] `/admin/services` — list view with delete buttons
+- [x] `/admin/services/new` — create service
+- [x] `/admin/services/[id]/edit` — edit service
 
 ### Future
 
-- [ ] `/reports` — Downloadable reports / whitepapers (likely also DB-backed)
+- [ ] `/reports` — Downloadable reports / whitepapers (DB-backed)
+- [ ] Subdomain split — `admin.bluprynt.com` for the admin panel via middleware rewrite
 
 ---
 
@@ -128,23 +133,25 @@
 - [x] AutoCAD crosshair cursor — ~30px, gold, with X/Y/Sheet readout
 - [x] Cream + gold + warm-charcoal theme via CSS variables (`app/globals.css`)
 - [x] Crosshair-spotlight reveal of CAD/drafting layer (signature interaction)
-- [x] **Cursor-illuminated grid on sub-pages** — `CursorGrid` component, ~220px radial mask, fixed-position viewport overlay
-- [x] **3D BuildingDraft animation** on homepage — pure CSS 3D transforms, scroll-driven via `--p` custom property, scroll-rotates 360°, drops floors with overshoot, slams APPROVED stamp at 92% scroll, fades to 0 at 95–100% so the footer is unobscured
+- [x] **Cursor-illuminated grid on sub-pages** — `CursorGrid` component, ~220px radial mask
+- [x] **3D BuildingDraft animation** — pure CSS 3D transforms, scroll-driven via `--p` custom property, scroll-rotates 360°, drops floors with overshoot. APPROVED stamp triggered by IntersectionObserver on `#contact` (lands when user reaches contact section)
 - [x] Alternating cream / dark sections on homepage
 - [x] Section-level sheet codes (A-001 → A-007), live in cursor readout + status bar
-- [x] **Active-section underline** in navbar — reads from `SheetProvider` context, draws underline via scaleX keyframe on the link matching the current sheet
-- [x] **Smooth scroll** to homepage anchors (`/#contact`, `/#founders`) via `html { scroll-behavior: smooth }` + `[id] { scroll-margin-top }` rule for the fixed navbar
-- [x] **Site-wide footer** — `Footer` component in `app/layout.tsx`, reserves right padding only on homepage (where BuildingDraft lives)
-- [x] **`PageShell` wrapper** — consistent sheet stamp + dashed divider + body for all sub-pages, staggered fade-up entrance
+- [x] **Active-section underline** in navbar — reads from `SheetProvider` context
+- [x] **Smooth scroll** to homepage anchors via `html { scroll-behavior: smooth }` + `[id] { scroll-margin-top }` rule
+- [x] **Site-wide footer** — 3-column layout (brand, Quick Links, Reach Out), reserves right padding on homepage where BuildingDraft renders
+- [x] **`PageShell` wrapper** — consistent sheet stamp + dashed divider + body for sub-pages
 - [x] **`SectionShell` wrapper** — same role for homepage sections
+- [x] **`WhyCards` reusable component** — 4 differentiator cards used on AboutPreview (and was used on /about before it was removed)
+- [x] **Team showcase** — Leadership row (2 larger cards) + Delivery Team row (3 smaller cards), photo-frame placeholders (F1/F2/T1/T2/T3) until real photos are added
+- [x] **Direct contact directory** in ContactPreview — `tel:` for phones, `wa.me/` for WhatsApp, `mailto:` for emails
+- [x] **Multi-select services checkboxes** in contact form — CAD-styled, joins selections into a comma-separated string for submission
 - [x] Responsive layout — touch devices fall back to default cursor + static visible grid
-- [x] Contact form with client-side validation (lives in homepage `ContactPreview` section)
 - [x] API route that scans for keywords and routes to FAQ groups
 - [x] Per-page metadata (titles, descriptions)
-- [x] Cost-of-change SVG chart on AboutPreview + about page (centerpiece of the firm thesis)
-- [x] Margin-note testimonials with hover lift / un-rotate
-- [x] Hover lift on Work, Services, Founder cards (-4px + box-shadow)
-- [x] **404 page** styled to match brand (black bg, mark center, "NOT FOUND" headline, gold corner ticks, return button)
+- [x] Margin-note testimonials with hover lift / un-rotate (DB-backed)
+- [x] Hover lift on Work, Services, team cards (-4px + box-shadow)
+- [x] **404 page** styled to match brand (black bg, mark center, gold corner ticks)
 - [x] **Loading state** with pulsing logo + animated dots
 - [x] Mobile hamburger drawer styled as CAD layer panel
 
@@ -152,35 +159,35 @@
 
 - [x] Drizzle ORM installed, configured, schema in TypeScript
 - [x] Neon Postgres provisioned, connection string in `.env.local`
-- [x] Schema for `projects` table
-- [x] Initial migration generated + applied
+- [x] Schema for `projects`, `testimonials`, `services`, `users`, `formSubmissions`, `emailLog`
+- [x] Initial migrations generated + applied
 - [x] `lib/projects.ts` rewritten to fetch from database via async helpers
+- [x] `lib/services.ts` rewritten to fetch from database (flat list, no category grouping)
+- [x] `lib/testimonials.ts` created with `getFeaturedTestimonials()` joined to projects
 - [x] Pages updated to be `async` server components, awaiting data
 
-### Phase 1 — still pending
+### Phase 2 — auth (done)
 
-- [ ] `testimonials` table + schema (deferred to Phase 3 setup)
-- [ ] `users` table for admin auth (Phase 2)
-- [ ] Seed script for starter content (current data is hand-entered via Drizzle Studio)
+- [x] NextAuth v5 installed and configured (`auth.ts`)
+- [x] Credentials provider with bcrypt password hashing
+- [x] `users` table connected to NextAuth via Drizzle
+- [x] Admin login page (`/admin/login`)
+- [x] `middleware.ts` protecting all `/admin/*` routes
+- [x] `scripts/create-admin.ts` to seed the first admin user from CLI
+- [ ] **Pending:** split auth into `auth.config.ts` (edge-compatible) + `auth.ts` (Node) to silence Edge Runtime warnings about bcryptjs + jose
 
-### Phase 2 — auth (not started)
+### Phase 3 — admin panel (built, polishing UI)
 
-- [ ] NextAuth installed and configured
-- [ ] Credentials provider with bcrypt password hashing
-- [ ] `users` table connected to NextAuth via Drizzle adapter
-- [ ] Admin login page (`/admin/login`)
-- [ ] Middleware protecting all `/admin/*` routes
-- [ ] Script to create the first admin user from the command line
-
-### Phase 3 — admin panel (not started)
-
-- [ ] Admin layout with sidebar navigation
-- [ ] Projects: list, create, edit, delete
-- [ ] Testimonials: list, create, edit, delete
-- [ ] Form validation with Zod
-- [ ] Toast notifications for success/error
-- [ ] Image upload (UploadThing) — possibly deferred to Phase 4
-- [ ] Homepage testimonials section reading from the database
+- [x] Admin layout with sidebar navigation, route-group protected via `app/admin/(authed)/layout.tsx`
+- [x] Projects: list, create, edit, delete (full CRUD)
+- [x] Testimonials: list, create, edit, delete (full CRUD)
+- [x] Services: list, create, edit, delete (full CRUD)
+- [x] Form validation with Zod (`lib/validation.ts`)
+- [x] API routes at `/api/admin/{projects,testimonials,services}/[id]?` with GET/POST/PATCH/DELETE
+- [x] CAD-styled admin UI (sheet stamp eyebrows, corner ticks, dashed dividers)
+- [ ] **Pending:** Toast notifications for success/error
+- [ ] **Pending:** Image upload (UploadThing) — deferred to Phase 4
+- [ ] **Pending:** UI polish pass
 
 ### Email (still pending)
 
@@ -193,12 +200,11 @@
 - [ ] Open Graph image (1200×630)
 - [ ] Real domain purchased + pointed
 - [ ] Resend domain verified (SPF, DKIM, DMARC)
+- [ ] Replace direct-contact directory placeholders (phone numbers, emails) with real values
 
 ---
 
 ## Project Structure
-
-Current state:
 
 ```
 /
@@ -213,29 +219,26 @@ Current state:
 │   ├── loading.tsx                 # loading state for async route segments
 │   ├── loading.module.css
 │   │
-│   ├── components/                 # ALL CAD chrome lives here (no nested cad/ subfolder)
+│   ├── components/
 │   │   ├── BuildingDraft.tsx + .module.css
 │   │   ├── CADCrosshair.tsx + .module.css
 │   │   ├── CADNavbar.tsx + .module.css
 │   │   ├── CADStatusBar.tsx + .module.css
 │   │   ├── CursorGrid.tsx + .module.css
 │   │   ├── Divider.tsx + .module.css
-│   │   ├── Footer.tsx + .module.css
-│   │   ├── PageShell.tsx + .module.css
+│   │   ├── Pageshell.tsx + .module.css
 │   │   ├── SectionShell.tsx + .module.css
+│   │   ├── WhyCards.tsx + .module.css     # reusable 4-card differentiators block
 │   │   │
-│   │   └── sections/               # homepage sections only
+│   │   └── sections/               # homepage sections
 │   │       ├── Hero.tsx + .module.css
 │   │       ├── WorkPreview.tsx + .module.css
 │   │       ├── ServicesPreview.tsx + .module.css
 │   │       ├── Testimonials.tsx + .module.css
 │   │       ├── AboutPreview.tsx + .module.css
 │   │       ├── FoundersPreview.tsx + .module.css
-│   │       └── ContactPreview.tsx + .module.css
-│   │
-│   ├── about/
-│   │   ├── page.tsx                # firm + founders embedded (id="founders")
-│   │   └── about.module.css
+│   │       ├── ContactPreview.tsx + .module.css
+│   │       └── Footer.tsx + .module.css
 │   │
 │   ├── work/
 │   │   ├── page.tsx                # work index
@@ -245,38 +248,75 @@ Current state:
 │   │       └── page.module.css
 │   │
 │   ├── services/
-│   │   ├── page.tsx                # services index
+│   │   ├── page.tsx                # services index (flat list, DB-backed)
 │   │   ├── page.module.css
 │   │   └── [slug]/
 │   │       ├── page.tsx            # service detail
 │   │       └── page.module.css
 │   │
-│   ├── api/
-│   │   └── contact/route.ts        # form submission handler
+│   ├── admin/                      # admin routes
+│   │   ├── (authed)/               # protected route group — middleware enforces
+│   │   │   ├── layout.tsx          # sidebar + main content
+│   │   │   ├── layout.module.css
+│   │   │   ├── page.tsx            # dashboard
+│   │   │   ├── page.module.css
+│   │   │   ├── projects/
+│   │   │   │   ├── page.tsx        # list
+│   │   │   │   ├── ProjectForm.tsx
+│   │   │   │   ├── DeleteButton.tsx
+│   │   │   │   ├── new/page.tsx
+│   │   │   │   └── [id]/edit/page.tsx
+│   │   │   ├── testimonials/       # same shape as projects/
+│   │   │   └── services/           # same shape as projects/
+│   │   └── login/
+│   │       ├── layout.tsx
+│   │       ├── page.tsx
+│   │       └── page.module.css
 │   │
-│   └── admin/                      # admin routes (Phase 2/3)
+│   └── api/
+│       ├── contact/route.ts        # public form submission handler
+│       ├── auth/[...nextauth]/route.ts
+│       └── admin/
+│           ├── projects/route.ts            # GET (list) + POST (create)
+│           ├── projects/[id]/route.ts       # GET + PATCH + DELETE
+│           ├── testimonials/route.ts
+│           ├── testimonials/[id]/route.ts
+│           ├── services/route.ts
+│           └── services/[id]/route.ts
 │
 ├── lib/
 │   ├── cad/
-│   │   ├── SheetProvider.tsx       # current-sheet context
-│   │   ├── useSheetObserver.ts     # observe section visibility, push to context
-│   │   ├── useScrollProgress.ts    # drives BuildingDraft
-│   │   ├── useSpotlight.ts         # drives section-level cursor grids
-│   │   ├── useTypewriter.ts        # Hero animation
+│   │   ├── SheetProvider.tsx
+│   │   ├── useSheetObserver.ts
+│   │   ├── useScrollProgress.ts
+│   │   ├── useSpotlight.ts
+│   │   ├── useTypewriter.ts
 │   │   └── useReducedMotion.ts
-│   ├── services.ts                 # static SERVICES + accessors
 │   ├── projects.ts                 # DB-backed (Drizzle) project queries
-│   └── founders.ts                 # static FOUNDERS + accessors
+│   ├── services.ts                 # DB-backed (Drizzle) service queries
+│   ├── testimonials.ts             # DB-backed (Drizzle) testimonial queries with project join
+│   ├── Founders.ts                 # static (used by Footer; team data is hardcoded in FoundersPreview)
+│   ├── faq.ts
+│   ├── email.ts
+│   └── validation.ts               # Zod schemas — projectFormSchema, serviceFormSchema, etc.
 │
-├── db/                             # Drizzle setup
-│   ├── schema.ts
-│   └── index.ts
+├── db/
+│   ├── schema.ts                   # all tables + types
+│   └── index.ts                    # re-exports + Drizzle client
 │
 ├── drizzle/                        # auto-generated migrations
 │
-├── public/
-│   └── Logo.png                    # site logo (used in navbar + 404)
+├── scripts/
+│   ├── create-admin.ts             # CLI to seed first admin user
+│   └── seed.ts                     # starter content seed
 │
+├── public/
+│   ├── Logo.png                    # site logo (used in navbar + 404)
+│   ├── Favicon-04.png              # used on the 3D building roof glyph
+│   └── Logo-A1.png
+│
+├── auth.ts                         # NextAuth v5 configuration
+├── middleware.ts                   # /admin/* route protection
 ├── tsconfig.json                   # has @/components/cad/* → ./app/components/* alias
 ├── package.json
 ├── next.config.ts
@@ -295,8 +335,6 @@ Current state:
 }
 ```
 
-This keeps imports clean — every page can write `import { PageShell } from "@/components/cad/PageShell"` regardless of how deeply nested the file is.
-
 ---
 
 ## Environment Variables
@@ -307,9 +345,9 @@ This keeps imports clean — every page can write `import { PageShell } from "@/
 # ── Database ──
 DATABASE_URL=postgresql://user:password@host.aws.neon.tech/neondb?sslmode=require
 
-# ── Auth (Phase 2, when started) ──
+# ── Auth ──
 NEXTAUTH_SECRET=
-NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL=http://localhost:3000     # production: https://bluprynt.com
 
 # ── Resend (still pending) ──
 RESEND_API_KEY=re_xxxxxxxxxxxxxxxxx
@@ -322,57 +360,27 @@ NEXT_PUBLIC_SITE_URL=https://bluprynt.com
 
 ---
 
-## Database Schema (current)
+## Database Schema
+
+Six tables currently:
 
 ### `projects`
+Case studies. Editable from `/admin/projects`.
 
-| Column        | Type           | Notes                                          |
-|---------------|----------------|------------------------------------------------|
-| `id`          | serial PK      |                                                |
-| `slug`        | varchar(100)   | Unique, used in URLs                           |
-| `num`         | varchar(50)    | "P-024 / 2025"                                 |
-| `name`        | varchar(200)   | Project name                                   |
-| `name_em`     | varchar(200)   | Gold-highlighted portion                       |
-| `sector`      | varchar(100)   | "Structural · Feasibility"                     |
-| `year`        | integer        |                                                |
-| `scope`       | varchar(200)   |                                                |
-| `status`      | enum           | live, review, complete, ongoing                |
-| `client`      | varchar(200)   | Nullable                                       |
-| `location`    | varchar(200)   | Nullable                                       |
-| `tools`       | text           | JSON-encoded `string[]`                        |
-| `challenge`   | text           | Long-form                                      |
-| `approach`    | text           | Long-form                                      |
-| `outcome`     | text           | Long-form                                      |
-| `featured`    | boolean        | Show on homepage                               |
-| `created_at`  | timestamp      |                                                |
-| `updated_at`  | timestamp      |                                                |
+### `testimonials`
+Client quotes, with optional `relatedProjectSlug` linking to a project. Editable from `/admin/testimonials`.
 
-### `testimonials` (planned for Phase 3)
+### `services`
+What the firm offers. Editable from `/admin/services`. No category grouping (flat list).
 
-| Column                  | Type         | Notes                              |
-|-------------------------|--------------|------------------------------------|
-| `id`                    | serial PK    |                                    |
-| `quote`                 | text         |                                    |
-| `author_name`           | varchar(200) |                                    |
-| `author_title`          | varchar(200) |                                    |
-| `author_company`        | varchar(200) |                                    |
-| `related_project_slug`  | varchar(100) |                                    |
-| `featured`              | boolean      |                                    |
-| `published`             | boolean      |                                    |
-| `sort_order`            | integer      |                                    |
-| `created_at`            | timestamp    |                                    |
-| `updated_at`            | timestamp    |                                    |
+### `users`
+Admin accounts. Created via `scripts/create-admin.ts`. Used by NextAuth.
 
-### `users` (planned for Phase 2)
+### `formSubmissions`
+Inbound contact-form submissions (stored alongside the email log).
 
-| Column           | Type         | Notes                          |
-|------------------|--------------|--------------------------------|
-| `id`             | serial PK    |                                |
-| `email`          | varchar(255) | Unique                         |
-| `password_hash`  | text         | bcrypt                         |
-| `name`           | varchar(200) |                                |
-| `created_at`     | timestamp    |                                |
-| `updated_at`     | timestamp    |                                |
+### `emailLog`
+Audit trail of every Resend send — type, recipient, status, timestamps.
 
 ### npm scripts
 
@@ -395,48 +403,38 @@ npm run db:studio     # open Drizzle Studio (web UI)
 - [x] Tagline — _Engineering accuracy. Consulting excellence._
 - [x] Brand colors confirmed
 - [x] Fonts chosen (Scto Grotesk A + Airbnb Cereal W BD; standing in with Inter Tight + Nunito)
-- [x] Logo file in `public/Logo.png` (used in navbar + 404)
+- [x] Logo file in `public/Logo.png`
 - [ ] Web font licenses confirmed (Scto + Cereal are paid)
 - [ ] Favicon set generated (currently `app/icon.png` for auto-detect)
 
 ### Homepage (using placeholder copy)
 
-- [ ] Hero headline + subheading — final copy
-- [ ] Intro paragraph
-- [ ] Key stats (projects, sectors, founded)
-- [ ] 2–3 featured projects flagged in the database
-- [ ] Services teaser copy — final
-- [ ] 1–2 testimonial quotes for homepage (Phase 3)
-
-### About / founders
-
-- [ ] Firm origin story — final copy
-- [ ] Founder 1 — name, role, bio (long), expertise, location, LinkedIn, photo or initials
-- [ ] Founder 2 — same
-- [ ] Real numbers for the "By the numbers" block (years, offices, engagements, disciplines)
-- [ ] Office addresses + hours
+- [x] Hero headline + subheading — written
+- [x] AboutPreview "Why Bluprynt" copy — written (4 differentiators)
+- [x] Cost advantage panel — written ($80k savings figure)
+- [x] FoundersPreview team list — Leadership + Delivery Team rendered with placeholder photos (F1/F2/T1/T2/T3)
+- [x] ContactPreview direct contact directory — structure built with placeholder phone numbers + emails
+- [ ] Real phone numbers in `ContactPreview.tsx` `DIRECT` array
+- [ ] Real emails (CEO, CFO, general) in `ContactPreview.tsx`
+- [ ] Real team photos in `public/team/` — set `photoUrl` on each `LEADERSHIP` and `DELIVERY` entry in `FoundersPreview.tsx`
+- [ ] Real testimonial quotes flagged `featured=true` in DB
 
 ### Work / projects
 
-- [ ] Real project list entered into the database (minimum 2 for launch)
+- [ ] Real project list entered into the database via `/admin/projects/new`
 - [ ] Per project — name, slug, sector, year, scope, status, client, location, tools, challenge, approach, outcome, featured
 
 ### Services
 
-- [ ] Per service — name, region, description, deliverables, when-to-engage triggers
-- [ ] Currently 5 services with placeholder content; replace with real
-
-### Testimonials (Phase 3)
-
-- [ ] Minimum 3 testimonials collected
-- [ ] Per testimonial — name, title, company, quote (client-approved), linked project
+- [ ] Real service descriptions entered into the database via `/admin/services/new`
+- [ ] Per service — title, line, description, region, tag, deliverables, whenToEngage, featured
 
 ### Contact
 
-- [x] Contact form fields finalised (name, email, organization, project type, message)
+- [x] Contact form fields finalised (name, email, organization, multi-select services, location, message)
 - [ ] Firm email address confirmed
-- [ ] Phone number — include or not
-- [ ] Response time expectation (currently shown as "two business days")
+- [ ] Real phone numbers + WhatsApp links in direct-contact directory
+- [ ] Response time expectation copy ("respond within one business day" — already in form footer)
 - [ ] FAQ replies — 3–5 Q&A per service area
 
 ### Site-wide / technical
@@ -444,16 +442,21 @@ npm run db:studio     # open Drizzle Studio (web UI)
 - [x] Per-page SEO meta title + description
 - [x] Custom 404 page
 - [x] Loading state component
+- [x] Footer with Quick Links + Reach Out columns
+- [ ] Replace placeholder Reach Out social URLs in `Footer.tsx`
 - [ ] Analytics platform set up (Vercel Analytics planned)
 - [ ] Privacy policy published
 - [ ] Open Graph image (1200×630)
 - [ ] Domain purchased + pointed
 - [ ] Resend domain verified (SPF, DKIM, DMARC)
 
-### Admin (Phase 3)
+### Admin
 
-- [ ] First admin user created via `scripts/create-admin.ts`
+- [x] First admin user created via `scripts/create-admin.ts`
+- [x] CRUD interfaces for projects, testimonials, services
 - [ ] Admin password documented securely
+- [ ] Toast notifications for save/delete success/error
+- [ ] UI polish pass (consistency check across list/edit/create views)
 
 ---
 
@@ -472,6 +475,9 @@ npm run db:generate    # generate migration from schema changes
 npm run db:migrate     # apply pending migrations
 npm run db:studio      # open the database UI
 
+# admin
+npx tsx scripts/create-admin.ts    # create the first admin user
+
 # checks
 npm run lint
 npm run type-check
@@ -481,7 +487,7 @@ npm run build
 npm run start
 ```
 
-Built with [Next.js 15](https://nextjs.org) (App Router) + TypeScript + CSS Modules + [Drizzle](https://orm.drizzle.team) + [Neon Postgres](https://neon.tech). Designed for [Vercel](https://vercel.com) deployment.
+Built with [Next.js 15](https://nextjs.org) (App Router) + TypeScript + CSS Modules + [Drizzle](https://orm.drizzle.team) + [Neon Postgres](https://neon.tech) + [NextAuth](https://authjs.dev). Designed for [Vercel](https://vercel.com) deployment.
 
 ---
 
