@@ -1,3 +1,8 @@
+/* ═══════════════════════════════════════════════════════════════
+   FoundersPreview — Leadership (2 larger) + Delivery Team (3 smaller)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ===== Section head (unchanged) ======================================== */
 .head { margin-bottom: var(--space-5); max-width: 60ch; }
 .heading {
   margin: 0 0 var(--space-2);
@@ -16,218 +21,197 @@
   line-height: 1.65;
 }
 
-/* ===== Grid ============================================================= */
-.grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--space-3);
-  grid-template-columns: 1fr;
-}
-@media (min-width: 720px) {
-  .grid { grid-template-columns: repeat(2, 1fr); }
+/* ===== Row label (▸ Leadership, ▸ Delivery Team) ====================== */
+.rowLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  font-weight: 700;
+  margin: 0 0 var(--space-3);
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--gold-20);
 }
 
-.card {
-  animation: cardIn 600ms var(--ease-out) both;
-  animation-delay: calc(var(--i, 0) * 80ms + 100ms);
+.rowLabel + ul {
+  margin-bottom: var(--space-5);
 }
-@keyframes cardIn {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+
+/* ===== Grids =========================================================== */
+.gridLeadership {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
 }
-@media (prefers-reduced-motion: reduce) { .card { animation: none; } }
+
+@media (max-width: 720px) {
+  .gridLeadership {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gridDelivery {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+@media (max-width: 960px) {
+  .gridDelivery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .gridDelivery {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* ===== Card ============================================================= */
-.cardLink {
+.card {
   position: relative;
+  background: var(--bg-soft);
+  border: 1px solid var(--gold-20);
+  border-radius: 2px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  height: 100%;
-  padding: var(--space-3) var(--space-3) var(--space-3);
-  background: var(--bg-soft);
-  border: 0.5px solid var(--gold-33);
-  border-radius: 2px;
-  text-decoration: none;
-  color: inherit;
   transition:
     border-color 220ms var(--ease-out),
     transform 220ms var(--ease-out),
     box-shadow 220ms var(--ease-out);
+  animation: cardIn 500ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 80ms + 50ms);
 }
-.cardLink:hover {
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { animation: none; }
+}
+
+.card:hover {
   border-color: var(--accent-gold);
   transform: translateY(-4px);
-  box-shadow: 0 0 0 1px var(--gold-33), 0 14px 32px -16px rgba(0, 0, 0, 0.6);
+  box-shadow:
+    0 0 0 1px var(--gold-33),
+    0 14px 32px -16px rgba(0, 0, 0, 0.6);
 }
 
-/* Corner ticks via four spans */
-.cardCorners > span {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  pointer-events: none;
-  z-index: 2;
-}
-.cardCorners > span::before,
-.cardCorners > span::after {
-  content: "";
-  position: absolute;
-  background: var(--accent-gold);
-  opacity: 0.7;
-}
-.cardCorners > span::before { width: 10px; height: 1px; }
-.cardCorners > span::after  { width: 1px;  height: 10px; }
-.cardCorners > span:nth-child(1) { top: 4px; left: 4px; }
-.cardCorners > span:nth-child(2) { top: 4px; right: 4px; }
-.cardCorners > span:nth-child(2)::before { right: 0; left: auto; }
-.cardCorners > span:nth-child(2)::after  { right: 0; left: auto; }
-.cardCorners > span:nth-child(3) { bottom: 4px; left: 4px; }
-.cardCorners > span:nth-child(3)::before { bottom: 0; top: auto; }
-.cardCorners > span:nth-child(4) { bottom: 4px; right: 4px; }
-.cardCorners > span:nth-child(4)::before { bottom: 0; top: auto; right: 0; left: auto; }
-.cardCorners > span:nth-child(4)::after  { right: 0; left: auto; bottom: 0; top: auto; }
-
-/* ===== Header (avatar + identity) ====================================== */
-.head2 {
-  display: flex;
-  gap: var(--space-3);
-  align-items: center;
-  margin-bottom: var(--space-1);
-}
-
-.who { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.name {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 500;
-  letter-spacing: -0.005em;
-  color: var(--accent-cream);
-  line-height: 1.2;
-}
-.role {
-  margin: 0;
-  /* font-family: var(--font-mono); */
-  font-size: 15px;
-  letter-spacing: 0.15em;
-  color: var(--accent-gold);
-  /* text-transform: uppercase; */
-}
-.loc {
-  margin: 0;
-  /* font-family: var(--font-mono); */
-  font-size: 12px;
-  letter-spacing: 0.15em;
-  color: var(--cream-65);
-}
-
-/* ===== Avatar tile ===================================================== */
-.avatar {
+/* ===== Photo frame ===================================================== */
+.photoFrame {
   position: relative;
-  flex-shrink: 0;
-  width: 64px;
-  height: 64px;
-  border: 1px solid var(--accent-gold);
-  border-radius: 2px;
-  overflow: hidden;
+  width: 100%;
+  background: var(--ink);
+  border-bottom: 1px solid var(--gold-20);
   display: flex;
   align-items: center;
   justify-content: center;
-  background:
-    repeating-linear-gradient(
-      45deg, transparent 0 4px,
-      rgba(196, 165, 100, 0.08) 4px 5px
-    ),
-    var(--bg-deep);
+  overflow: hidden;
 }
-.avatar img {
+
+.cardLg .photoFrame { aspect-ratio: 4 / 3; }
+.cardSm .photoFrame { aspect-ratio: 4 / 3; }
+
+.photoImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-.avatarMono {
-  /* Initials version — no img */
-}
-.avatarInitials {
+
+/* Placeholder code (F1, F2, T1, etc.) shown when no photo is set */
+.photoCode {
   font-family: var(--font-mono);
-  font-size: 18px;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--accent-gold);
+  letter-spacing: 0.15em;
+  color: rgba(196, 165, 100, 0.45);
+  user-select: none;
 }
 
-/* Tiny corner marks on the initials avatar */
-.avatarCorners > span {
+.cardLg .photoCode {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.cardSm .photoCode {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+}
+
+/* Corner ticks on photo */
+.tickTL, .tickTR, .tickBL, .tickBR {
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 12px;
+  height: 12px;
   pointer-events: none;
+  z-index: 2;
 }
-.avatarCorners > span::before,
-.avatarCorners > span::after {
-  content: "";
-  position: absolute;
-  background: var(--accent-gold);
-  opacity: 0.6;
-}
-.avatarCorners > span::before { width: 6px; height: 1px; }
-.avatarCorners > span::after  { width: 1px;  height: 6px; }
-.avatarCorners > span:nth-child(1) { top: 3px; left: 3px; }
-.avatarCorners > span:nth-child(2) { top: 3px; right: 3px; }
-.avatarCorners > span:nth-child(2)::before { right: 0; left: auto; }
-.avatarCorners > span:nth-child(2)::after  { right: 0; left: auto; }
-.avatarCorners > span:nth-child(3) { bottom: 3px; left: 3px; }
-.avatarCorners > span:nth-child(3)::before { bottom: 0; top: auto; }
-.avatarCorners > span:nth-child(4) { bottom: 3px; right: 3px; }
-.avatarCorners > span:nth-child(4)::before { bottom: 0; top: auto; right: 0; left: auto; }
-.avatarCorners > span:nth-child(4)::after  { right: 0; left: auto; bottom: 0; top: auto; }
+.tickTL { top: 6px; left: 6px; border-top: 1px solid var(--accent-gold); border-left: 1px solid var(--accent-gold); }
+.tickTR { top: 6px; right: 6px; border-top: 1px solid var(--accent-gold); border-right: 1px solid var(--accent-gold); }
+.tickBL { bottom: 6px; left: 6px; border-bottom: 1px solid var(--accent-gold); border-left: 1px solid var(--accent-gold); }
+.tickBR { bottom: 6px; right: 6px; border-bottom: 1px solid var(--accent-gold); border-right: 1px solid var(--accent-gold); }
 
-/* ===== Bio ============================================================= */
-.bio {
+/* ===== Card body ======================================================= */
+.cardBody {
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cardSm .cardBody {
+  padding: var(--space-2);
+  gap: 4px;
+}
+
+.name {
   margin: 0;
-  font-size: 0.9375rem;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--accent-cream);
+  line-height: 1.25;
+}
+
+.cardLg .name { font-size: 1.25rem; }
+.cardSm .name { font-size: 1rem; }
+
+.role {
+  margin: 0;
+  font-family: var(--font-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+
+.cardLg .role { font-size: 10px; }
+.cardSm .role { font-size: 9px; }
+
+.experience {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--cream-65);
+  text-transform: uppercase;
+}
+
+.detail {
+  margin: 4px 0 0 0;
   line-height: 1.55;
   color: var(--cream-80);
 }
 
-/* ===== Expertise tags ================================================= */
-.tags {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.tag {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border: 0.5px solid var(--gold-33);
-  border-radius: 2px;
-  color: var(--accent-gold);
-  background: rgba(13, 12, 8, 0.4);
-}
-
-/* ===== Foot ============================================================ */
-.foot {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: auto;
-  padding-top: var(--space-2);
-  border-top: 1px dashed var(--gold-20);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.15em;
-  color: var(--accent-gold);
-  /* text-transform: uppercase; */
-}
-.arrow { transition: transform var(--t-fast) var(--ease-out); }
-.cardLink:hover .arrow { transform: translateX(3px); }
+.cardLg .detail { font-size: 13px; }
+.cardSm .detail { font-size: 12px; }

@@ -1,95 +1,133 @@
-import Link from "next/link";
 import { SectionShell } from "../SectionShell";
-import { getFeaturedFounders } from "@/lib/Founders";
 import styles from "./FoundersPreview.module.css";
 
-export default function FoundersPreview() {
-  const founders = getFeaturedFounders(2);
+type Person = {
+  code: string;       // F1, F2, T1, T2, T3 — used as photo placeholder
+  name: string;
+  role: string;
+  experience?: string;
+  detail?: string;
+  photoUrl?: string;  // when set, shows the photo instead of the code
+};
 
+const LEADERSHIP: Person[] = [
+  {
+    code: "F1",
+    name: "Vivek Budankayala",
+    role: "Co-founder & CEO",
+    detail:
+      "Master of Engineering (Construction Management), New York University",
+  },
+  {
+    code: "F2",
+    name: 'BG M',
+    role: "Co-founder & CFO",
+    detail:
+      "Post Graduate Programme in Management (MBA), Indian School of Business",
+  },
+];
+
+const DELIVERY: Person[] = [
+  {
+    code: "T1",
+    name: "Raju PNM",
+    role: "Senior Estimation Manager",
+    experience: "20+ years",
+    detail: "Rebar shop drawings · Estimating · Slab edge",
+  },
+  {
+    code: "T2",
+    name: "Shivakumar S",
+    role: "Senior Estimator",
+    experience: "6 years",
+    detail: "Window and Façade Detailing (Logikal Software)",
+  },
+  {
+    code: "T3",
+    name: "Prasanth E",
+    role: "Estimator",
+    experience: "5 years",
+  },
+];
+
+export default function FoundersPreview() {
   return (
-    <SectionShell
-      code="A-006"
-      label="Personnel"
-      eyebrow="The names on the drawings"
-    >
+    <SectionShell code="A-006" label="MEET THE TEAM" eyebrow="">
       <header className={styles.head}>
         <h2 className={styles.heading}>
-          Who you'll <span className={styles.gold}>actually work with</span>.
+          Who you&apos;ll{" "}
+          <span className={styles.gold}>actually work with</span>.
         </h2>
         <p className={styles.lede}>
-          No bait-and-switch — the people who scope your project are the same
-          people stamping the deliverables.
+          12.5+ years average team experience. Civil engineers and estimators
+          aligned with US standards.
         </p>
       </header>
 
-      <ul className={styles.grid}>
-        {founders.map((f, i) => (
-          <li
-            key={f.slug}
-            className={styles.card}
-            style={{ ['--i' as string]: i }}
-          >
-            {/* All founder cards link to the same destination — the founders
-                section on the about page. We removed per-founder pages. */}
-            <Link href="/about#founders" className={styles.cardLink}>
-              <div className={styles.cardCorners} aria-hidden="true">
-                <span /><span /><span /><span />
-              </div>
+      {/* ────────── Leadership row ────────── */}
+      <div className={styles.rowLabel}>▸ Leadership</div>
+      <ul className={styles.gridLeadership}>
+        {LEADERSHIP.map((p, i) => (
+          <PersonCard key={p.code} person={p} variant="lg" index={i} />
+        ))}
+      </ul>
 
-              <div className={styles.head2}>
-                <Avatar founder={f} />
-                <div className={styles.who}>
-                  <h3 className={styles.name}>{f.name}</h3>
-                  <p className={styles.role}>{f.role}</p>
-                  {f.location && (
-                    <p className={styles.loc}>{f.location}</p>
-                  )}
-                </div>
-              </div>
-
-              <p className={styles.bio}>{f.bio}</p>
-
-              {/* {f.expertise && f.expertise.length > 0 && (
-                <ul className={styles.tags}>
-                  {f.expertise.map((tag) => (
-                    <li key={tag} className={styles.tag}>{tag}</li>
-                  ))}
-                </ul>
-              )} */}
-
-              <div className={styles.foot}>
-                <span className={styles.read}>Meet the team</span>
-                <span className={styles.arrow}>→</span>
-              </div>
-            </Link>
-          </li>
+      {/* ────────── Delivery Team row ────────── */}
+      <div className={styles.rowLabel}>▸ Delivery Team</div>
+      <ul className={styles.gridDelivery}>
+        {DELIVERY.map((p, i) => (
+          <PersonCard key={p.code} person={p} variant="sm" index={i} />
         ))}
       </ul>
     </SectionShell>
   );
 }
 
-/* ---------- Avatar: photo if provided, otherwise initials tile ---------- */
+/* ──────────────────────────────────────────────────────────────
+   PersonCard — same shape, two sizes.
+   ────────────────────────────────────────────────────────────── */
 
-function Avatar({
-  founder,
+function PersonCard({
+  person,
+  variant,
+  index,
 }: {
-  founder: { initials?: string; name: string; photoUrl?: string };
+  person: Person;
+  variant: "lg" | "sm";
+  index: number;
 }) {
-  if (founder.photoUrl) {
-    return (
-      <div className={styles.avatar}>
-        <img src={founder.photoUrl} alt="" aria-hidden="true" />
-      </div>
-    );
-  }
-  const initials = founder.initials ?? founder.name.slice(0, 2).toUpperCase();
+  const cardClass = `${styles.card} ${
+    variant === "lg" ? styles.cardLg : styles.cardSm
+  }`;
+
   return (
-    <div className={`${styles.avatar} ${styles.avatarMono}`}>
-      <span className={styles.avatarInitials}>{initials}</span>
-      <span className={styles.avatarCorners} aria-hidden="true">
-        <span /><span /><span /><span />
-      </span>
-    </div>
+    <li className={cardClass} style={{ ["--i" as string]: index }}>
+      <div className={styles.photoFrame}>
+        {person.photoUrl ? (
+          <img
+            src={person.photoUrl}
+            alt={person.name}
+            className={styles.photoImg}
+          />
+        ) : (
+          <span className={styles.photoCode}>{person.code}</span>
+        )}
+        <span className={styles.tickTL} aria-hidden="true" />
+        <span className={styles.tickTR} aria-hidden="true" />
+        <span className={styles.tickBL} aria-hidden="true" />
+        <span className={styles.tickBR} aria-hidden="true" />
+      </div>
+
+      <div className={styles.cardBody}>
+        <h3 className={styles.name}>{person.name}</h3>
+        <p className={styles.role}>{person.role}</p>
+        {person.experience && (
+          <p className={styles.experience}>
+            Experience: {person.experience}
+          </p>
+        )}
+        {person.detail && <p className={styles.detail}>{person.detail}</p>}
+      </div>
+    </li>
   );
 }

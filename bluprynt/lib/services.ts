@@ -25,9 +25,9 @@ export interface Service {
   title: string;
   line: string;
   description: string;
-  region?: string;        // ← `?:` belongs HERE (interface)
+  // region?: string;
   tag?: string;
-  category?: string;
+  // category?: string;
   deliverables?: string[];
   whenToEngage?: string[];
   featured: boolean;
@@ -58,9 +58,9 @@ function hydrate(row: DbService): Service {
     title: row.title,
     line: row.line,
     description: row.description,
-    region: row.region ?? undefined,
+    // region: row.region ?? undefined,
     tag: row.tag ?? undefined,
-    category: row.category ?? undefined,
+    // category: row.category ?? undefined,
     deliverables: parseList(row.deliverables),
     whenToEngage: parseList(row.whenToEngage),
     featured: row.featured,

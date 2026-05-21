@@ -41,7 +41,7 @@ export default function Hero() {
         <div className={styles.stamp}>
         <span className={styles.stampCode}>A-001</span>
         <span className={styles.stampSep}>·</span>
-        <span className={styles.stampLabel}>Overview</span>
+        <span className={styles.stampLabel}>OVERVIEW</span>
       </div>
         <p className={styles.eyebrow}>
           <span className={styles.eyebrowDot} /> PRECONSTRUCTION · US GCs · CONCRETE · REBAR

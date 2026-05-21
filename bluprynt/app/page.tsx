@@ -22,10 +22,10 @@ export default async function HomePage() {
       <Hero />
       <Divider />
 
-      <WorkPreview />
+      <ServicesPreview />
       <Divider />
 
-      <ServicesPreview />
+      <WorkPreview />
       <Divider />
 
       {/* <Testimonials /> */}

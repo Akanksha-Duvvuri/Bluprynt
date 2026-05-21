@@ -124,7 +124,7 @@
 .tileTitle {
   margin: 4px 0 0;
   font-family: var(--font-display);
-  font-size: 1.125rem;
+  font-size: 1.5rem;
   font-weight: 500;
   letter-spacing: -0.005em;
   color: var(--accent-cream);
@@ -147,7 +147,7 @@
 }
 .tileTag {
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.18em;
   color: var(--accent-gold);
   text-transform: uppercase;
@@ -156,10 +156,10 @@
 
 .note {
   margin: 0;
-  font-family: var(--font-mono);
-  font-size: var(--fs-mono-sm);
+  /* font-family: var(--font-mono); */
+  font-size: 0.90rem;
   letter-spacing: 0.1em;
-  color: var(--cream-65);
+  color: var(--cream-80);
   padding-top: var(--space-2);
   border-top: 1px dashed var(--gold-20);
 }
@@ -169,7 +169,7 @@
   align-items: center;
   gap: 0.6em;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 14px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent-gold);

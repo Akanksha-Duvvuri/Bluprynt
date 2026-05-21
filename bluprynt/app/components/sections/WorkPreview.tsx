@@ -16,7 +16,7 @@ export default async function WorkPreview() {
 
   return (
     <SectionShell
-      code="A-002"
+      code="A-003"
       label="Foundation"
       eyebrow="Selected work"
     >
