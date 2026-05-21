@@ -29,6 +29,7 @@ const EDGES = [
 
 export default function AboutPreview() {
   return (
+    <div id="about">
     <SectionShell
       code="A-005"
       label="COMPETITVE EDGE"
@@ -92,5 +93,6 @@ export default function AboutPreview() {
         </div>
       </div>
     </SectionShell>
+    </div>
   );
 }

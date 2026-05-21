@@ -70,6 +70,9 @@ export default function ContactPreview() {
         <div className={styles.split}>
           {/* ── Left: pitch + direct contact ─────────────────────────────── */}
           <div className={styles.col}>
+            <p className={styles.eyebrow}>
+          <span className={styles.eyebrowDot} /> TELL US ABOUT YOUR PROJECT
+               </p>
             <h2 className={styles.heading}>
               Ready to cut preconstruction costs without giving up control?
             </h2>

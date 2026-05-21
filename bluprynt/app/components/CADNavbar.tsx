@@ -18,16 +18,16 @@ const NAV_ITEMS: ReadonlyArray<{ href: string; label: string }> = [
   { href: "/work", label: "Work" },
   { href: "/services", label: "Services" },
   { href: "/#testimonials", label: "Testimonials" },
-  { href: "/about", label: "About" },
+  { href: "/#about", label: "About" },
   { href: "/#contact", label: "Contact" },
 ];
 
 const SHEET_FOR_HREF: Record<string, string> = {
   "/": "A-001",
-  "/work": "A-002",
-  "/services": "A-003",
+  "/work": "A-003",
+  "/services": "A-002",
   "/Testimonials": "A-004",
-  "/about": "A-005",
+  "/#about": "A-005",
   "/#contact": "A-006",
 };
 

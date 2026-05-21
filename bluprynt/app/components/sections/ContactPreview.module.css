@@ -58,6 +58,29 @@
 .bullets li:last-child { border-bottom: 0; }
 .bMark { color: var(--accent-gold); font-family: var(--font-mono); }
 
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 var(--space-2, 16px) 0;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-gold, #C4A564);
+}
+
+.eyebrowDot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-gold, #C4A564);
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(196, 165, 100, 0.4);
+}
+
 /* ===== Direct contact directory ======================================= */
 .direct {
   margin-top: var(--space-4);
