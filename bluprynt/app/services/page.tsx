@@ -38,9 +38,6 @@ export default async function ServicesPage() {
               </div>
               <div className={styles.tileHead}>
                 <span className={styles.tileN}>{s.num}</span>
-                {s.region && (
-                  <span className={styles.tileRegion}>{s.region}</span>
-                )}
               </div>
               <h3 className={styles.tileTitle}>{s.title}</h3>
               <p className={styles.tileLine}>{s.line}</p>
