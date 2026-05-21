@@ -45,7 +45,7 @@ export default async function ServiceDetailPage({
     <PageShell
       code={`A-2${service.num.padStart(2, "0")}`}
       label={`SERVICE · ${service.num}`}
-      eyebrow={service.region}
+      // eyebrow={service.region}
       title={service.title}
       lede={service.line}
       maxWidth={1100}
