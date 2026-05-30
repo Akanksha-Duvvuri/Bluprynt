@@ -23,21 +23,21 @@ const SERVICES = [
 const DIRECT = [
   {
     label: "US direct line",
-    phone: { display: "+1 (646) 586 1213 ", tel: "+1 (646) 586 1213" },
+    phone: { display: "+1 (646) 586 1213 ", tel: "+16465861213" },
   },
   {
     label: "Vivek (CEO)",
-    whatsapp: { display: "+91 91000 07774 ", wa: "9191000 07774" },
+    whatsapp: { display: "+91 91000 07774 ", wa: "919100007774" },
     email: "vivek@blupryntconsulting.com",
   },
   {
     label: "Bharghav (CFO)",
-    whatsapp: { display: "+91 91331 36353", wa: "+91 91331 36353" },
+    whatsapp: { display: "+91 91331 36353", wa: "+919133136353" },
     email: " bharghav@blupryntconsulting.com",
   },
   {
     label: "General inquiries",
-    whatsapp: { display: "+91 9988 294296", wa: "+91 9988 294296 " },
+    whatsapp: { display: "+91 9988 294296", wa: "+919988294296 " },
   },
 ];
 
