@@ -10,28 +10,39 @@ import styles from "./page.module.css";
 
 type Params = { slug: string };
 
+const STATUS_LABEL: Record<string, string> = {
+  live: "Live",
+  review: "In review",
+  complete: "Complete",
+  ongoing: "Ongoing",
+};
+
+// Maps to a CSS class so the status dot picks up the right colour
+const STATUS_TONE: Record<string, "live" | "review" | "complete" | "ongoing"> = {
+  live: "live",
+  review: "review",
+  complete: "complete",
+  ongoing: "ongoing",
+};
+
 export async function generateStaticParams() {
   const slugs = await getAllProjectSlugs();
-  // BG's helper returns string[], not {slug}[]. Map into the shape Next wants.
   return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<Params> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
   const { slug } = await params;
-  const project = await getProjectBySlug(slug);
-  if (!project) return { title: "Project not found · Bluprynt" };
+  const p = await getProjectBySlug(slug);
+  if (!p) return { title: "Project not found · Bluprynt" };
   return {
-    title: `${project.name} · Bluprynt`,
-    description: project.scope,
+    title: `${p.name} · Bluprynt`,
+    description: p.scope ?? undefined,
   };
 }
-
-const STATUS_TONE: Record<string, string> = {
-  live: "mint",
-  ongoing: "mint",
-  review: "gold",
-  complete: "cream",
-};
 
 export default async function ProjectDetailPage({
   params,
@@ -42,130 +53,118 @@ export default async function ProjectDetailPage({
   const project = await getProjectBySlug(slug);
   if (!project) notFound();
 
-  const all = await getAllProjects();
-  const others = all.filter((p) => p.slug !== project.slug).slice(0, 3);
+    const all = await getAllProjects();
+  const others = all.filter((p) => p.slug !== project.slug).slice(0, 2);
 
-  const tone =
-    STATUS_TONE[String(project.status ?? "").toLowerCase()] ?? "cream";
+  const status = project.status ?? "ongoing";        // ← new
+  const tone = STATUS_TONE[status] ?? "ongoing";     // ← updated to use `status`
+  const eyebrow = [project.client, project.location]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
     <PageShell
-      code={`A-1${project.num.padStart(2, "0")}`}
-      label={`PROJECT · ${project.sector}`}
-      eyebrow={
-        <>
-          {project.client && <span>{project.client}</span>}
-          {project.client && project.location && <span> · </span>}
-          {project.location && <span>{project.location}</span>}
-        </>
-      }
+      code={project.num}
+      label={`PROJECT · ${(project.sector ?? "").toUpperCase()}`}
+      eyebrow={eyebrow || undefined}
       title={project.name}
       lede={project.scope}
       maxWidth={1100}
     >
-      {/* ===== Meta strip ================================================== */}
-      <section className={styles.meta} style={{ ['--i' as string]: 0 }}>
-        {project.status && (
-          <div className={styles.metaCell}>
-            <span className={styles.metaK}>STATUS</span>
-            <span className={styles.metaV} data-tone={tone}>
-              <span className={styles.statusDot} />
-              {project.status.toUpperCase()}
-            </span>
-          </div>
+      {/* ===== Meta strip — inline, no boxes =========================== */}
+      <div className={styles.meta} style={{ ["--i" as string]: 0 }}>
+        <div className={styles.metaItem}>
+          <span className={styles.metaK}>Status</span>
+          <span className={`${styles.metaV} ${styles[`status_${tone}`]}`}>
+            <span className={styles.statusDot} aria-hidden="true" />
+            {STATUS_LABEL[status] ?? status}
+          </span>
+        </div>
+        <span className={styles.metaSep} aria-hidden="true" />
+        <div className={styles.metaItem}>
+          <span className={styles.metaK}>Year</span>
+          <span className={styles.metaV}>{project.year}</span>
+        </div>
+        {project.sector && (
+          <>
+            <span className={styles.metaSep} aria-hidden="true" />
+            <div className={styles.metaItem}>
+              <span className={styles.metaK}>Sector</span>
+              <span className={styles.metaV}>{project.sector}</span>
+            </div>
+          </>
         )}
-
-        <div className={styles.metaCell}>
-          <span className={styles.metaK}>YEAR</span>
-          <span className={styles.metaVPlain}>{project.year}</span>
-        </div>
-
-        <div className={styles.metaCell}>
-          <span className={styles.metaK}>SECTOR</span>
-          <span className={styles.metaVPlain}>{project.sector}</span>
-        </div>
-
         {project.client && (
-          <div className={styles.metaCell}>
-            <span className={styles.metaK}>CLIENT</span>
-            <span className={styles.metaVPlain}>{project.client}</span>
-          </div>
+          <>
+            <span className={styles.metaSep} aria-hidden="true" />
+            <div className={styles.metaItem}>
+              <span className={styles.metaK}>Client</span>
+              <span className={styles.metaV}>{project.client}</span>
+            </div>
+          </>
         )}
-      </section>
+      </div>
 
-      {/* ===== Tools (if present) ========================================= */}
-      {project.tools && project.tools.length > 0 && (
-        <section className={styles.scopeBlock} style={{ ['--i' as string]: 1 }}>
-          <header className={styles.blockHead}>
-            <span className={styles.blockNum}>01</span>
-            <h2 className={styles.blockTitle}>Tools & methods</h2>
+      {/* ===== Narrative — large editorial prose ======================= */}
+      {project.challenge && (
+        <section className={styles.story} style={{ ["--i" as string]: 1 }}>
+          <header className={styles.storyHead}>
+            <span className={styles.storyN}>01</span>
+            <h2 className={styles.storyTitle}>The challenge</h2>
           </header>
-          <ul className={styles.tools}>
+          <p className={styles.storyBody}>{project.challenge}</p>
+        </section>
+      )}
+
+      {project.approach && (
+        <section className={styles.story} style={{ ["--i" as string]: 2 }}>
+          <header className={styles.storyHead}>
+            <span className={styles.storyN}>02</span>
+            <h2 className={styles.storyTitle}>Our approach</h2>
+          </header>
+          <p className={styles.storyBody}>{project.approach}</p>
+        </section>
+      )}
+
+      {project.outcome && (
+        <section className={styles.story} style={{ ["--i" as string]: 3 }}>
+          <header className={styles.storyHead}>
+            <span className={styles.storyN}>03</span>
+            <h2 className={styles.storyTitle}>Outcome</h2>
+          </header>
+          <p className={styles.storyBody}>{project.outcome}</p>
+        </section>
+      )}
+
+      {/* ===== Tools — small chip row ================================== */}
+      {project.tools && project.tools.length > 0 && (
+        <section className={styles.tools} style={{ ["--i" as string]: 4 }}>
+          <h3 className={styles.toolsHead}>Tools &amp; methods</h3>
+          <ul className={styles.toolsList}>
             {project.tools.map((t) => (
-              <li key={t} className={styles.tool}>{t}</li>
+              <li key={t} className={styles.tool}>
+                {t}
+              </li>
             ))}
           </ul>
         </section>
       )}
 
-      {/* ===== Challenge ================================================== */}
-      <section className={styles.scopeBlock} style={{ ['--i' as string]: 2 }}>
-        <header className={styles.blockHead}>
-          <span className={styles.blockNum}>
-            {project.tools && project.tools.length > 0 ? "02" : "01"}
-          </span>
-          <h2 className={styles.blockTitle}>The challenge</h2>
-        </header>
-        <div className={styles.blockBody}>
-          <p>{project.challenge}</p>
-        </div>
-      </section>
-
-      {/* ===== Approach =================================================== */}
-      <section className={styles.scopeBlock} style={{ ['--i' as string]: 3 }}>
-        <header className={styles.blockHead}>
-          <span className={styles.blockNum}>
-            {project.tools && project.tools.length > 0 ? "03" : "02"}
-          </span>
-          <h2 className={styles.blockTitle}>Our approach</h2>
-        </header>
-        <div className={styles.blockBody}>
-          <p>{project.approach}</p>
-        </div>
-      </section>
-
-      {/* ===== Outcome ==================================================== */}
-      <section className={styles.scopeBlock} style={{ ['--i' as string]: 4 }}>
-        <header className={styles.blockHead}>
-          <span className={styles.blockNum}>
-            {project.tools && project.tools.length > 0 ? "04" : "03"}
-          </span>
-          <h2 className={styles.blockTitle}>Outcome</h2>
-        </header>
-        <div className={styles.blockBody}>
-          <p>{project.outcome}</p>
-        </div>
-      </section>
-
-      {/* ===== Other projects ============================================ */}
+      {/* ===== Other projects ========================================== */}
       {others.length > 0 && (
-        <section className={styles.others} style={{ ['--i' as string]: 5 }}>
-          <header className={styles.blockHead}>
-            <span className={styles.blockNum}>—</span>
-            <h2 className={styles.blockTitle}>Other projects</h2>
-          </header>
+        <section className={styles.others} style={{ ["--i" as string]: 5 }}>
+          <h3 className={styles.othersHead}>— Other projects</h3>
           <ul className={styles.othersList}>
             {others.map((o) => (
               <li key={o.slug}>
                 <Link href={`/work/${o.slug}`} className={styles.otherLink}>
-                  <span className={styles.otherTitle}>{o.name}</span>
-                  {(o.client || o.location) && (
-                    <span className={styles.otherMeta}>
-                      {o.client}
-                      {o.client && o.location ? " · " : ""}
-                      {o.location}
-                    </span>
-                  )}
+                  <div className={styles.otherInner}>
+                    <span className={styles.otherN}>{o.num}</span>
+                    <h4 className={styles.otherTitle}>{o.name}</h4>
+                    <p className={styles.otherMeta}>
+                      {[o.client, o.location].filter(Boolean).join(" · ")}
+                    </p>
+                  </div>
                   <span className={styles.otherArrow}>→</span>
                 </Link>
               </li>
@@ -174,8 +173,11 @@ export default async function ProjectDetailPage({
         </section>
       )}
 
-      <div className={styles.back} style={{ ['--i' as string]: 6 }}>
-        <Link href="/work" className={styles.backLink}>← Back to all work</Link>
+      {/* ===== Back link =============================================== */}
+      <div className={styles.backRow} style={{ ["--i" as string]: 6 }}>
+        <Link href="/work" className={styles.back}>
+          ← Back to all work
+        </Link>
       </div>
     </PageShell>
   );

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PageShell } from "../components/Pageshell";
 import { getAllServices } from "@/lib/services";
 import styles from "./page.module.css";
+import Footer from "../components/sections/Footer";
 
 export const metadata = {
   title: "Services · Bluprynt",
@@ -16,6 +17,7 @@ export default async function ServicesPage() {
     <PageShell
       code="A-200"
       label="SERVICES INDEX"
+      rev={null}
       eyebrow="What we do, end to end"
       title={
         <>
@@ -70,6 +72,8 @@ export default async function ServicesPage() {
           </Link>
         </div>
       </section>
+
+      <Footer />
     </PageShell>
   );
 }

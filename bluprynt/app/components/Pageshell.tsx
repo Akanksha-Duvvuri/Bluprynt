@@ -1,4 +1,7 @@
-import { ReactNode } from "react";
+"use client";
+
+import { ReactNode, useRef } from "react";
+import { useSpotlight } from "@/lib/cad/useSpotlight";
 import styles from "./Pageshell.module.css";
 
 type PageShellProps = {
@@ -7,7 +10,7 @@ type PageShellProps = {
   /** Sheet label, e.g. "SERVICES INDEX" */
   label: string;
   /** Revision tag, defaults to "01" */
-  rev?: string;
+  rev?: string | null;
   /** Optional small line above the title */
   eyebrow?: ReactNode;
   /** Main page title — accepts JSX so you can highlight portions */
@@ -30,10 +33,14 @@ export function PageShell({
   children,
   maxWidth = 1280,
 }: PageShellProps) {
+
+  const ref = useSpotlight<HTMLElement>();  
+   
   return (
-    <main className={styles.page}>
+    <main ref={ref} className={styles.page} data-sheet={code}>
       {/* Background grid — subtle, identical on all pages */}
-      <div className={styles.grid} aria-hidden="true" />
+      {/* <div className={styles.grid} aria-hidden="true" /> */}
+      {/* <CursorGrid /> */}
 
       <div
         className={styles.inner}
@@ -48,9 +55,13 @@ export function PageShell({
             <span className={styles.stampV}>{code}</span>
             <span className={styles.stampSep}>·</span>
             <span className={styles.stampL}>{label}</span>
-            <span className={styles.stampSep}>·</span>
-            <span className={styles.stampK}>REV</span>
-            <span className={styles.stampV}>{rev}</span>
+            {rev && (
+              <>
+                <span className={styles.stampSep}>·</span>
+                <span className={styles.stampK}>REV</span>
+                <span className={styles.stampV}>{rev}</span>
+              </>
+            )}
           </div>
 
           {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}

@@ -3,10 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./CADCrosshair.module.css";
 
-/* ──────────────────────────────────────────────────────────────
-   Maps section IDs to drawing sheet codes shown in the readout
-   and status bar. Add new sections here as the site grows.
-   ────────────────────────────────────────────────────────────── */
 const SHEET_MAP: Record<string, string> = {
   hero: "A-001",
   work: "A-002",

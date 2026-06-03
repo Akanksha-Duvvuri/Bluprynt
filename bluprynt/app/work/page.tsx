@@ -87,7 +87,7 @@ export default async function WorkIndexPage() {
         <h3 className={styles.ctaHead}>
           We pick engagements where the work matters and the team listens.
         </h3>
-        <Link href="/contact" className={styles.ctaBtn}>
+        <Link href="/#contact" className={styles.ctaBtn}>
           <span>Tell us about it</span>
           <span className={styles.ctaArrow}>→</span>
         </Link>

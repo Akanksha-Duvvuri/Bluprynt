@@ -240,8 +240,8 @@
 
 .ctaEyebrow {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.25em;
+  font-size: 16px;
+  letter-spacing: 0.20em;
   color: var(--accent-gold, #C4A564);
 }
 

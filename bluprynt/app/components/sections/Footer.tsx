@@ -6,10 +6,11 @@ import styles from "./Footer.module.css";
 
 /* Internal navigation links */
 const QUICK_LINKS = [
-  { href: "/work", label: "Work" },
+  { href: "/", label: "Homepage" },
   { href: "/services", label: "Services" },
+  { href: "/work", label: "Work" },
   { href: "/#testimonials", label: "Testimonials" },
-  { href: "/about", label: "About" },
+  { href: "/#about", label: "About" },
   { href: "/#contact", label: "Contact" },
 ];
 

@@ -4,9 +4,10 @@ import { useEffect, useRef } from "react";
 import { useSheet } from "./SheetProvider";
 
 /**
- * Attach to any section element. When the section enters the viewport at
- * the threshold, the global sheet code updates — driving the status bar
- * label and the crosshair's SHEET readout.
+ * Attach to any section element. The sheet code updates when the section
+ * crosses the "active band" — a horizontal strip in the middle 20% of the
+ * viewport. This is independent of section height, so even tall sections
+ * (like contact) activate reliably.
  *
  * Usage:
  *   const ref = useSheetObserver("A-002");
@@ -14,7 +15,6 @@ import { useSheet } from "./SheetProvider";
  */
 export function useSheetObserver<T extends HTMLElement = HTMLElement>(
   code: string,
-  threshold = 0.5,
 ) {
   const ref = useRef<T | null>(null);
   const { setSheet } = useSheet();
@@ -32,12 +32,17 @@ export function useSheetObserver<T extends HTMLElement = HTMLElement>(
           }
         }
       },
-      { threshold },
+      {
+        // Shrink the viewport to a 20% band in the middle.
+        // Section is "active" when its body crosses this band.
+        rootMargin: "-40% 0px -40% 0px",
+        threshold: 0,
+      },
     );
 
     obs.observe(el);
     return () => obs.disconnect();
-  }, [code, setSheet, threshold]);
+  }, [code, setSheet]);
 
   return ref;
 }

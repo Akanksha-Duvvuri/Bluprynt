@@ -15,27 +15,26 @@ import styles from "./CADNavbar.module.css";
  */
 
 const NAV_ITEMS: ReadonlyArray<{ href: string; label: string }> = [
-  { href: "/work", label: "Work" },
+  { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
+  { href: "/work", label: "Work" },
   { href: "/#testimonials", label: "Testimonials" },
   { href: "/#about", label: "About" },
   { href: "/#contact", label: "Contact" },
 ];
 
-const SHEET_FOR_HREF: Record<string, string> = {
-  "/": "A-001",
-  "/work": "A-003",
-  "/services": "A-002",
-  "/Testimonials": "A-004",
-  "/#about": "A-005",
-  "/#contact": "A-006",
+const SHEET_FOR_HREF: Record<string, string[]> = {
+  "/": ["A-001"],
+  "/services": ["A-002"],
+  "/work": ["A-003"],
+  "/#testimonials": ["A-004"],
+  "/#about": ["A-005", "A-006"],  
+  "/#contact": ["A-007"],
 };
 
 export function CADNavbar() {
   const pathname = usePathname();
-  const sheet = useSheet() as unknown as string | { code?: string } | null;
-const currentSheet =
-  (typeof sheet === "string" ? sheet : sheet?.code) ?? "A-001";
+  const { sheet: currentSheet } = useSheet();
 
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -62,10 +61,10 @@ const currentSheet =
   // On homepage: match by current sheet (scroll-driven).
   // On sub-page: match by pathname.
   // Note: /#contact only highlights when on homepage scrolled to A-006.
-  const isActive = (href: string) => {
-    if (isHomepage) return SHEET_FOR_HREF[href] === currentSheet;
-    return pathname === href;
-  };
+const isActive = (href: string) => {
+  if (isHomepage) return SHEET_FOR_HREF[href]?.includes(currentSheet) ?? false;
+  return pathname === href;
+};
 
   return (
     <header className={`${styles.navbar} ${scrolled ? styles.scrolled : ""}`}>
@@ -135,8 +134,8 @@ const currentSheet =
                   <span className={styles.drawerDot} />
                   <span>{item.label}</span>
                   <span className={styles.drawerCode}>
-                    {SHEET_FOR_HREF[item.href]}
-                  </span>
+                  {SHEET_FOR_HREF[item.href]?.join(" · ")}
+                </span>
                 </Link>
               </li>
             ))}

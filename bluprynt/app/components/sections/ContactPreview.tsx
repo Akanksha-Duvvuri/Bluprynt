@@ -4,8 +4,6 @@ import { useState } from "react";
 import { SectionShell } from "@/app/components/SectionShell";
 import styles from "./ContactPreview.module.css";
 
-/* List of services — checkbox values are the labels themselves so they
-   submit cleanly as readable strings. */
 const SERVICES = [
   "Concrete Takeoff & Estimation",
   "Rebar Shop Drawings",
@@ -18,27 +16,25 @@ const SERVICES = [
   "Other / Not sure yet",
 ];
 
-/* ── Direct-contact directory ──────────────────────────────────────────
-   REPLACE the placeholder numbers + emails with real values. */
 const DIRECT = [
-  {
-    label: "US direct line",
-    phone: { display: "+1 (646) 586 1213 ", tel: "+16465861213" },
-  },
-  {
-    label: "Vivek (CEO)",
-    whatsapp: { display: "+91 91000 07774 ", wa: "919100007774" },
-    email: "vivek@blupryntconsulting.com",
-  },
-  {
-    label: "Bharghav (CFO)",
-    whatsapp: { display: "+91 91331 36353", wa: "+919133136353" },
-    email: " bharghav@blupryntconsulting.com",
-  },
-  {
-    label: "General inquiries",
-    whatsapp: { display: "+91 9988 294296", wa: "+919988294296 " },
-  },
+ {
+   label: "US direct line",
+   phone: { display: "+1 (646) 586 1213 ", tel: "+16465861213" },
+ },
+ {
+   label: "Vivek (CEO)",
+   whatsapp: { display: "+91 91000 07774 ", wa: "919100007774" },
+   email: "vivek@blupryntconsulting.com",
+ },
+ {
+   label: "Bharghav (CFO)",
+   whatsapp: { display: "+91 91331 36353", wa: "+919133136353" },
+   email: " bharghav@blupryntconsulting.com",
+ },
+ {
+   label: "General inquiries",
+   whatsapp: { display: "+91 9988 294296", wa: "+919988294296 " },
+ },
 ];
 
 export default function ContactPreview() {
@@ -56,7 +52,6 @@ export default function ContactPreview() {
     e.preventDefault();
     setSubmitting(true);
     try {
-      // TODO: wire to your form submission endpoint
       await new Promise((r) => setTimeout(r, 600));
       setSubmitted(true);
     } finally {
@@ -67,94 +62,90 @@ export default function ContactPreview() {
   return (
     <div id="contact">
       <SectionShell code="A-007" label="LETS TALK" tone="deep" eyebrow="">
-        <div className={styles.split}>
-          {/* ── Left: pitch + direct contact ─────────────────────────────── */}
-          <div className={styles.col}>
-            <p className={styles.eyebrow}>
-          <span className={styles.eyebrowDot} /> TELL US ABOUT YOUR PROJECT
-               </p>
-            <h2 className={styles.heading}>
-              Ready to cut preconstruction costs without giving up control?
-            </h2>
-            <p className={styles.lede}>
-              We&apos;d rather earn your trust with one deliverable than a
-              pitch deck. Start with the sample. Decide from there.
-            </p>
+        {/* ── Top: Pitch (full content width) ────────────────────── */}
+        <header className={styles.pitch}>
+          <h2 className={styles.heading}>
+            Ready to cut preconstruction costs without giving up control?
+          </h2>
+          <p className={styles.lede}>
+            We&apos;d rather earn your trust with one deliverable than a pitch
+            deck. Start with the sample. Decide from there.
+          </p>
 
-            <ul className={styles.bullets}>
-              <li>
-                <span className={styles.bMark}>▸</span>
-                <span>
-                  Send us your next bid package or shop drawing scope.
-                </span>
-              </li>
-              <li>
-                <span className={styles.bMark}>▸</span>
-                <span>
-                  We&apos;ll send back a sample in 48 hours. Samples on us.
-                </span>
-              </li>
-            </ul>
+          <ul className={styles.bullets}>
+            <li>
+              <span className={styles.bMark}>▸</span>
+              <span>Send us your next bid package or shop drawing scope.</span>
+            </li>
+            <li>
+              <span className={styles.bMark}>▸</span>
+              <span>
+                We&apos;ll send back a sample in 48 hours. Samples on us.
+              </span>
+            </li>
+          </ul>
+        </header>
 
-            {/* ── Direct contact directory ── */}
-            <div className={styles.direct}>
-              <h3 className={styles.directHead}>
-                Prefer to call or email directly?
-              </h3>
-              <ul className={styles.directList}>
-                {DIRECT.map((d) => (
-                  <li key={d.label} className={styles.directItem}>
-                    <span className={styles.directMark}>▸</span>
-                    <div className={styles.directBody}>
-                      <span className={styles.directLabel}>{d.label}</span>
-                      <div className={styles.directLinks}>
-                        {d.phone && (
-                          <a
-                            href={`tel:${d.phone.tel}`}
-                            className={styles.directLink}
-                          >
-                            <PhoneIcon />
-                            <span>{d.phone.display}</span>
-                          </a>
-                        )}
-                        {d.whatsapp && (
-                          <a
-                            href={`https://wa.me/${d.whatsapp.wa}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`${styles.directLink} ${styles.directLinkWa}`}
-                          >
-                            <WhatsAppIcon />
-                            <span>{d.whatsapp.display}</span>
-                          </a>
-                        )}
-                        {d.email && (
-                          <a
-                            href={`mailto:${d.email}`}
-                            className={styles.directLink}
-                          >
-                            <EmailIcon />
-                            <span>{d.email}</span>
-                          </a>
-                        )}
-                      </div>
+        {/* ── Bottom: Directory (left) + Form (right) ────────────── */}
+        <div className={styles.grid}>
+          {/* Left column: direct contact directory */}
+          <aside className={styles.directory}>
+            <h3 className={styles.directoryHead}>
+              Prefer to call or email directly?
+            </h3>
+            <ul className={styles.directList}>
+              {DIRECT.map((d) => (
+                <li key={d.label} className={styles.directItem}>
+                  <span className={styles.directMark}>▸</span>
+                  <div className={styles.directBody}>
+                    <span className={styles.directLabel}>{d.label}</span>
+                    <div className={styles.directLinks}>
+                      {d.phone && (
+                        <a
+                          href={`tel:${d.phone.tel}`}
+                          className={styles.directLink}
+                        >
+                          <PhoneIcon />
+                          <span>{d.phone.display}</span>
+                        </a>
+                      )}
+                      {d.whatsapp && (
+                        <a
+                          href={`https://wa.me/${d.whatsapp.wa}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`${styles.directLink} ${styles.directLinkWa}`}
+                        >
+                          <WhatsAppIcon />
+                          <span>{d.whatsapp.display}</span>
+                        </a>
+                      )}
+                      {d.email && (
+                        <a
+                          href={`mailto:${d.email}`}
+                          className={styles.directLink}
+                        >
+                          <EmailIcon />
+                          <span>{d.email}</span>
+                        </a>
+                      )}
                     </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </aside>
 
-          {/* ── Right: form ────────────────────────────────────────────── */}
-          <div className={styles.col}>
+          {/* Right column: project brief form */}
+          <div className={styles.formCol}>
             {submitted ? (
               <div className={styles.success}>
                 <span className={styles.successCode}>RECEIVED · A-007</span>
                 <h3 className={styles.successHead}>Brief received.</h3>
                 <p className={styles.successBody}>
-                  We&apos;ll review and route to the right team within two
-                  business days. You will receive an automated confirmation
-                  email in the meantime.
+                  We&apos;ll review and route to the right team within one
+                  business day. You will receive an automated confirmation in
+                  the meantime.
                 </p>
               </div>
             ) : (
@@ -195,7 +186,10 @@ export default function ContactPreview() {
                   />
                 </Field>
 
-                <Field id="services" label="Services Required (select one or more)">
+                <Field
+                  id="services"
+                  label="Services Required (select one or more)"
+                >
                   <div className={styles.checkboxes}>
                     {SERVICES.map((s) => {
                       const isSelected = selectedServices.includes(s);
@@ -234,7 +228,6 @@ export default function ContactPreview() {
                       );
                     })}
                   </div>
-                  {/* Hidden input that submits the joined services list */}
                   <input
                     type="hidden"
                     name="services"
@@ -271,13 +264,13 @@ export default function ContactPreview() {
                   >
                     {submitting ? "Sending…" : "Send brief"}
                     <span className={styles.submitArrow}>→</span>
-                  </button><br></br>
+                  </button>
+                  <p className={styles.reassure}>
+                    We respond within one business day.
+                    <span className={styles.reassureSep}> · </span>
+                    Your scope stays confidential.
+                  </p>
                 </div>
-                <p className={styles.reassure}>
-                      We respond within one business day.
-                      <span className={styles.reassureSep}> · </span>
-                      Your scope stays confidential.
-                    </p>
               </form>
             )}
           </div>
