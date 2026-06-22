@@ -31,7 +31,7 @@ export default function AboutPreview() {
   return (
     <div id="about">
     <SectionShell
-      code="A-005"
+      code="A-003"
       label="COMPETITVE EDGE"
       eyebrow=""
     >

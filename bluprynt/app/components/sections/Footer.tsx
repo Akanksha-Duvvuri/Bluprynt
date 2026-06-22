@@ -8,8 +8,8 @@ import styles from "./Footer.module.css";
 const QUICK_LINKS = [
   { href: "/", label: "Homepage" },
   { href: "/services", label: "Services" },
-  { href: "/work", label: "Work" },
-  { href: "/#testimonials", label: "Testimonials" },
+  // { href: "/work", label: "Work" },
+  // { href: "/#testimonials", label: "Testimonials" },
   { href: "/#about", label: "About" },
   { href: "/#contact", label: "Contact" },
 ];

@@ -18,16 +18,44 @@
 }
 
 /* ===== Grid ============================================================= */
+/* ===== Grid ============================================================= */
 .grid {
   list-style: none;
   margin: 0 0 var(--space-5);
   padding: 0;
-  display: grid;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   gap: var(--space-3);
-  grid-template-columns: 1fr;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
+  scrollbar-width: none;
 }
-@media (min-width: 720px) and (max-width: 1280px) {
-  .grid { grid-template-columns: repeat(2, 1fr); }
+.grid::-webkit-scrollbar { display: none; }
+
+/* Fixed width so cards peek and invite scrolling */
+.grid > * {
+  flex: 0 0 78vw;
+  max-width: 320px;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 720px) {
+  .grid {
+    display: grid;
+    overflow-x: unset;
+    scroll-snap-type: unset;
+    padding-left: 0;
+    padding-right: 0;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid > * {
+    flex: unset;
+    max-width: unset;
+  }
 }
 @media (min-width: 1281px) {
   .grid { grid-template-columns: repeat(3, 1fr); }

@@ -25,12 +25,12 @@ export default async function HomePage() {
       <ServicesPreview />
       <Divider />
 
-      <WorkPreview />
-      <Divider />
+      {/* <WorkPreview /> */}
+      {/* <Divider /> */}
 
       {/* <Testimonials /> */}
-      <Testimonials testimonials={testimonialsData} />
-      <Divider />
+      {/* <Testimonials testimonials={testimonialsData} /> */}
+      {/* <Divider /> */}
 
       <AboutPreview />
       <Divider />

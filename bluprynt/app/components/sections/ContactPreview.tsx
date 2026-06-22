@@ -61,7 +61,7 @@ export default function ContactPreview() {
 
   return (
     <div id="contact">
-      <SectionShell code="A-007" label="LETS TALK" tone="deep" eyebrow="">
+      <SectionShell code="A-005" label="LETS TALK" tone="deep" eyebrow="">
         {/* ── Top: Pitch (full content width) ────────────────────── */}
         <header className={styles.pitch}>
           <h2 className={styles.heading}>

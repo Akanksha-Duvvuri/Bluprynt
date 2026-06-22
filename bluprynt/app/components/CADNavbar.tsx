@@ -17,8 +17,8 @@ import styles from "./CADNavbar.module.css";
 const NAV_ITEMS: ReadonlyArray<{ href: string; label: string }> = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
-  { href: "/work", label: "Work" },
-  { href: "/#testimonials", label: "Testimonials" },
+  // { href: "/work", label: "Work" },
+  // { href: "/#testimonials", label: "Testimonials" },
   { href: "/#about", label: "About" },
   { href: "/#contact", label: "Contact" },
 ];

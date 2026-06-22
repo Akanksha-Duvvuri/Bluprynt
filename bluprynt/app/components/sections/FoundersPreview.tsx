@@ -10,6 +10,14 @@ type Person = {
   photoUrl?: string;  // when set, shows the photo instead of the code
 };
 
+type Team = {
+  name: string;
+  role: string;
+  experience?: string;
+  detail?: string;
+};
+
+
 const LEADERSHIP: Person[] = [
   {
     code: "F1",
@@ -27,23 +35,23 @@ const LEADERSHIP: Person[] = [
   },
 ];
 
-const DELIVERY: Person[] = [
+const DELIVERY: Team[] = [
   {
-    code: "T1",
+    // code: "T1",
     name: "Raju PNM",
     role: "Senior Estimation Manager",
     experience: "20+ years",
     detail: "Rebar shop drawings · Estimating · Slab edge",
   },
   {
-    code: "T2",
+    // code: "T2",
     name: "Shivakumar S",
     role: "Senior Estimator",
     experience: "6 years",
     detail: "Window and Façade Detailing (Logikal Software)",
   },
   {
-    code: "T3",
+    // code: "T3",
     name: "Prasanth E",
     role: "Estimator",
     experience: "5 years",
@@ -52,7 +60,7 @@ const DELIVERY: Person[] = [
 
 export default function FoundersPreview() {
   return (
-    <SectionShell code="A-006" label="MEET THE TEAM" eyebrow="">
+    <SectionShell code="A-004" label="MEET THE TEAM" eyebrow="">
       <header className={styles.head}>
         <h2 className={styles.heading}>
           Who you&apos;ll{" "}
@@ -75,8 +83,8 @@ export default function FoundersPreview() {
       {/* ────────── Delivery Team row ────────── */}
       <div className={styles.rowLabel}>▸ Delivery Team</div>
       <ul className={styles.gridDelivery}>
-        {DELIVERY.map((p, i) => (
-          <PersonCard key={p.code} person={p} variant="sm" index={i} />
+        {DELIVERY.map((t, i) => (
+          <TeamCard key={t.name} team={t} variant="sm" index={i} />
         ))}
       </ul>
     </SectionShell>
@@ -127,6 +135,35 @@ function PersonCard({
           </p>
         )}
         {person.detail && <p className={styles.detail}>{person.detail}</p>}
+      </div>
+    </li>
+  );
+}
+
+function TeamCard({
+  team,
+  variant,
+  index,
+}: {
+  team: Team;
+  variant: "lg" | "sm";
+  index: number;
+}) {
+  const cardClass = `${styles.card} ${
+    variant === "lg" ? styles.cardLg : styles.cardSm
+  }`;
+
+  return (
+    <li className={cardClass} style={{ ["--i" as string]: index }}>
+      <div className={styles.cardBody}>
+        <h3 className={styles.name}>{team.name}</h3>
+        <p className={styles.role}>{team.role}</p>
+        {team.experience && (
+          <p className={styles.experience}>
+            Experience: {team.experience}
+          </p>
+        )}
+        {team.detail && <p className={styles.detail}>{team.detail}</p>}
       </div>
     </li>
   );
