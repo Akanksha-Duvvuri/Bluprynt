@@ -7,6 +7,8 @@ interface ContactPayload {
   email?: string;
   company?: string;
   message?: string;
+  location?: string;
+  services?: string;
 }
 
 /**
@@ -21,7 +23,6 @@ interface ContactPayload {
  */
 export async function POST(req: NextRequest) {
   let payload: ContactPayload;
-
   try {
     payload = (await req.json()) as ContactPayload;
   } catch {
@@ -32,6 +33,8 @@ export async function POST(req: NextRequest) {
   const email = payload.email?.trim();
   const company = payload.company?.trim() ?? "";
   const message = payload.message?.trim();
+  const location = payload.location?.trim() ?? "";    // ← add
+  const services = payload.services?.trim() ?? "";    // ← add
 
   if (!name || !email || !message) {
     return NextResponse.json(
@@ -44,21 +47,38 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
-  // US-18: keyword routing — first match wins, fallback to GENERAL
-  const faqGroup = matchFaqGroup(message);
-
+  // Send notification email to team (non-blocking — log but don't fail submission)
   try {
-    await Promise.all([
-      sendProspectConfirmation({ name, email, faqGroup }),
-      sendOwnerAlert({ name, email, company, message, faqGroup }),
-    ]);
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "Bluprynt Contact <onboarding@resend.dev>",
+        to: process.env.CONTACT_NOTIFICATION_EMAIL,
+        reply_to: email,
+        subject: `New contact: ${name}${company ? ` (${company})` : ""}`,
+        text: [
+        `Name:     ${name}`,
+        `Email:    ${email}`,
+        `Company:  ${company || "—"}`,
+        `Location: ${location || "—"}`,    // ← add
+        `Services: ${services || "—"}`,    // ← add
+        ``,
+        `Message:`,
+        message,
+        ``,
+        `———`,
+        `Submitted via bluprynt.com contact form`,
+      ].join("\n"),
+      }),
+    });
   } catch (err) {
-    console.error("Email send failed:", err);
-    return NextResponse.json(
-      { error: "Failed to send. Please try again." },
-      { status: 500 }
-    );
+    console.error("[contact] email notification failed:", err);
+    // Don't fail the submission
   }
 
-  return NextResponse.json({ ok: true, faqGroup });
+  return NextResponse.json({ ok: true });
 }
