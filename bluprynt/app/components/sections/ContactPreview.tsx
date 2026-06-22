@@ -49,15 +49,39 @@ export default function ContactPreview() {
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      await new Promise((r) => setTimeout(r, 600));
-      setSubmitted(true);
-    } finally {
-      setSubmitting(false);
+  e.preventDefault();
+  setSubmitting(true);
+
+  try {
+    const fd = new FormData(e.currentTarget);
+    const payload = {
+      name: String(fd.get("name") ?? ""),
+      email: String(fd.get("email") ?? ""),
+      company: String(fd.get("company") ?? ""),
+      message: String(fd.get("message") ?? ""),
+      location: String(fd.get("location") ?? ""),
+      services: String(fd.get("services") ?? ""),
+    };
+
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error("Contact submit failed:", res.status, errorText);
+      return;
     }
+
+    setSubmitted(true);
+  } catch (err) {
+    console.error("Contact submit error:", err);
+  } finally {
+    setSubmitting(false);
   }
+}
 
   return (
     <div id="contact">

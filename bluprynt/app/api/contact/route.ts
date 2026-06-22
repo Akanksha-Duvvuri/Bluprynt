@@ -47,38 +47,46 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
-  // Send notification email to team (non-blocking — log but don't fail submission)
+  console.log("[debug] RESEND_API_KEY exists:", !!process.env.RESEND_API_KEY);
+  console.log("[debug] CONTACT_NOTIFICATION_EMAIL:", process.env.CONTACT_NOTIFICATION_EMAIL);
+  console.log("[debug] reached email block");
+
   try {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: "Bluprynt Contact <onboarding@resend.dev>",
-        to: process.env.CONTACT_NOTIFICATION_EMAIL,
-        reply_to: email,
-        subject: `New contact: ${name}${company ? ` (${company})` : ""}`,
-        text: [
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Bluprynt Contact <onboarding@resend.dev>",
+      to: process.env.CONTACT_NOTIFICATION_EMAIL,
+      reply_to: email,
+      subject: `New contact: ${name}${company ? ` (${company})` : ""}`,
+      text: [
         `Name:     ${name}`,
         `Email:    ${email}`,
         `Company:  ${company || "—"}`,
-        `Location: ${location || "—"}`,    // ← add
-        `Services: ${services || "—"}`,    // ← add
         ``,
         `Message:`,
         message,
         ``,
         `———`,
-        `Submitted via bluprynt.com contact form`,
+        `Submitted via blupryntconsulting.com contact form`,
       ].join("\n"),
-      }),
-    });
-  } catch (err) {
-    console.error("[contact] email notification failed:", err);
-    // Don't fail the submission
+    }),
+  });
+
+  const responseText = await res.text();
+  console.log("[debug] Resend response status:", res.status);
+  console.log("[debug] Resend response body:", responseText);
+
+  if (!res.ok) {
+    console.error("[contact] Resend rejected the send");
   }
+} catch (err) {
+  console.error("[contact] email notification fetch threw:", err);
+}
 
   return NextResponse.json({ ok: true });
 }
