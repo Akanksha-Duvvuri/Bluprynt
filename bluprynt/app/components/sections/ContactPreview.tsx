@@ -164,7 +164,7 @@ export default function ContactPreview() {
           <div className={styles.formCol}>
             {submitted ? (
               <div className={styles.success}>
-                <span className={styles.successCode}>RECEIVED · A-007</span>
+                <span className={styles.successCode}>RECEIVED · A-005</span>
                 <h3 className={styles.successHead}>Brief received.</h3>
                 <p className={styles.successBody}>
                   We&apos;ll review and route to the right team within one
