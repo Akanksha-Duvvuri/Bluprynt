@@ -40,12 +40,6 @@ export default async function ServicesPreview() {
 
       {/* Mobile */}
       <ServicesCarousel services={services} />
-      <div className={styles.foot}>
-        <Link href="/services" className={styles.viewAll}>
-          <span>View all Services Provided</span>
-          <span className={styles.viewArrow}>→</span>
-        </Link>
-      </div>
     </SectionShell>
   );
 }
