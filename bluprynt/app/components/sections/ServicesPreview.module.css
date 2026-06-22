@@ -17,48 +17,47 @@
   line-height: 1.65;
 }
 
-/* ===== Grid ============================================================= */
-/* ===== Grid ============================================================= */
+/* ===== Desktop grid ===================================================== */
 .grid {
   list-style: none;
   margin: 0 0 var(--space-5);
   padding: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  display: none; /* hidden — carousel handles mobile */
   gap: var(--space-3);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  padding-left: var(--space-3);
-  padding-right: var(--space-3);
-  scrollbar-width: none;
 }
-.grid::-webkit-scrollbar { display: none; }
-
-/* Fixed width so cards peek and invite scrolling */
-.grid > * {
-  flex: 0 0 78vw;
-  max-width: 320px;
-  scroll-snap-align: start;
-}
-
 @media (min-width: 720px) {
   .grid {
     display: grid;
-    overflow-x: unset;
-    scroll-snap-type: unset;
-    padding-left: 0;
-    padding-right: 0;
     grid-template-columns: repeat(2, 1fr);
-  }
-  .grid > * {
-    flex: unset;
-    max-width: unset;
   }
 }
 @media (min-width: 1281px) {
   .grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ===== Mobile carousel ================================================== */
+.carouselTrack {
+  list-style: none;
+  margin: 0 0 var(--space-5);
+  padding: var(--space-2) 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: var(--space-3);
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-behavior: auto;
+}
+.carouselTrack::-webkit-scrollbar { display: none; }
+
+.carouselTrack > .tile {
+  flex: 0 0 78vw;
+  max-width: 300px;
+}
+
+@media (min-width: 720px) {
+  .carouselTrack { display: none; }
 }
 
 /* ===== Tile ============================================================= */
@@ -71,7 +70,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  /* Lift effect — same family as work cards */
   transition:
     border-color 220ms var(--ease-out),
     background 220ms var(--ease-out),
@@ -89,14 +87,13 @@
 .tile:hover {
   border-color: var(--accent-gold);
   background: linear-gradient(180deg, var(--bg-soft) 0%, rgba(196,165,100,0.06) 100%);
-  /* Stronger lift than before (-4px), with shadow */
   transform: translateY(-4px);
   box-shadow:
     0 0 0 1px var(--gold-33),
     0 14px 32px -16px rgba(0, 0, 0, 0.6);
 }
 
-/* Leader: dot at top-left + dashed vertical line down the side */
+/* ===== Leader =========================================================== */
 .leader {
   position: absolute;
   left: 12px;
@@ -115,9 +112,7 @@
   margin-bottom: 4px;
   transition: box-shadow 220ms var(--ease-out);
 }
-.tile:hover .leaderDot {
-  box-shadow: 0 0 12px var(--accent-gold);
-}
+.tile:hover .leaderDot { box-shadow: 0 0 12px var(--accent-gold); }
 .leaderLine {
   flex: 1;
   width: 1px;
@@ -131,7 +126,7 @@
   opacity: 0.5;
 }
 
-/* ===== Tile head ======================================================== */
+/* ===== Tile internals =================================================== */
 .tileHead {
   display: flex;
   justify-content: space-between;
@@ -148,7 +143,6 @@
   border-radius: 2px;
   color: var(--accent-gold);
 }
-
 .tileTitle {
   margin: 4px 0 0;
   font-family: var(--font-display);
@@ -158,14 +152,12 @@
   color: var(--accent-cream);
   line-height: 1.3;
 }
-
 .tileLine {
   margin: 0;
   font-size: 0.9375rem;
   line-height: 1.55;
   color: var(--cream-80);
 }
-
 .tileFoot {
   display: flex;
   justify-content: flex-end;
@@ -182,16 +174,15 @@
   opacity: 0.7;
 }
 
+/* ===== Footer =========================================================== */
 .note {
   margin: 0;
-  /* font-family: var(--font-mono); */
   font-size: 0.90rem;
   letter-spacing: 0.1em;
   color: var(--cream-80);
   padding-top: var(--space-2);
   border-top: 1px dashed var(--gold-20);
 }
-
 .viewAll {
   display: inline-flex;
   align-items: center;
@@ -209,64 +200,3 @@
 .viewAll:hover { border-bottom-color: var(--accent-gold); }
 .viewArrow { transition: transform 200ms ease-out; }
 .viewAll:hover .viewArrow { transform: translateX(4px); }
-
-
-/* ===== Mobile carousel (replaces .grid on mobile) ==================== */
-.carouselWrapper {
-  display: none; /* hidden on desktop */
-  overflow: hidden;
-  margin: 0 0 var(--space-5);
-  /* fade edges */
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 8%,
-    black 92%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 8%,
-    black 92%,
-    transparent 100%
-  );
-}
-
-.carouselTrack {
-  list-style: none;
-  margin: 0;
-  padding: var(--space-2) 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  gap: var(--space-3);
-  width: max-content;
-
-  animation: scrollTrack 30s linear infinite;
-}
-
-.carouselTrack:hover {
-  animation-play-state: paused;
-}
-
-@keyframes scrollTrack {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); } /* -50% because list is doubled */
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .carouselTrack { animation: none; overflow-x: auto; }
-}
-
-/* Card width inside carousel */
-.carouselTrack .tile {
-  flex: 0 0 78vw;
-  max-width: 300px;
-}
-
-/* Show carousel, hide grid on mobile */
-@media (max-width: 719px) {
-  .carouselWrapper { display: block; }
-  .grid { display: none; }
-}
