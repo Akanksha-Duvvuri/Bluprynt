@@ -209,3 +209,64 @@
 .viewAll:hover { border-bottom-color: var(--accent-gold); }
 .viewArrow { transition: transform 200ms ease-out; }
 .viewAll:hover .viewArrow { transform: translateX(4px); }
+
+
+/* ===== Mobile carousel (replaces .grid on mobile) ==================== */
+.carouselWrapper {
+  display: none; /* hidden on desktop */
+  overflow: hidden;
+  margin: 0 0 var(--space-5);
+  /* fade edges */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+}
+
+.carouselTrack {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-2) 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: var(--space-3);
+  width: max-content;
+
+  animation: scrollTrack 30s linear infinite;
+}
+
+.carouselTrack:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scrollTrack {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); } /* -50% because list is doubled */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carouselTrack { animation: none; overflow-x: auto; }
+}
+
+/* Card width inside carousel */
+.carouselTrack .tile {
+  flex: 0 0 78vw;
+  max-width: 300px;
+}
+
+/* Show carousel, hide grid on mobile */
+@media (max-width: 719px) {
+  .carouselWrapper { display: block; }
+  .grid { display: none; }
+}

@@ -1,10 +1,10 @@
 import { SectionShell } from "@/app/components/SectionShell";
+import { getFeaturedServices } from "@/lib/services";
+import { ServicesCarousel } from "./ServicesCarousel";
 import styles from "./ServicesPreview.module.css";
-import  { getFeaturedServices } from "@/lib/services";
-import Link from "next/link";
 
 export default async function ServicesPreview() {
-   const services = await getFeaturedServices();
+  const services = await getFeaturedServices();
   return (
     <SectionShell
       code="A-002"
@@ -13,48 +13,12 @@ export default async function ServicesPreview() {
       eyebrow="WHAT WE PROVIDE"
     >
       <header className={styles.head}>
-        <h2 className={styles.heading}>
-          What we do_
-        </h2>
+        <h2 className={styles.heading}>What we do_</h2>
         <p className={styles.lede}>
-          Scale Smart. Pay only for the 
-          preconstruction work you 
-          need, when you need it.
+          Scale Smart. Pay only for the preconstruction work you need, when you need it.
         </p>
       </header>
-     <ul className={styles.grid}>
-        {services.map((s, i) => (
-          <li
-            key={s.slug}
-            className={styles.tile}
-            style={{ ['--i' as string]: i }}
-          >
-            <div className={styles.leader} aria-hidden="true">
-              <span className={styles.leaderDot} />
-              <span className={styles.leaderLine} />
-            </div>
-            <div className={styles.tileHead}>
-              {/* <span className={styles.tileN}>{s.slug}</span> */}
-              {/* <span className={styles.tileRegion}>{s.region}</span> */}
-            </div>
-            <h3 className={styles.tileTitle}>{s.title}</h3>
-            <p className={styles.tileLine}>{s.line}</p>
-            <div className={styles.tileFoot}>
-              <span className={styles.tileTag}>SHEET A-002.{s.slug}</span>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <p className={styles.note}>
-        ▸ Note: There is no minimum project pricing, we take on all scales of work. 
-Rates are transparent with no hidden fees
-      </p>
-      <div className={styles.foot}>
-        <Link href="/services" className={styles.viewAll}>
-          <span>View all Services Provided</span>
-          <span className={styles.viewArrow}>→</span>
-        </Link>
-      </div>
+      <ServicesCarousel services={services} />
     </SectionShell>
   );
 }
