@@ -40,11 +40,6 @@ export default async function ServicesPreview() {
 
       {/* Mobile */}
       <ServicesCarousel services={services} />
-
-      <p className={styles.note}>
-        ▸ Note: There is no minimum project pricing, we take on all scales of work.
-        Rates are transparent with no hidden fees
-      </p>
       <div className={styles.foot}>
         <Link href="/services" className={styles.viewAll}>
           <span>View all Services Provided</span>
