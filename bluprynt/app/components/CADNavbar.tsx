@@ -26,10 +26,10 @@ const NAV_ITEMS: ReadonlyArray<{ href: string; label: string }> = [
 const SHEET_FOR_HREF: Record<string, string[]> = {
   "/": ["A-001"],
   "/services": ["A-002"],
-  "/work": ["A-003"],
-  "/#testimonials": ["A-004"],
-  "/#about": ["A-005", "A-006"],  
-  "/#contact": ["A-007"],
+  // "/work": ["A-003"],
+  // "/#testimonials": ["A-004"],
+  "/#about": ["A-003", "A-004"],  
+  "/#contact": ["A-005"],
 };
 
 export function CADNavbar() {
