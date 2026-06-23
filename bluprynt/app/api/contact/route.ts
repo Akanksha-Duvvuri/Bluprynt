@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { matchFaqGroup } from "@/lib/faq";
 import { sendOwnerAlert, sendProspectConfirmation } from "@/lib/email";
+import { pushSubmissionToSheets } from "@/lib/sheets";
 
 interface ContactPayload {
   name?: string;
@@ -77,6 +78,18 @@ export async function POST(req: NextRequest) {
       ].join("\n"),
     }),
   });
+
+  // Push to Google Sheets as a backup (non-blocking)
+    pushSubmissionToSheets({
+      name,
+      email,
+      company,
+      location,
+      services,
+      message,
+    }).catch((err) => {
+      console.error("[contact] sheets push failed:", err);
+    });
 
   const responseText = await res.text();
   console.log("[debug] Resend response status:", res.status);
