@@ -5,6 +5,7 @@ import { SheetProvider } from "@/lib/cad/SheetProvider";
 import CADCrosshair from "./components/CADCrosshair";
 import { CADNavbar } from "@/app/components/CADNavbar";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -63,6 +64,7 @@ export default async function RootLayout({
     {!isAdminRoute && <CADNavbar />}
     {children}
   </SheetProvider>
+   <Analytics />  
 </body>
     </html>
   );
