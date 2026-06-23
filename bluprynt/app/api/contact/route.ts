@@ -61,6 +61,7 @@ export async function POST(req: NextRequest) {
     body: JSON.stringify({
       from: "Bluprynt Contact <onboarding@resend.dev>",
       to: process.env.CONTACT_NOTIFICATION_EMAIL,
+      cc: process.env.CONTACT_CC_EMAIL,   
       reply_to: email,
       subject: `New contact: ${name}${company ? ` (${company})` : ""}`,
       text: [
