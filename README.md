@@ -5,21 +5,6 @@
 
 ---
 
-## Project Status
-
-| Phase                     | Status         | Notes                                                              |
-|---------------------------|----------------|--------------------------------------------------------------------|
-| Design                    | ✅ Locked       | CAD-hosted homepage, crosshair-spotlight reveal, alternating sheets |
-| Homepage                  | ✅ Built        | Next.js + TypeScript, all sections live (A-001 through A-007)      |
-| Inner pages               | ✅ Built        | `/work`, `/work/[slug]`, `/services`, `/services/[slug]`           |
-| 404 + loading states      | ✅ Built        | `app/not-found.tsx`, `app/loading.tsx` with brand styling          |
-| **Database (Phase 1)**    | ✅ Live         | Drizzle + Neon, `projects` + `testimonials` + `services` + `users` |
-| **Auth (Phase 2)**        | ✅ Live         | NextAuth Credentials provider, admin login, middleware-protected   |
-| **Admin Panel (Phase 3)** | 🟡 Built        | Full CRUD on projects + testimonials + services — UI polishing     |
-| Email                     | 🟡 Stubbed     | API route + templates written; needs Resend account + verified domain |
-
----
-
 ## Brand & Design
 
 ### Colors (locked)
@@ -58,18 +43,6 @@
 - **3D building animation** — `BuildingDraft` on the homepage, scroll-driven CSS 3D transforms; APPROVED stamp slams when ContactPreview enters viewport
 - **Admin** — sidebar layout with CAD chrome, separate route group `(authed)` for protected pages
 
-### Section sheet codes (homepage)
-
-| Code  | Section          | Notes                                          |
-|-------|------------------|------------------------------------------------|
-| A-001 | Hero             | "SITE"                                         |
-| A-002 | WorkPreview      | "FOUNDATION" — pulls top 3 from `lib/projects` |
-| A-003 | ServicesPreview  | "FRAME" — pulls featured services from DB      |
-| A-004 | Testimonials     | "ENVELOPE" — pulls featured testimonials from DB |
-| A-005 | AboutPreview     | "ANNOTATION" — 4 differentiators (vertical list) + cost advantage panel |
-| A-006 | FoundersPreview  | "PERSONNEL" — Leadership row (2 cards) + Delivery Team row (3 cards) |
-| A-007 | ContactPreview   | "TITLE BLOCK" — form + direct contact directory, anchor `id="contact"` |
-
 ---
 
 ## Tech Stack (locked)
@@ -86,46 +59,6 @@
 | Analytics     | Vercel Analytics        | Defer until launch                                          |
 
 ---
-
-## Pages
-
-### Public — built
-
-- [x] `/` — Homepage (CAD-hosted, crosshair spotlight, 7 sections, scroll-driven 3D building animation). All firm content (differentiators, team, contact, testimonials) lives here.
-- [x] `/work` — Project index (database-backed list)
-- [x] `/work/[slug]` — Individual project case study (database-backed)
-- [x] `/services` — Services index (database-backed, flat list — no category grouping)
-- [x] `/services/[slug]` — Individual service detail (deliverables, when-to-engage)
-- [x] **404 page** — `app/not-found.tsx`, black bg + mark + "NOT FOUND" + return button
-- [x] **Loading state** — `app/loading.tsx`, pulsing logo + "PLOTTING..." mono text
-
-### Consolidated (single-source-of-truth on homepage)
-
-- **About / firm thesis** — homepage section A-005 (`AboutPreview`). No separate `/about` route. The "Why Bluprynt" 4 differentiators live here.
-- **Team / founders** — homepage section A-006 (`FoundersPreview`). Two rows: Leadership (Vivek, BG) + Delivery Team (Raju, Shivakumar, Prasanth). No per-person pages.
-- **Contact** — homepage section A-007 (`ContactPreview`). No separate `/contact` route. Direct contact directory (WhatsApp, phone, email) lives next to the form. Linked everywhere as `/#contact`.
-
-### Admin — built
-
-- [x] `/admin/login` — credentials login form
-- [x] `/admin` — dashboard with project/testimonial counts + auth status
-- [x] `/admin/projects` — list view with delete buttons
-- [x] `/admin/projects/new` — create project form (Zod-validated)
-- [x] `/admin/projects/[id]/edit` — edit project form
-- [x] `/admin/testimonials` — list view with delete buttons
-- [x] `/admin/testimonials/new` — create testimonial
-- [x] `/admin/testimonials/[id]/edit` — edit testimonial
-- [x] `/admin/services` — list view with delete buttons
-- [x] `/admin/services/new` — create service
-- [x] `/admin/services/[id]/edit` — edit service
-
-### Future
-
-- [ ] `/reports` — Downloadable reports / whitepapers (DB-backed)
-- [ ] Subdomain split — `admin.bluprynt.com` for the admin panel via middleware rewrite
-
----
-
 ## Features
 
 ### Done
@@ -187,7 +120,7 @@
 - [x] CAD-styled admin UI (sheet stamp eyebrows, corner ticks, dashed dividers)
 - [ ] **Pending:** Toast notifications for success/error
 - [ ] **Pending:** Image upload (UploadThing) — deferred to Phase 4
-- [ ] **Pending:** UI polish pass
+- [x] **Pending:** UI polish pass
 
 ### Email (still pending)
 
@@ -322,7 +255,7 @@
 ├── next.config.ts
 ├── drizzle.config.ts
 ├── .env.example
-├── .env.local                      # never committed
+├── .env.local                 
 └── README.md
 ```
 
